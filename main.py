@@ -1,12 +1,15 @@
 import json
+import uuid
 
 
 def main():
     with open('good/data_2.json') as good_file:
         good = json.load(good_file)
 
-    hydrated_good = hydrate_artifact_with_efficiency(good)
-    artifacts = good_to_set_type_format(hydrated_good)
+    good_with_efficiency = hydrate_artifact_with_efficiency(good)
+    good_with_id = hydrate_artifact_with_id(good_with_efficiency)
+    artifacts = good_to_set_type_format(good_with_id)
+
     print(json.dumps(artifacts))
 
 
@@ -32,6 +35,13 @@ def hydrate_artifact_with_efficiency(good):
             current_value = sub_stats['value']
             average_efficiency = (current_value / max_roll_value) / max_artifact_rolls
             sub_stats['efficiency'] = average_efficiency
+
+    return good
+
+
+def hydrate_artifact_with_id(good):
+    for artifact in good['artifacts']:
+        artifact['id'] = str(uuid.uuid4())
 
     return good
 
