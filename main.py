@@ -11,7 +11,12 @@ def main():
 
 
 def hydrate_artifact_with_efficiency(good):
-    """Calculate average efficiency for each sub stat"""
+    """Calculate average efficiency for each sub stat
+
+    The greatest efficiency is achieved when the artifact contains:
+    - 9 rolls (only in rarity equal 5 stars begin with 4 sub stats)
+    - Each roll in max value for specific sub stat (others possible values are 70%, 80% and 90%)
+    """
     max_artifact_rolls = 9
 
     with open('artifact-max-stats.json') as artifact_stats_file:
