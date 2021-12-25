@@ -6,7 +6,8 @@ def main():
         good = json.load(good_file)
 
     hydrated_good = hydrate_artifact_with_efficiency(good)
-    print(json.dumps(hydrated_good))
+    artifacts = good_to_set_type_format(hydrated_good)
+    print(json.dumps(artifacts))
 
 
 def hydrate_artifact_with_efficiency(good):
@@ -29,6 +30,27 @@ def hydrate_artifact_with_efficiency(good):
 
     return good
 
+
+def good_to_set_type_format(good):
+    """Convert GOOD format to Set/Type format
+
+    Set/Type format example:
+    { HuskOfOpulentDreams: { flower: [], plume: [], sands: [], circlet: [], goblet: [] } }
+    """
+    artifacts = dict()
+    for artifact in good['artifacts']:
+        if artifact['setKey'] not in artifacts:
+            artifacts[artifact['setKey']] = dict({
+                'flower': [],
+                'plume': [],
+                'sands': [],
+                'goblet': [],
+                'circlet': [],
+            })
+
+        artifacts[artifact['setKey']][artifact['slotKey']].append(artifact)
+
+    return artifacts
 
 # buildFiles = []  # listar arquivos do diretório
 # builds = []  # ler arquivos e converter para objeto iterando sobre buildFiles
