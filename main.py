@@ -104,6 +104,8 @@ def get_match_artifacts(build, artifacts):
             filtered_artifacts['circlet'].extend(artifacts[artifact_set]['circlet'])
 
     filtered_artifacts['sands'] = get_match_artifacts_by_main_stat(build, filtered_artifacts['sands'], 'sands')
+    filtered_artifacts['goblet'] = get_match_artifacts_by_main_stat(build, filtered_artifacts['goblet'], 'goblet')
+    filtered_artifacts['circlet'] = get_match_artifacts_by_main_stat(build, filtered_artifacts['circlet'], 'circlet')
 
     return filtered_artifacts
 
