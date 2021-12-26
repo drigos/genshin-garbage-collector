@@ -4,7 +4,7 @@ import uuid
 
 
 def main():
-    with open('good/data_2.json') as good_file:
+    with open('good/data_1.json') as good_file:
         good = json.load(good_file)
 
     # buildFiles = []  # listar arquivos do diretório
@@ -94,11 +94,15 @@ def filter_mismatched_artifacts(build, artifacts):
             filtered_artifacts['goblet'].extend(artifacts[artifact_set]['goblet'])
             filtered_artifacts['circlet'].extend(artifacts[artifact_set]['circlet'])
 
-    # filtered_artifacts.sands = filter_sands(build, filtered_artifacts.sands)
-    # filtered_artifacts.goblet = filter_goblet(build, filtered_artifacts.goblet)
-    # filtered_artifacts.circlet = filter_circlet(build, filtered_artifacts.circlet)
+    filtered_artifacts['sands'] = filter_sands(build, filtered_artifacts['sands'])
+    # filtered_artifacts['goblet'] = filter_goblet(build, filtered_artifacts['goblet'])
+    # filtered_artifacts['circlet'] = filter_circlet(build, filtered_artifacts['circlet'])
 
     return filtered_artifacts
+
+
+def filter_sands(build, artifacts):
+    return [artifact for artifact in artifacts if artifact['mainStatKey'] in build['filter']['sands']]
 
 # filtered_artifacts
 # {
@@ -108,13 +112,6 @@ def filter_mismatched_artifacts(build, artifacts):
 #     goblet: [],
 #     circlet: [],
 # }
-
-
-# def main():
-#     for build in builds:
-#         filtered_artifacts = filter(build, artifacts)
-#         # var = calculate(artifacts)
-
 
 # result = [
 #     {
