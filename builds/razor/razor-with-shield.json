@@ -1,6 +1,6 @@
 {
   "character": "Razor",
-  "build": "With Shield",
+  "name": "With Shield",
   "filter": {
     "set": [
       "RetracingBolide"

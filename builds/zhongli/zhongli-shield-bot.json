@@ -1,6 +1,6 @@
 {
   "character": "Zhongli",
-  "build": "Shield Bot",
+  "name": "Shield Bot",
   "filter": {
     "set": [
       "TenacityOfTheMillelith"

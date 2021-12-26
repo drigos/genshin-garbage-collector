@@ -8,10 +8,10 @@ def main():
     with open('good/data_1.json') as good_file:
         good = json.load(good_file)
 
-    good_with_efficiency = hydrate_artifact_with_efficiency(good)
-    good_with_id = hydrate_artifact_with_id(good_with_efficiency)
+    artifacts = generate_output_format_from_good(good['artifacts'])
+    artifacts_with_efficiency = calculate_sub_stats_efficiency(artifacts)
 
-    set_type_format_artifacts = good_to_set_type_format(good_with_id)
+    set_type_format_artifacts = convert_list_to_set_type_format(artifacts_with_efficiency)
 
     build_file_names = find_files_by_extension('builds/', '.json')
     id_format_artifacts = dict()
@@ -19,18 +19,27 @@ def main():
     for build_file_name in build_file_names:
         with open(build_file_name) as build_file:
             build = json.load(build_file)
-        matched_artifacts = get_match_artifacts(set_type_format_artifacts, build)
-        scored_artifacts = score_artifacts(matched_artifacts, build)
 
-        for scored_artifact in scored_artifacts:
-            if scored_artifact['id'] not in id_format_artifacts:
-                id_format_artifacts[scored_artifact['id']] = make_id_format(scored_artifact, build)
-            else:
-                pass
-                # copiar build score para artefato existente
+        matched_artifacts = get_matched_artifacts(set_type_format_artifacts, build)
+        artifacts_score = score_artifacts(matched_artifacts, build)
+
+        for matched_artifact in matched_artifacts:
+            identifier = matched_artifact['id']
+            if identifier not in id_format_artifacts.keys():
+                id_format_artifacts[identifier] = copy.deepcopy(matched_artifact)
+
+            id_format_artifacts[identifier]['build_score'].append({
+                'character': build['character'],
+                'build': build['name'],
+                'score': artifacts_score[identifier]
+            })
 
     # reconstruir formato GOOD
-    print(json.dumps(id_format_artifacts))
+    # aplicar filtros de melhor pontuação (olhar discord)
+    # escrever builds
+    # receber arquivo GOOD via CLI
+    # tarefas de qualidade de código (typing, code quality tools, unit tests)
+    print(json.dumps(id_format_artifacts, indent=2))
 
 
 def find_files_by_extension(path, extension):
@@ -44,58 +53,66 @@ def find_files_by_extension(path, extension):
     return file_names
 
 
-def hydrate_artifact_with_efficiency(good):
+def generate_output_format_from_good(artifacts):
+    output_format_artifacts = list()
+    for artifact in artifacts:
+        output_format_artifacts.append({
+            'id': str(uuid.uuid4()),
+            'set_key': artifact['setKey'],
+            'slot_key': artifact['slotKey'],
+            'main_stat_key': artifact['mainStatKey'],
+            'rarity': artifact['rarity'],
+            'sub_stats': copy.deepcopy(artifact['substats']),
+            'build_score': [],
+            'artifact_data': copy.deepcopy(artifact)
+        })
+    return output_format_artifacts
+
+
+def calculate_sub_stats_efficiency(artifacts):
     """Calculate average efficiency for each sub stat
 
     The greatest efficiency is achieved when the artifact contains:
     - 9 rolls (only in rarity equal 5 stars begin with 4 sub stats)
     - Each roll in max value for specific sub stat (others possible values are 70%, 80% and 90%)
     """
-    good = copy.deepcopy(good)
+    artifacts = copy.deepcopy(artifacts)
 
     max_artifact_rolls = 9
 
     with open('artifact-max-stats.json') as artifact_stats_file:
         artifact_stats_constants = json.load(artifact_stats_file)
 
-    for artifact in good['artifacts']:
+    for artifact in artifacts:
         artifact_rarity = str(artifact['rarity'])
 
-        for sub_stats in artifact['substats']:
-            sub_stat_key = sub_stats['key']
+        for sub_stat in artifact['sub_stats']:
+            sub_stat_key = sub_stat['key']
 
-            if sub_stat_key != '':
-                max_roll_value = artifact_stats_constants[sub_stat_key][artifact_rarity]
-                current_value = sub_stats['value']
-                average_efficiency = (current_value / max_roll_value) / max_artifact_rolls
-                sub_stats['efficiency'] = average_efficiency
+            if sub_stat_key == '':  # its condition is for artifacts with less than 4 sub stats
+                sub_stat['efficiency'] = 0
             else:
-                sub_stats['efficiency'] = 0
+                max_roll_value = artifact_stats_constants[sub_stat_key][artifact_rarity]
+                current_value = sub_stat['value']
+                average_efficiency = (current_value / max_roll_value) / max_artifact_rolls
+                sub_stat['efficiency'] = average_efficiency
 
-    return good
-
-
-def hydrate_artifact_with_id(good):
-    """Generate random ID for each artifact"""
-    good = copy.deepcopy(good)
-
-    for artifact in good['artifacts']:
-        artifact['id'] = str(uuid.uuid4())
-
-    return good
+    return artifacts
 
 
-def good_to_set_type_format(good):
-    """Convert GOOD format to Set/Type format
+def convert_list_to_set_type_format(artifacts):
+    """Convert artifact list to Set/Type format
 
     Output format example:
     - { SetName: { typeName: [...] } }
     - { HuskOfOpulentDreams: { flower: [], plume: [], sands: [], circlet: [], goblet: [] } }
     """
-    artifacts = dict()
-    for artifact in good['artifacts']:
-        if artifact['setKey'] not in artifacts:
-            artifacts[artifact['setKey']] = dict({
+    set_type_format_artifacts = dict()
+    for artifact in artifacts:
+        artifact_set_key = artifact['set_key']
+        artifact_slot_key = artifact['slot_key']
+        if artifact_set_key not in set_type_format_artifacts.keys():
+            set_type_format_artifacts[artifact_set_key] = dict({
                 'flower': [],
                 'plume': [],
                 'sands': [],
@@ -103,9 +120,9 @@ def good_to_set_type_format(good):
                 'circlet': [],
             })
 
-        artifacts[artifact['setKey']][artifact['slotKey']].append(artifact)
+        set_type_format_artifacts[artifact_set_key][artifact_slot_key].append(artifact)
 
-    return artifacts
+    return set_type_format_artifacts
 
 
 def get_artifacts_match_with_set(artifacts, artifact_set_names):
@@ -136,10 +153,10 @@ def get_artifacts_match_with_main_stat(artifacts, main_stats):
     artifacts: list with all artifacts
     main_stats: list with allowed main stats
     """
-    return [artifact for artifact in artifacts if artifact['mainStatKey'] in main_stats]
+    return [artifact for artifact in artifacts if artifact['main_stat_key'] in main_stats]
 
 
-def get_match_artifacts(artifacts, build):
+def get_matched_artifacts(artifacts, build):
     """Return artifact list that match the build
 
     artifacts: list with all artifacts
@@ -157,44 +174,12 @@ def get_match_artifacts(artifacts, build):
 # ToDo: usar deepcopy
 # ToDo: criar lógica de pontuação
 def score_artifacts(artifacts, build):
+    artifacts_score = dict()
     for artifact in artifacts:
-        artifact['score'] = 1
+        artifacts_score[artifact['id']] = 1
 
-    return artifacts
+    return artifacts_score
 
-
-def make_id_format(artifact, build):
-    id_format_artifact = copy.deepcopy(artifact)
-    # ToDo: criar função para adicionar score na list
-    id_format_artifact['build_score'] = [{
-        'character': build['character'],
-        'build': build['build'],
-        'score': artifact['score']
-    }]
-    del id_format_artifact['score']
-    return id_format_artifact
-
-
-# id_format_artifacts = {
-#     '123': {
-#         id: '123',
-#         set: '',
-#         type: '',
-#         main_stat: '',
-#         first_substat: '',
-#         second_substat: '',
-#         third_substat: '',
-#         forth_substat: '',
-#         buildScore: [
-#             {character: 'Zhongli', build: 'Shield Bot', score: 80},
-#         ],
-#     }
-# }
 
 if __name__ == '__main__':
     main()
-
-# ToDo:
-# - typing
-# - code quality tools
-# - unit tests
