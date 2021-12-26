@@ -7,11 +7,18 @@ def main():
     with open('good/data_2.json') as good_file:
         good = json.load(good_file)
 
+    # buildFiles = []  # listar arquivos do diretório
+    # builds = []  # ler arquivos e converter para objeto iterando sobre buildFiles
+    with open('builds/zhongli-shield-bot.json') as zhongli_build_file:
+        zhongli_build = json.load(zhongli_build_file)
+
     good_with_efficiency = hydrate_artifact_with_efficiency(good)
     good_with_id = hydrate_artifact_with_id(good_with_efficiency)
     artifacts = good_to_set_type_format(good_with_id)
 
-    print(json.dumps(artifacts))
+    filtered_artifacts = filter_mismatched_artifacts(zhongli_build, artifacts)
+
+    print(json.dumps(filtered_artifacts))
 
 
 def hydrate_artifact_with_efficiency(good):
@@ -34,10 +41,13 @@ def hydrate_artifact_with_efficiency(good):
         for sub_stats in artifact['substats']:
             sub_stat_key = sub_stats['key']
 
-            max_roll_value = artifact_stats_constants[sub_stat_key][artifact_rarity]
-            current_value = sub_stats['value']
-            average_efficiency = (current_value / max_roll_value) / max_artifact_rolls
-            sub_stats['efficiency'] = average_efficiency
+            if sub_stat_key != '':
+                max_roll_value = artifact_stats_constants[sub_stat_key][artifact_rarity]
+                current_value = sub_stats['value']
+                average_efficiency = (current_value / max_roll_value) / max_artifact_rolls
+                sub_stats['efficiency'] = average_efficiency
+            else:
+                sub_stats['efficiency'] = 0
 
     return good
 
@@ -72,22 +82,23 @@ def good_to_set_type_format(good):
 
     return artifacts
 
-# buildFiles = []  # listar arquivos do diretório
-# builds = []  # ler arquivos e converter para objeto iterando sobre buildFiles
 
-# def filter(build, artifacts):
-#     filtered_artifacts = {flower: [], feather: [], sands: [], goblet: [], circlet: []}
-#
-#     for artifactSet in build.filter.set:
-#         filtered_artifacts.flower.extend(artifacts[artifactSet].flower)
-#         filtered_artifacts.feather.extend(artifacts[artifactSet].feather)
-#         filtered_artifacts.sands.extend(artifacts[artifactSet].sands)
-#         filtered_artifacts.goblet.extend(artifacts[artifactSet].goblet)
-#         filtered_artifacts.circlet.extend(artifacts[artifactSet].circlet)
-#
-#     filtered_artifacts.sands = filter_sands(build, filtered_artifacts.sands)
-#     filtered_artifacts.goblet = filter_goblet(build, filtered_artifacts.goblet)
-#     filtered_artifacts.circlet = filter_circlet(build, filtered_artifacts.circlet)
+def filter_mismatched_artifacts(build, artifacts):
+    filtered_artifacts = dict({'flower': [], 'plume': [], 'sands': [], 'goblet': [], 'circlet': []})
+
+    for artifact_set in build['filter']['set']:
+        if artifact_set in artifacts:
+            filtered_artifacts['flower'].extend(artifacts[artifact_set]['flower'])
+            filtered_artifacts['plume'].extend(artifacts[artifact_set]['plume'])
+            filtered_artifacts['sands'].extend(artifacts[artifact_set]['sands'])
+            filtered_artifacts['goblet'].extend(artifacts[artifact_set]['goblet'])
+            filtered_artifacts['circlet'].extend(artifacts[artifact_set]['circlet'])
+
+    # filtered_artifacts.sands = filter_sands(build, filtered_artifacts.sands)
+    # filtered_artifacts.goblet = filter_goblet(build, filtered_artifacts.goblet)
+    # filtered_artifacts.circlet = filter_circlet(build, filtered_artifacts.circlet)
+
+    return filtered_artifacts
 
 # filtered_artifacts
 # {
