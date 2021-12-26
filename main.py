@@ -103,15 +103,13 @@ def get_match_artifacts(build, artifacts):
             filtered_artifacts['goblet'].extend(artifacts[artifact_set]['goblet'])
             filtered_artifacts['circlet'].extend(artifacts[artifact_set]['circlet'])
 
-    filtered_artifacts['sands'] = filter_sands(build, filtered_artifacts['sands'])
-    # filtered_artifacts['goblet'] = filter_goblet(build, filtered_artifacts['goblet'])
-    # filtered_artifacts['circlet'] = filter_circlet(build, filtered_artifacts['circlet'])
+    filtered_artifacts['sands'] = get_match_artifacts_by_main_stat(build, filtered_artifacts['sands'], 'sands')
 
     return filtered_artifacts
 
 
-def filter_sands(build, artifacts):
-    return [artifact for artifact in artifacts if artifact['mainStatKey'] in build['filter']['sands']]
+def get_match_artifacts_by_main_stat(build, artifacts, type):
+    return [artifact for artifact in artifacts if artifact['mainStatKey'] in build['filter'][type]]
 
 # result = [
 #     {
