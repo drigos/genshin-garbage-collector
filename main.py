@@ -1,3 +1,4 @@
+import copy
 import json
 import uuid
 
@@ -20,6 +21,8 @@ def hydrate_artifact_with_efficiency(good):
     - 9 rolls (only in rarity equal 5 stars begin with 4 sub stats)
     - Each roll in max value for specific sub stat (others possible values are 70%, 80% and 90%)
     """
+    good = copy.deepcopy(good)
+
     max_artifact_rolls = 9
 
     with open('artifact-max-stats.json') as artifact_stats_file:
@@ -40,6 +43,8 @@ def hydrate_artifact_with_efficiency(good):
 
 
 def hydrate_artifact_with_id(good):
+    good = copy.deepcopy(good)
+
     for artifact in good['artifacts']:
         artifact['id'] = str(uuid.uuid4())
 
