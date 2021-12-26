@@ -1,5 +1,6 @@
 import copy
 import json
+import os
 import uuid
 
 
@@ -9,17 +10,32 @@ def main():
 
     good_with_efficiency = hydrate_artifact_with_efficiency(good)
     good_with_id = hydrate_artifact_with_id(good_with_efficiency)
-    artifacts = good_to_set_type_format(good_with_id)
 
-    # buildFiles = []  # listar arquivos do diretório
-    # builds = []  # ler arquivos e converter para objeto iterando sobre buildFiles
-    with open('builds/zhongli-shield-bot.json') as zhongli_build_file:
-        zhongli_build = json.load(zhongli_build_file)
+    set_type_format_artifacts = good_to_set_type_format(good_with_id)
 
-    filtered_artifacts = get_match_artifacts(zhongli_build, artifacts)
-    # score artifacts based on builds
+    id_format_artifacts = dict()
 
-    print(json.dumps(filtered_artifacts))
+    build_path = 'builds/'
+    for root, dirs, files in os.walk(build_path):
+        if not len(files):
+            continue
+
+        build_file_names = [build_file_name for build_file_name in files if build_file_name.endswith('.json')]
+        for build_file_name in build_file_names:
+            with open(os.path.join(root, build_file_name)) as build_file:
+                build = json.load(build_file)
+            matched_artifacts = get_match_artifacts(build, set_type_format_artifacts)
+            scored_artifacts = score_artifacts(build, matched_artifacts)
+
+            for scored_artifact in scored_artifacts:
+                if scored_artifact['id'] not in id_format_artifacts:
+                    id_format_artifacts[scored_artifact['id']] = make_id_format(scored_artifact)
+                else:
+                    pass
+                    # copiar build score para artefato existente
+
+    # reconstruir formato GOOD
+    print(json.dumps(id_format_artifacts))
 
 
 def hydrate_artifact_with_efficiency(good):
@@ -86,35 +102,48 @@ def good_to_set_type_format(good):
     return artifacts
 
 
-def get_match_artifacts(build, artifacts):
-    """Remove artifacts that don't match the build
-
-    Output format example:
-    - { typeName: [] }
-    - { flower: [], plume: [], sands: [], circlet: [], goblet: [] }
-    """
-    filtered_artifacts = dict({'flower': [], 'plume': [], 'sands': [], 'goblet': [], 'circlet': []})
-
-    for artifact_set in build['filter']['set']:
-        if artifact_set in artifacts:
-            filtered_artifacts['flower'].extend(artifacts[artifact_set]['flower'])
-            filtered_artifacts['plume'].extend(artifacts[artifact_set]['plume'])
-            filtered_artifacts['sands'].extend(artifacts[artifact_set]['sands'])
-            filtered_artifacts['goblet'].extend(artifacts[artifact_set]['goblet'])
-            filtered_artifacts['circlet'].extend(artifacts[artifact_set]['circlet'])
-
-    filtered_artifacts['sands'] = get_match_artifacts_by_main_stat(build, filtered_artifacts['sands'], 'sands')
-    filtered_artifacts['goblet'] = get_match_artifacts_by_main_stat(build, filtered_artifacts['goblet'], 'goblet')
-    filtered_artifacts['circlet'] = get_match_artifacts_by_main_stat(build, filtered_artifacts['circlet'], 'circlet')
-
-    return filtered_artifacts
-
-
 def get_match_artifacts_by_main_stat(build, artifacts, type):
     return [artifact for artifact in artifacts if artifact['mainStatKey'] in build['filter'][type]]
 
-# result = [
-#     {
+
+def get_match_artifacts(build, artifacts):
+    """Return artifact list that match the build"""
+    flower = list()
+    plume = list()
+    sands = list()
+    goblet = list()
+    circlet = list()
+
+    for artifact_set in build['filter']['set']:
+        if artifact_set in artifacts:
+            flower.extend(artifacts[artifact_set]['flower'])
+            plume.extend(artifacts[artifact_set]['plume'])
+            sands.extend(artifacts[artifact_set]['sands'])
+            goblet.extend(artifacts[artifact_set]['goblet'])
+            circlet.extend(artifacts[artifact_set]['circlet'])
+
+    sands = get_match_artifacts_by_main_stat(build, sands, 'sands')
+    goblet = get_match_artifacts_by_main_stat(build, goblet, 'goblet')
+    circlet = get_match_artifacts_by_main_stat(build, circlet, 'circlet')
+
+    return [*flower, *plume, *sands, *goblet, *circlet]
+
+
+# ToDo: usar deepcopy
+# ToDo: criar lógica de pontuação
+def score_artifacts(build, artifacts):
+    for artifact in artifacts:
+        artifact['score'] = 1
+
+    return artifacts
+
+
+def make_id_format(artifact):
+    return artifact
+
+
+# id_format_artifacts = {
+#     '123': {
 #         id: '123',
 #         set: '',
 #         type: '',
@@ -127,8 +156,7 @@ def get_match_artifacts_by_main_stat(build, artifacts, type):
 #             {char: 'Zhongli', build: 'Shield Bot', score: 80},
 #         ],
 #     }
-# ]
-
+# }
 
 if __name__ == '__main__':
     main()

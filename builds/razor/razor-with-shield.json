@@ -1,0 +1,25 @@
+{
+  "char": "Razor",
+  "build": "With Shield",
+  "filter": {
+    "set": [
+      "RetracingBolide"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "physical_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "substats": [
+    { "stat": "critRate_", "prio": 1 },
+    { "stat": "critDMG_", "prio": 1 },
+    { "stat": "atk_", "prio": 1 },
+    { "stat": "atk", "prio": 0.8 }
+  ]
+}
