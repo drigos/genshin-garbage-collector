@@ -19,8 +19,8 @@ def main():
     for build_file_name in build_file_names:
         with open(build_file_name) as build_file:
             build = json.load(build_file)
-        matched_artifacts = get_match_artifacts(build, set_type_format_artifacts)
-        scored_artifacts = score_artifacts(build, matched_artifacts)
+        matched_artifacts = get_match_artifacts(set_type_format_artifacts, build)
+        scored_artifacts = score_artifacts(matched_artifacts, build)
 
         for scored_artifact in scored_artifacts:
             if scored_artifact['id'] not in id_format_artifacts:
@@ -108,36 +108,55 @@ def good_to_set_type_format(good):
     return artifacts
 
 
-def get_match_artifacts_by_main_stat(build, artifacts, type):
-    return [artifact for artifact in artifacts if artifact['mainStatKey'] in build['filter'][type]]
+def get_artifacts_match_with_set(artifacts, artifact_set_names):
+    """Filter artifact list based on set names
 
-
-def get_match_artifacts(build, artifacts):
-    """Return artifact list that match the build"""
+    artifacts: list with all artifacts
+    artifact_set_names: list with allowed set names
+    """
     flower = list()
     plume = list()
     sands = list()
     goblet = list()
     circlet = list()
 
-    for artifact_set in build['filter']['set']:
-        if artifact_set in artifacts:
+    for artifact_set in artifact_set_names:
+        if artifact_set in artifacts.keys():
             flower.extend(artifacts[artifact_set]['flower'])
             plume.extend(artifacts[artifact_set]['plume'])
             sands.extend(artifacts[artifact_set]['sands'])
             goblet.extend(artifacts[artifact_set]['goblet'])
             circlet.extend(artifacts[artifact_set]['circlet'])
+    return flower, plume, sands, goblet, circlet
 
-    sands = get_match_artifacts_by_main_stat(build, sands, 'sands')
-    goblet = get_match_artifacts_by_main_stat(build, goblet, 'goblet')
-    circlet = get_match_artifacts_by_main_stat(build, circlet, 'circlet')
+
+def get_artifacts_match_with_main_stat(artifacts, main_stats):
+    """Filter artifact list based on main stat
+
+    artifacts: list with all artifacts
+    main_stats: list with allowed main stats
+    """
+    return [artifact for artifact in artifacts if artifact['mainStatKey'] in main_stats]
+
+
+def get_match_artifacts(artifacts, build):
+    """Return artifact list that match the build
+
+    artifacts: list with all artifacts
+    build: contains the definition of filter rules
+    """
+    flower, plume, sands, goblet, circlet = get_artifacts_match_with_set(artifacts, build['filter']['set'])
+
+    sands = get_artifacts_match_with_main_stat(sands, build['filter']['sands'])
+    goblet = get_artifacts_match_with_main_stat(goblet, build['filter']['goblet'])
+    circlet = get_artifacts_match_with_main_stat(circlet, build['filter']['circlet'])
 
     return [*flower, *plume, *sands, *goblet, *circlet]
 
 
 # ToDo: usar deepcopy
 # ToDo: criar lógica de pontuação
-def score_artifacts(build, artifacts):
+def score_artifacts(artifacts, build):
     for artifact in artifacts:
         artifact['score'] = 1
 
