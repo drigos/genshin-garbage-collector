@@ -1,5 +1,5 @@
 {
-  "char": "Zhongli",
+  "character": "Zhongli",
   "build": "Shield Bot",
   "filter": {
     "set": [
@@ -19,9 +19,9 @@
     ]
   },
   "substats": [
-    { "stat": "hp_", "prio": 1 },
-    { "stat": "hp", "prio": 0.8 },
-    { "stat": "critRate_", "prio": 0.8 },
-    { "stat": "critDMG_", "prio": 0.8 }
+    { "stat": "critRate_", "prio": 1 },
+    { "stat": "critDMG_", "prio": 1 },
+    { "stat": "hp_", "prio": 0.8 },
+    { "stat": "hp", "prio": 0.6 }
   ]
 }

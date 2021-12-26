@@ -24,7 +24,7 @@ def main():
 
         for scored_artifact in scored_artifacts:
             if scored_artifact['id'] not in id_format_artifacts:
-                id_format_artifacts[scored_artifact['id']] = make_id_format(scored_artifact)
+                id_format_artifacts[scored_artifact['id']] = make_id_format(scored_artifact, build)
             else:
                 pass
                 # copiar build score para artefato existente
@@ -163,8 +163,16 @@ def score_artifacts(artifacts, build):
     return artifacts
 
 
-def make_id_format(artifact):
-    return artifact
+def make_id_format(artifact, build):
+    id_format_artifact = copy.deepcopy(artifact)
+    # ToDo: criar função para adicionar score na list
+    id_format_artifact['build_score'] = [{
+        'character': build['character'],
+        'build': build['build'],
+        'score': artifact['score']
+    }]
+    del id_format_artifact['score']
+    return id_format_artifact
 
 
 # id_format_artifacts = {
@@ -172,13 +180,13 @@ def make_id_format(artifact):
 #         id: '123',
 #         set: '',
 #         type: '',
-#         mainStat: '',
-#         firstSubstat: '',
-#         secondSubstat: '',
-#         thirdSubstat: '',
-#         forthSubstat: '',
+#         main_stat: '',
+#         first_substat: '',
+#         second_substat: '',
+#         third_substat: '',
+#         forth_substat: '',
 #         buildScore: [
-#             {char: 'Zhongli', build: 'Shield Bot', score: 80},
+#             {character: 'Zhongli', build: 'Shield Bot', score: 80},
 #         ],
 #     }
 # }
