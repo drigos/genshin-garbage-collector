@@ -13,29 +13,35 @@ def main():
 
     set_type_format_artifacts = good_to_set_type_format(good_with_id)
 
+    build_file_names = find_files_by_extension('builds/', '.json')
     id_format_artifacts = dict()
 
-    build_path = 'builds/'
-    for root, dirs, files in os.walk(build_path):
-        if not len(files):
-            continue
+    for build_file_name in build_file_names:
+        with open(build_file_name) as build_file:
+            build = json.load(build_file)
+        matched_artifacts = get_match_artifacts(build, set_type_format_artifacts)
+        scored_artifacts = score_artifacts(build, matched_artifacts)
 
-        build_file_names = [build_file_name for build_file_name in files if build_file_name.endswith('.json')]
-        for build_file_name in build_file_names:
-            with open(os.path.join(root, build_file_name)) as build_file:
-                build = json.load(build_file)
-            matched_artifacts = get_match_artifacts(build, set_type_format_artifacts)
-            scored_artifacts = score_artifacts(build, matched_artifacts)
-
-            for scored_artifact in scored_artifacts:
-                if scored_artifact['id'] not in id_format_artifacts:
-                    id_format_artifacts[scored_artifact['id']] = make_id_format(scored_artifact)
-                else:
-                    pass
-                    # copiar build score para artefato existente
+        for scored_artifact in scored_artifacts:
+            if scored_artifact['id'] not in id_format_artifacts:
+                id_format_artifacts[scored_artifact['id']] = make_id_format(scored_artifact)
+            else:
+                pass
+                # copiar build score para artefato existente
 
     # reconstruir formato GOOD
     print(json.dumps(id_format_artifacts))
+
+
+def find_files_by_extension(path, extension):
+    file_names = list()
+    for root, dirs, files in os.walk(path):
+        if not len(files):
+            continue
+
+        file_names.extend([os.path.join(root, file_name) for file_name in files if file_name.endswith(extension)])
+
+    return file_names
 
 
 def hydrate_artifact_with_efficiency(good):
