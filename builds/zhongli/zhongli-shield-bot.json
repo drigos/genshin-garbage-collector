@@ -18,10 +18,10 @@
       "critDMG_"
     ]
   },
-  "substats": [
-    { "stat": "critRate_", "prio": 1 },
-    { "stat": "critDMG_", "prio": 1 },
-    { "stat": "hp_", "prio": 0.8 },
-    { "stat": "hp", "prio": 0.6 }
-  ]
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "hp_": 0.8,
+    "hp": 0.6
+  }
 }

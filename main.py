@@ -1,4 +1,5 @@
 import copy
+import functools
 import json
 import os
 import uuid
@@ -171,12 +172,12 @@ def get_matched_artifacts(artifacts, build):
     return [*flower, *plume, *sands, *goblet, *circlet]
 
 
-# ToDo: usar deepcopy
-# ToDo: criar lógica de pontuação
 def score_artifacts(artifacts, build):
     artifacts_score = dict()
     for artifact in artifacts:
-        artifacts_score[artifact['id']] = 1
+        score = functools.reduce(
+            lambda a, b: a + b['efficiency'] * build['sub_stats'].get(b['key'], 0), artifact['sub_stats'], 0)
+        artifacts_score[artifact['id']] = score
 
     return artifacts_score
 
