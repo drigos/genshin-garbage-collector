@@ -1,6 +1,9 @@
 {
   "character": "Zhongli",
   "name": "Burst Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/zhongli/"
+  },
   "filter": {
     "set": [
       "ArchaicPetra",

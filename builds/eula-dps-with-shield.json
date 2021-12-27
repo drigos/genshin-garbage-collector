@@ -1,6 +1,9 @@
 {
   "character": "Eula",
   "name": "DPS with Shield",
+  "description": {
+    "guide_uri": "https://keqingmains.com/eula/"
+  },
   "filter": {
     "set": [
       "RetracingBolide"

@@ -1,6 +1,9 @@
 {
     "character": "Hu Tao",
     "name": "HP DPS",
+    "description": {
+      "guide_uri": "https://keqingmains.com/hu-tao/"
+    },
     "filter": {
       "set": [
         "CrimsonWitchOfFlames",

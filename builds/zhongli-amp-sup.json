@@ -1,6 +1,9 @@
 {
   "character": "Zhongli",
   "name": "Amplifier Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/zhongli/"
+  },
   "filter": {
     "set": [
       "TenacityOfTheMillelith",

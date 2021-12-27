@@ -1,6 +1,9 @@
 {
   "character": "Eula",
   "name": "ER DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/eula/"
+  },
   "filter": {
     "set": [
       "PaleFlame",

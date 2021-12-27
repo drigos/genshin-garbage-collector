@@ -1,6 +1,9 @@
 {
   "character": "Zhongli",
   "name": "DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/zhongli/"
+  },
   "filter": {
     "set": [
       "PaleFlame"
