@@ -1,9 +1,10 @@
 {
-  "character": "Razor",
-  "name": "With Shield",
+  "character": "Eula",
+  "name": "DPS Full DMG",
   "filter": {
     "set": [
-      "RetracingBolide"
+      "PaleFlame",
+      "BloodstainedChivalry"
     ],
     "sands": [
       "atk_"
@@ -19,7 +20,8 @@
   "sub_stats": {
     "critRate_": 1,
     "critDMG_": 1,
-    "atk_": 1,
-    "atk": 0.8
+    "atk_": 0.8,
+    "atk": 0.5,
+    "enerRech_": 0.5
   }
 }
