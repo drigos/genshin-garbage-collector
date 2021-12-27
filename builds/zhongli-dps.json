@@ -1,19 +1,19 @@
 {
   "character": "Zhongli",
-  "name": "Shield Bot",
+  "name": "DPS",
   "filter": {
     "set": [
-      "TenacityOfTheMillelith"
+      "PaleFlame"
     ],
     "sands": [
-      "hp_"
+      "hp_",
+      "atk_"
     ],
     "goblet": [
-      "hp_",
+      "physical_dmg_",
       "geo_dmg_"
     ],
     "circlet": [
-      "hp_",
       "critRate_",
       "critDMG_"
     ]
@@ -21,9 +21,9 @@
   "sub_stats": {
     "critRate_": 1,
     "critDMG_": 1,
-    "hp_": 0.8,
-    "hp": 0.6,
-    "atk_": 0.4,
-    "atk": 0.2
+    "atk_": 0.8,
+    "hp_": 0.6,
+    "atk": 0.4,
+    "hp": 0.2
   }
 }

@@ -1,13 +1,13 @@
 {
   "character": "Eula",
-  "name": "DPS with ER",
+  "name": "DPS",
   "filter": {
     "set": [
       "PaleFlame",
       "BloodstainedChivalry"
     ],
     "sands": [
-      "enerRech_"
+      "atk_"
     ],
     "goblet": [
       "physical_dmg_"
@@ -21,6 +21,7 @@
     "critRate_": 1,
     "critDMG_": 1,
     "atk_": 0.8,
-    "atk": 0.5
+    "atk": 0.5,
+    "enerRech_": 0.5
   }
 }
