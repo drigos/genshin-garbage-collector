@@ -39,11 +39,11 @@ def main():
     # função para manter artefatos acima de um determinado best_score
     # função para manter N melhores artefatos
 
-    # reconstruir formato GOOD
     # escrever builds
     # receber argumentos via CLI (good_file, threshold, amount)
     # tarefas de qualidade de código (typing, code quality tools, unit tests)
-    print(json.dumps(id_format_artifacts_with_best_score, indent=2))
+    updated_good = update_good_artifacts(good, id_format_artifacts_with_best_score)
+    print(json.dumps(updated_good, indent=2))
 
 
 def find_files_by_extension(path, extension):
@@ -201,6 +201,13 @@ def hydrate_artifacts_with_best_score(artifacts):
         artifact['best_score'] = best_score['score']
 
     return hydrated_artifacts
+
+
+def update_good_artifacts(good, artifacts):
+    good = copy.deepcopy(good)
+    good_artifacts = [artifact['artifact_data'] for artifact in artifacts.values()]
+    good['artifacts'] = good_artifacts
+    return good
 
 
 if __name__ == '__main__':
