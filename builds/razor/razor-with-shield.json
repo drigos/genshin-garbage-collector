@@ -1,0 +1,25 @@
+{
+  "character": "Razor",
+  "name": "With Shield",
+  "filter": {
+    "set": [
+      "RetracingBolide"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "physical_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "atk_": 1,
+    "atk": 0.8
+  }
+}

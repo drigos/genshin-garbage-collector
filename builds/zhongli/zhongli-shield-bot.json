@@ -1,0 +1,29 @@
+{
+  "character": "Zhongli",
+  "name": "Shield Bot",
+  "filter": {
+    "set": [
+      "TenacityOfTheMillelith"
+    ],
+    "sands": [
+      "hp_"
+    ],
+    "goblet": [
+      "hp_",
+      "geo_dmg_"
+    ],
+    "circlet": [
+      "hp_",
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "hp_": 0.8,
+    "hp": 0.6,
+    "atk_": 0.4,
+    "atk": 0.2
+  }
+}
