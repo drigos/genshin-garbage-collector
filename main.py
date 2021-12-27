@@ -1,6 +1,7 @@
 import copy
 import functools
 import json
+import math
 import os
 import uuid
 
@@ -66,6 +67,8 @@ def generate_output_format_from_good(artifacts):
             'slot_key': artifact['slotKey'],
             'main_stat_key': artifact['mainStatKey'],
             'rarity': artifact['rarity'],
+            'level': artifact['level'],
+            'rank': math.floor(artifact['level'] / 4),
             'sub_stats': copy.deepcopy(artifact['substats']),
             'best_score': 0,
             'build_score': [],
