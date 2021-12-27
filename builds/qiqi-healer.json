@@ -1,0 +1,33 @@
+{
+  "character": "Qiqi",
+  "name": "Healer",
+  "description": {
+    "guide_uri": "https://keqingmains.com/qiqi/"
+  },
+  "filter": {
+    "set": [
+      "OceanHuedClam"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "atk_"
+    ],
+    "circlet": [
+      "heal_",
+      "atk_"
+    ]
+  },
+  "sub_stats": {
+    "atk_": 1,
+    "atk": 0.8,
+    "hp": 0.5,
+    "hp_": 0.5,
+    "def": 0.5,
+    "def_": 0.5,
+    "eleMas": 0.5,
+    "critRate_": 0.5,
+    "critDMG_": 0.5
+  }
+}
