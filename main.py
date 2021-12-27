@@ -172,12 +172,20 @@ def get_matched_artifacts(artifacts, build):
     return [*flower, *plume, *sands, *goblet, *circlet]
 
 
+def calculate_normalization_factor(sub_stats):
+    sorted_sub_status = sorted(sub_stats, reverse=True)[0:4]
+    sorted_sub_status[0] *= 6
+    return sum(sorted_sub_status) / 9
+
+
 def score_artifacts(artifacts, build):
+    normalization_factor = calculate_normalization_factor(build['sub_stats'].values())
+
     artifacts_score = dict()
     for artifact in artifacts:
         score = functools.reduce(
             lambda a, b: a + b['efficiency'] * build['sub_stats'].get(b['key'], 0), artifact['sub_stats'], 0)
-        artifacts_score[artifact['id']] = score
+        artifacts_score[artifact['id']] = round(score / normalization_factor, 2)
 
     return artifacts_score
 
