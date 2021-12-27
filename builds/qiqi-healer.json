@@ -22,6 +22,7 @@
   "sub_stats": {
     "atk_": 1,
     "atk": 0.8,
+    "enerRech_": 0.8,
     "hp": 0.5,
     "hp_": 0.5,
     "def": 0.5,
