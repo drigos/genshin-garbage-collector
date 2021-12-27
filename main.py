@@ -35,12 +35,15 @@ def main():
                 'score': artifacts_score[identifier]
             })
 
+    id_format_artifacts_with_best_score = hydrate_artifacts_with_best_score(id_format_artifacts)
+    # função para manter artefatos acima de um determinado best_score
+    # função para manter N melhores artefatos
+
     # reconstruir formato GOOD
-    # aplicar filtros de melhor pontuação (olhar discord)
     # escrever builds
-    # receber arquivo GOOD via CLI
+    # receber argumentos via CLI (good_file, threshold, amount)
     # tarefas de qualidade de código (typing, code quality tools, unit tests)
-    print(json.dumps(id_format_artifacts, indent=2))
+    print(json.dumps(id_format_artifacts_with_best_score, indent=2))
 
 
 def find_files_by_extension(path, extension):
@@ -64,6 +67,7 @@ def generate_output_format_from_good(artifacts):
             'main_stat_key': artifact['mainStatKey'],
             'rarity': artifact['rarity'],
             'sub_stats': copy.deepcopy(artifact['substats']),
+            'best_score': 0,
             'build_score': [],
             'artifact_data': copy.deepcopy(artifact)
         })
@@ -188,6 +192,15 @@ def score_artifacts(artifacts, build):
         artifacts_score[artifact['id']] = round(score / normalization_factor, 2)
 
     return artifacts_score
+
+
+def hydrate_artifacts_with_best_score(artifacts):
+    hydrated_artifacts = copy.deepcopy(artifacts)
+    for artifact in hydrated_artifacts.values():
+        best_score = max(artifact['build_score'], key=lambda a: a['score'])
+        artifact['best_score'] = best_score['score']
+
+    return hydrated_artifacts
 
 
 if __name__ == '__main__':
