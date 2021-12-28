@@ -11,6 +11,11 @@ import uuid
 # - GOOD (Genshin Open Object Description)
 # - G2C (Genshin Garbage Collector)
 
+# Artifact wrappers
+# - List: [artifact]
+# - Set/Slot format: { set_key: { slot_key: [artifact] } }
+# - ID format: { id: artifact }
+
 @click.command()
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
 def main(filters):
@@ -18,22 +23,21 @@ def main(filters):
         good = json.load(good_file)
 
     artifact_list = generate_g2c_artifact_list_from_good(good['artifacts'])
-    artifact_list_with_efficiency = hydrate_sub_stats_efficiency(artifact_list)
+    artifact_list = hydrate_sub_stats_efficiency(artifact_list)
 
-    build_file_names = find_files_by_extension('builds/', '.json')
-    id_format_artifacts = get_artifacts_with_build_scores(artifact_list_with_efficiency, build_file_names)
+    build_file_name_list = find_files_by_extension('builds/', '.json')
+    artifact_id_format = get_artifacts_with_build_scores(artifact_list, build_file_name_list)
 
-    id_format_artifacts_with_best_score = hydrate_artifacts_with_best_score(id_format_artifacts)
+    if filters:
+        filter_rule_list = parse_cli_filter_string(filters)
+        artifact_id_format = filter_artifacts(artifact_id_format, filter_rule_list)
 
-    filter_obj_list = parse_filter_string(filters)
-    filtered_artifacts = filter_artifacts(id_format_artifacts_with_best_score, filter_obj_list)
-
-    print(json.dumps(filtered_artifacts, indent=2))
-    print(len(filtered_artifacts))
+    print(json.dumps(artifact_id_format, indent=2))
+    print(len(artifact_id_format))
 
     # implementar parâmetros de CLI como descrito no README
     # tarefas de qualidade de código (typing, code quality tools, unit tests, jsonlint)
-    updated_good = update_good_artifacts(good, id_format_artifacts_with_best_score)
+    # updated_good = update_good_artifacts(good, matched_artifact_list_with_best_score)
 
 
 def find_files_by_extension(path, extension):
@@ -51,6 +55,42 @@ def find_files_by_extension(path, extension):
         file_names.extend([os.path.join(root, file_name) for file_name in files if file_name.endswith(extension)])
 
     return file_names
+
+
+def parse_cli_filter_string(filter_str_list):
+    """Parse -f/--filter CLI argument
+
+    Filter rules format:
+    {'selectors': [{'key': 'rank', 'value': ['0']}], 'action': {'key': 't','value': '0.2'}}
+
+    :param filter_str_list: string with 'selector_list=action'
+    :return: filter rules format
+    """
+    filter_rule_list = list()
+
+    for filter_str in filter_str_list:
+        filter_rule = {
+            'selectors': [],
+            'action': {'key': '', 'value': ''},
+        }
+
+        selectors_str, action_str = filter_str.split('=')
+        selector_str_list = selectors_str.split(',')
+
+        for selector_str in selector_str_list:
+            selector_key, selector_value = selector_str.split(':')
+            filter_rule['selectors'].append({
+                'key': selector_key,
+                'value': selector_value.strip('[]').split(';')
+            })
+
+        action_key, action_value = action_str.split(':')
+        filter_rule['action']['key'] = action_key
+        filter_rule['action']['value'] = action_value
+
+        filter_rule_list.append(filter_rule)
+
+    return filter_rule_list
 
 
 def generate_g2c_artifact_from_good(good_artifact):
@@ -117,6 +157,43 @@ def hydrate_sub_stats_efficiency(g2c_artifact_list):
     return g2c_artifact_list
 
 
+def get_artifacts_with_build_scores(g2c_artifact_list, build_file_name_list):
+    """Get artifacts with build scores
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param build_file_name_list: build file path list
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
+    g2c_artifact_set_slot_format = convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list)
+
+    g2c_artifact_id_format = dict()
+    for build_file_name in build_file_name_list:
+        with open(build_file_name) as build_file:
+            build = json.load(build_file)
+
+        matched_artifact_list = get_artifacts_that_match_build(g2c_artifact_set_slot_format, build)
+
+        for matched_artifact in matched_artifact_list:
+            artifact_id = matched_artifact['id']
+            if artifact_id not in g2c_artifact_id_format.keys():
+                g2c_artifact_id_format[artifact_id] = copy.deepcopy(matched_artifact)
+
+        artifacts_score = score_artifacts(matched_artifact_list, build)
+
+        for artifact_id, artifact_score in artifacts_score.items():
+            g2c_artifact_id_format[artifact_id]['build_score'].append({
+                'character': build['character'],
+                'build': build['name'],
+                'score': artifact_score
+            })
+
+    for g2c_artifact in g2c_artifact_id_format.values():
+        best_score = max(g2c_artifact['build_score'], key=lambda artifact: artifact['score'])
+        g2c_artifact['best_score'] = best_score['score']
+
+    return g2c_artifact_id_format
+
+
 def convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list):
     """Convert G2C artifact list to G2C artifact Set/Slot format
 
@@ -141,49 +218,31 @@ def convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list):
     return g2c_artifact_set_slot_format
 
 
-def get_artifacts_with_build_scores(g2c_artifact_list, build_file_names):
-    """Get artifacts with build scores
+def get_artifacts_that_match_build(g2c_artifact_set_slot_format, build):
+    """Return artifact list that match build
 
-    # Artifact wrappers
-    # - List: [artifact]
-    # - Set/Slot format: { set_key: { slot_key: [artifact] } }
-    # - ID format: { id: artifact }
-
-    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
-    :param build_file_names: build file path list
-    :return: G2C (Genshin Garbage Collector) artifact ID format
+    :param g2c_artifact_set_slot_format: G2C (Genshin Garbage Collector) artifact Set/Slot format
+    :param build: contains the definition of filter rules
+    :return: filtered G2C (Genshin Garbage Collector) artifact list
     """
-    artifact_set_slot_format = convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list)
+    flower, plume, sands, goblet, circlet = get_artifacts_match_set_key(
+        g2c_artifact_set_slot_format,
+        build['filter']['set']
+    )
 
-    artifact_id_format = dict()
-    for build_file_name in build_file_names:
-        with open(build_file_name) as build_file:
-            build = json.load(build_file)
+    sands = get_artifacts_match_main_stat(sands, build['filter']['sands'])
+    goblet = get_artifacts_match_main_stat(goblet, build['filter']['goblet'])
+    circlet = get_artifacts_match_main_stat(circlet, build['filter']['circlet'])
 
-        matched_artifact_list = get_artifacts_that_match_builds(artifact_set_slot_format, build)
-
-        for matched_artifact in matched_artifact_list:
-            artifact_id = matched_artifact['id']
-            if artifact_id not in artifact_id_format.keys():
-                artifact_id_format[artifact_id] = copy.deepcopy(matched_artifact)
-
-        artifacts_score = score_artifacts(matched_artifact_list, build)
-
-        for artifact_id, artifact_score in artifacts_score.items():
-            artifact_id_format[artifact_id]['build_score'].append({
-                'character': build['character'],
-                'build': build['name'],
-                'score': artifact_score
-            })
-
-    return artifact_id_format
+    return [*flower, *plume, *sands, *goblet, *circlet]
 
 
-def get_artifacts_match_with_set(artifacts, artifact_set_names):
-    """Filter artifact list based on set names
+def get_artifacts_match_set_key(g2c_artifact_set_slot_format, artifact_set_keys):
+    """Filter artifact list based on set keys
 
-    artifacts: list with all artifacts
-    artifact_set_names: list with allowed set names
+    :param g2c_artifact_set_slot_format: G2C (Genshin Garbage Collector) artifact Set/Slot format
+    :param artifact_set_keys: list with allowed set keys
+    :return: filtered G2C (Genshin Garbage Collector) artifact list separate for slot
     """
     flower = list()
     plume = list()
@@ -191,115 +250,87 @@ def get_artifacts_match_with_set(artifacts, artifact_set_names):
     goblet = list()
     circlet = list()
 
-    for artifact_set in artifact_set_names:
-        if artifact_set in artifacts.keys():
-            flower.extend(artifacts[artifact_set]['flower'])
-            plume.extend(artifacts[artifact_set]['plume'])
-            sands.extend(artifacts[artifact_set]['sands'])
-            goblet.extend(artifacts[artifact_set]['goblet'])
-            circlet.extend(artifacts[artifact_set]['circlet'])
+    for artifact_set_key in artifact_set_keys:
+        if artifact_set_key in g2c_artifact_set_slot_format.keys():
+            flower.extend(g2c_artifact_set_slot_format[artifact_set_key]['flower'])
+            plume.extend(g2c_artifact_set_slot_format[artifact_set_key]['plume'])
+            sands.extend(g2c_artifact_set_slot_format[artifact_set_key]['sands'])
+            goblet.extend(g2c_artifact_set_slot_format[artifact_set_key]['goblet'])
+            circlet.extend(g2c_artifact_set_slot_format[artifact_set_key]['circlet'])
     return flower, plume, sands, goblet, circlet
 
 
-def get_artifacts_match_with_main_stat(artifacts, main_stats):
-    """Filter artifact list based on main stat
+def get_artifacts_match_main_stat(g2c_artifact_list, artifact_main_stats):
+    """Filter artifact list based on main stats
 
-    artifacts: list with all artifacts
-    main_stats: list with allowed main stats
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param artifact_main_stats: list with allowed main stats
+    :return filtered G2C (Genshin Garbage Collector) artifact list
     """
-    return [artifact for artifact in artifacts if artifact['main_stat_key'] in main_stats]
+    return [artifact for artifact in g2c_artifact_list if artifact['main_stat_key'] in artifact_main_stats]
 
 
-def get_artifacts_that_match_builds(artifacts, build):
-    """Return artifact list that match the build
+def score_artifacts(g2c_artifact_list, build):
+    """Return score for each artifact in the list
 
-    artifacts: list with all artifacts
-    build: contains the definition of filter rules
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param build: contains the definition of filter rules
+    :return: dict {id: score} for each G2C (Genshin Garbage Collector) artifact
     """
-    flower, plume, sands, goblet, circlet = get_artifacts_match_with_set(artifacts, build['filter']['set'])
+    normalization_factor = calculate_normalization_factor(build['sub_stats'].values())
 
-    sands = get_artifacts_match_with_main_stat(sands, build['filter']['sands'])
-    goblet = get_artifacts_match_with_main_stat(goblet, build['filter']['goblet'])
-    circlet = get_artifacts_match_with_main_stat(circlet, build['filter']['circlet'])
+    artifacts_score = dict()
+    for g2c_artifact in g2c_artifact_list:
+        score = functools.reduce(
+            lambda acc, sub_stat: acc + sub_stat['efficiency'] * build['sub_stats'].get(sub_stat['key'], 0),
+            g2c_artifact['sub_stats'],
+            0
+        )
+        artifacts_score[g2c_artifact['id']] = round(score / normalization_factor, 2)
 
-    return [*flower, *plume, *sands, *goblet, *circlet]
+    return artifacts_score
 
 
 def calculate_normalization_factor(sub_stats):
+    """Calculate the optimal sub stats to find the normalization factor
+
+    :param sub_stats: sub stat list with weight
+    :return: float representing the normalization factor
+    """
     sorted_sub_status = sorted(sub_stats, reverse=True)[0:4]
     sorted_sub_status[0] *= 6
     return sum(sorted_sub_status) / 9
 
 
-def score_artifacts(artifacts, build):
-    normalization_factor = calculate_normalization_factor(build['sub_stats'].values())
+def filter_artifacts(g2c_artifact_id_format, filter_rule_list):
+    """Filter artifacts according to defined rules
 
-    artifacts_score = dict()
-    for artifact in artifacts:
-        score = functools.reduce(
-            lambda a, b: a + b['efficiency'] * build['sub_stats'].get(b['key'], 0), artifact['sub_stats'], 0)
-        artifacts_score[artifact['id']] = round(score / normalization_factor, 2)
+    Only artifacts matched by the selector will be filtered
+    Any artifact that don't match the selector will be preserved
 
-    return artifacts_score
-
-
-def hydrate_artifacts_with_best_score(artifacts):
-    hydrated_artifacts = copy.deepcopy(artifacts)
-    for artifact in hydrated_artifacts.values():
-        best_score = max(artifact['build_score'], key=lambda a: a['score'])
-        artifact['best_score'] = best_score['score']
-
-    return hydrated_artifacts
-
-
-def parse_filter_string(filter_str_list):
-    filter_obj_list = list()
-
-    for filter_str in filter_str_list:
-        filter_obj = {
-            'selectors': [],
-            'action': {'key': '', 'value': ''},
-        }
-
-        selectors_str, action_str = filter_str.split('=')
-        selector_str_list = selectors_str.split(',')
-
-        for selector_str in selector_str_list:
-            selector_key, selector_value = selector_str.split(':')
-            filter_obj['selectors'].append({
-                'key': selector_key,
-                'value': selector_value.strip('[]').split(';')
-            })
-
-        action_key, action_value = action_str.split(':')
-        filter_obj['action']['key'] = action_key
-        filter_obj['action']['value'] = action_value
-
-        filter_obj_list.append(filter_obj)
-
-    return filter_obj_list
-
-
-def filter_artifacts(filtered_artifacts, filter_rules):
-    filtered_artifacts = copy.deepcopy(filtered_artifacts)
+    :param g2c_artifact_id_format: G2C (Genshin Garbage Collector) artifact ID format
+    :param filter_rule_list: list with selector and action to filter artifacts
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
+    g2c_artifact_id_format = copy.deepcopy(g2c_artifact_id_format)
 
     actions_functions = {
         't': lambda artifacts, threshold: [artifact for artifact in artifacts if artifact['best_score'] < float(threshold)],
         'b': lambda artifacts, threshold: sorted(artifacts, key=lambda item: item['best_score'], reverse=True)[int(threshold):]
     }
 
-    for filter_rule in filter_rules:
-        temp_artifacts = filtered_artifacts.values()
+    for filter_rule in filter_rule_list:
+        exclusion_artifact_list = g2c_artifact_id_format.values()
         for selector in filter_rule['selectors']:
-            temp_artifacts = [artifact for artifact in temp_artifacts if str(artifact[selector['key']]) in selector['value']]
+            exclusion_artifact_list = [artifact for artifact in exclusion_artifact_list if str(artifact[selector['key']]) in selector['value']]
 
         action_key, action_value = filter_rule['action'].values()
-        temp_artifacts = actions_functions[action_key](temp_artifacts, action_value)
+        exclusion_artifact_list = actions_functions[action_key](exclusion_artifact_list, action_value)
 
-        filtered_artifact_ids = [artifact['id'] for artifact in temp_artifacts]
-        [filtered_artifacts.pop(identifier) for identifier in filtered_artifact_ids]
+        filtered_artifact_ids = [artifact['id'] for artifact in exclusion_artifact_list]
+        [g2c_artifact_id_format.pop(identifier) for identifier in filtered_artifact_ids]
 
-    return filtered_artifacts
+    return g2c_artifact_id_format
 
 
 def update_good_artifacts(good, artifacts):
