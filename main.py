@@ -14,30 +14,12 @@ def main(filters):
         good = json.load(good_file)
 
     artifacts = generate_output_format_from_good(good['artifacts'])
-    artifacts_with_efficiency = calculate_sub_stats_efficiency(artifacts)
+    artifacts_with_efficiency = hydrate_sub_stats_efficiency(artifacts)
 
-    set_type_format_artifacts = convert_list_to_set_type_format(artifacts_with_efficiency)
+    set_type_format_artifacts = generate_set_slot_format_from_artifact_list(artifacts_with_efficiency)
 
     build_file_names = find_files_by_extension('builds/', '.json')
-    id_format_artifacts = dict()
-
-    for build_file_name in build_file_names:
-        with open(build_file_name) as build_file:
-            build = json.load(build_file)
-
-        matched_artifacts = get_matched_artifacts(set_type_format_artifacts, build)
-        artifacts_score = score_artifacts(matched_artifacts, build)
-
-        for matched_artifact in matched_artifacts:
-            identifier = matched_artifact['id']
-            if identifier not in id_format_artifacts.keys():
-                id_format_artifacts[identifier] = copy.deepcopy(matched_artifact)
-
-            id_format_artifacts[identifier]['build_score'].append({
-                'character': build['character'],
-                'build': build['name'],
-                'score': artifacts_score[identifier]
-            })
+    id_format_artifacts = score_artifacts_from_build_definitions(set_type_format_artifacts, build_file_names)
 
     id_format_artifacts_with_best_score = hydrate_artifacts_with_best_score(id_format_artifacts)
 
@@ -81,7 +63,7 @@ def generate_output_format_from_good(artifacts):
     return output_format_artifacts
 
 
-def calculate_sub_stats_efficiency(artifacts):
+def hydrate_sub_stats_efficiency(artifacts):
     """Calculate average efficiency for each sub stat
 
     The greatest efficiency is achieved when the artifact contains:
@@ -112,7 +94,7 @@ def calculate_sub_stats_efficiency(artifacts):
     return artifacts
 
 
-def convert_list_to_set_type_format(artifacts):
+def generate_set_slot_format_from_artifact_list(artifacts):
     """Convert artifact list to Set/Type format
 
     Output format example:
@@ -135,6 +117,28 @@ def convert_list_to_set_type_format(artifacts):
         set_type_format_artifacts[artifact_set_key][artifact_slot_key].append(artifact)
 
     return set_type_format_artifacts
+
+
+def score_artifacts_from_build_definitions(set_type_format_artifacts, build_file_names):
+    id_format_artifacts = dict()
+    for build_file_name in build_file_names:
+        with open(build_file_name) as build_file:
+            build = json.load(build_file)
+
+        matched_artifacts = get_matched_artifacts(set_type_format_artifacts, build)
+        artifacts_score = score_artifacts(matched_artifacts, build)
+
+        for matched_artifact in matched_artifacts:
+            identifier = matched_artifact['id']
+            if identifier not in id_format_artifacts.keys():
+                id_format_artifacts[identifier] = copy.deepcopy(matched_artifact)
+
+            id_format_artifacts[identifier]['build_score'].append({
+                'character': build['character'],
+                'build': build['name'],
+                'score': artifacts_score[identifier]
+            })
+    return id_format_artifacts
 
 
 def get_artifacts_match_with_set(artifacts, artifact_set_names):
