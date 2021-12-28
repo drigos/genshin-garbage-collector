@@ -1,19 +1,20 @@
 {
-  "character": "Diluc",
-  "name": "DPS",
+  "character": "Mona",
+  "name": "Support",
   "description": {
-    "guide_uri": "https://keqingmains.com/diluc/"
+    "guide_uri": "https://keqingmains.com/mona/"
   },
   "filter": {
     "set": [
-      "CrimsonWitchOfFlames"
+      "HeartOfDepth",
+      "WanderersTroupe"
     ],
     "sands": [
-      "atk_",
-      "eleMas"
+      "enerRech_",
+      "atk_"
     ],
     "goblet": [
-      "pyro_dmg_"
+      "hydro_dmg_"
     ],
     "circlet": [
       "critRate_",
@@ -21,10 +22,12 @@
     ]
   },
   "sub_stats": {
-    "critDMG_": 1,
     "critRate_": 1,
+    "critDMG_": 1,
     "atk_": 0.8,
     "atk": 0.6,
+    "enerRech_": 0.6,
     "eleMas": 0.4
   }
 }
+  

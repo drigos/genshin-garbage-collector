@@ -1,30 +1,29 @@
 {
-    "character": "Ayaka",
-    "name": "DPS",
-    "description": {
-      "guide_uri": "https://keqingmains.com/ayaka/"
-    },
-    "filter": {
-      "set": [
-        "BlizzardStrayer"
-      ],
-      "sands": [
-        "atk_"
-      ],
-      "goblet": [
-        "cryo_dmg_"
-      ],
-      "circlet": [
-        "critRate_",
-        "critDMG_"
-      ]
-    },
-    "sub_stats": {
-      "critDMG_": 1,
-      "atk_": 0.8,
-      "atk": 0.6,
-      "enerRech_": 0.6,
-      "critRate_": 0.4
-    }
+  "character": "Ayaka",
+  "name": "DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/ayaka/"
+  },
+  "filter": {
+    "set": [
+      "BlizzardStrayer"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "cryo_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critDMG_": 1,
+    "atk_": 0.8,
+    "atk": 0.6,
+    "enerRech_": 0.6,
+    "critRate_": 0.4
   }
-  
+}

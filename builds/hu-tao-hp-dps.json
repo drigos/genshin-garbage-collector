@@ -1,35 +1,34 @@
 {
-    "character": "Hu Tao",
-    "name": "HP DPS",
-    "description": {
-      "guide_uri": "https://keqingmains.com/hu-tao/"
-    },
-    "filter": {
-      "set": [
-        "CrimsonWitchOfFlames",
-        "ShimenawasReminiscence",
-        "TenacityOfTheMillelith",
-        "WanderersTroupe"
-      ],
-      "sands": [
-        "hp_"
-      ],
-      "goblet": [
-        "pyro_dmg_"
-      ],
-      "circlet": [
-        "critRate_",
-        "critDMG_"
-      ]
-    },
-    "sub_stats": {
-      "critRate_": 1,
-      "critDMG_": 1,
-      "eleMas": 0.8,
-      "hp_": 0.8,
-      "atk_": 0.6,
-      "hp": 0.4,
-      "atk": 0.2
-    }
+  "character": "Hu Tao",
+  "name": "HP DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/hu-tao/"
+  },
+  "filter": {
+    "set": [
+      "CrimsonWitchOfFlames",
+      "ShimenawasReminiscence",
+      "TenacityOfTheMillelith",
+      "WanderersTroupe"
+    ],
+    "sands": [
+      "hp_"
+    ],
+    "goblet": [
+      "pyro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "eleMas": 0.8,
+    "hp_": 0.8,
+    "atk_": 0.6,
+    "hp": 0.4,
+    "atk": 0.2
   }
-  
+}

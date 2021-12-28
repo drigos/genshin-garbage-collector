@@ -1,34 +1,33 @@
 {
-    "character": "Xingqiu",
-    "name": "Sub DPS",
-    "description": {
-      "guide_uri": "https://keqingmains.com/xingqiu-extended/"
-    },
-    "filter": {
-      "set": [
-        "EmblemOfSeveredFate",
-        "NoblesseOblige",
-        "HeartOfDepth",
-        "ShimenawasReminiscence",
-        "GladiatorsFinale"
-      ],
-      "sands": [
-        "enerRech_",
-        "atk_"
-      ],
-      "goblet": [
-        "hydro_dmg_"
-      ],
-      "circlet": [
-        "critRate_",
-        "critDMG_"
-      ]
-    },
-    "sub_stats": {
-      "critRate_": 1,
-      "critDMG_": 1,
-      "atk_": 0.8,
-      "atk": 0.6
-    }
+  "character": "Xingqiu",
+  "name": "Sub DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/xingqiu-extended/"
+  },
+  "filter": {
+    "set": [
+      "EmblemOfSeveredFate",
+      "NoblesseOblige",
+      "HeartOfDepth",
+      "ShimenawasReminiscence",
+      "GladiatorsFinale"
+    ],
+    "sands": [
+      "enerRech_",
+      "atk_"
+    ],
+    "goblet": [
+      "hydro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "atk_": 0.8,
+    "atk": 0.6
   }
-  
+}
