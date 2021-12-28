@@ -1,0 +1,38 @@
+{
+    "character": "Xiangling",
+    "name": "Sub DPS",
+    "description": {
+      "guide_uri": "https://keqingmains.com/xiangling/"
+    },
+    "filter": {
+      "set": [
+        "EmblemOfSeveredFate",
+        "CrimsonWitchOfFlames",
+        "NoblesseOblige",
+        "WanderersTroupe",
+        "GladiatorsFinale",
+        "ShimenawasReminiscence"
+      ],
+      "sands": [
+        "enerRech_",
+        "eleMas",
+        "atk_"
+      ],
+      "goblet": [
+        "pyro_dmg_"
+      ],
+      "circlet": [
+        "critRate_",
+        "critDMG_"
+      ]
+    },
+    "sub_stats": {
+      "enerRech_": 1,
+      "critRate_": 1,
+      "critDMG_": 1,
+      "eleMas": 0.8,
+      "atk_": 0.8,
+      "atk": 0.6
+    }
+  }
+  
