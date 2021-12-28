@@ -1,18 +1,19 @@
 {
-    "character": "Ayaka",
+    "character": "Diluc",
     "name": "DPS",
     "description": {
-      "guide_uri": "https://keqingmains.com/ayaka/"
+      "guide_uri": "https://keqingmains.com/diluc/"
     },
     "filter": {
       "set": [
-        "BlizzardStrayer"
+        "CrimsonWitchOfFlames"
       ],
       "sands": [
-        "atk_"
+        "atk_",
+        "eleMas"
       ],
       "goblet": [
-        "cryo_dmg_"
+        "pyro_dmg_"
       ],
       "circlet": [
         "critRate_",
@@ -21,10 +22,10 @@
     },
     "sub_stats": {
       "critDMG_": 1,
+      "critRate_": 1,
       "atk_": 0.8,
       "atk": 0.6,
-      "enerRech_": 0.6,
-      "critRate_": 0.4
+      "eleMas": 0.4
     }
   }
   
