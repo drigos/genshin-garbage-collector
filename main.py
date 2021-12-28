@@ -17,10 +17,11 @@ import uuid
 # - ID format: { id: artifact }
 
 @click.command()
+@click.option('-i', '--input-file', required=True, type=str, help='Specify GOOD file.')
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
-@click.option('-e', '--export', is_flag=True, help='Display artifacts in GOOD format (default is G2C format')
-def main(filters, export):
-    with open('good/data-andre.json') as good_file:
+@click.option('-e', '--export', is_flag=True, help='Display artifacts in GOOD format (default is G2C format)')
+def main(input_file, filters, export):
+    with open(input_file) as good_file:
         good = json.load(good_file)
 
     artifact_list = generate_g2c_artifact_list_from_good(good['artifacts'])

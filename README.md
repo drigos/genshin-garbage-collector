@@ -2,6 +2,21 @@
 
 ## CLI Parameters
 
+
+### Input file
+
+Specify GOOD file
+
+```
+-i/--input input_file
+  input_file = path to file
+```
+
+**Example:**
+```
+-i './good.json'
+```
+
 ### Filter
 
 Filter artifacts according to defined rules.  
@@ -9,7 +24,7 @@ _*Only artifacts matched by the selector will be filtered._
 _*Any artifact that don't match the selector will be preserved._
 
 ```
--f selector_list=action_list
+-f/--filter selector_list=action
   selector_list = selector_key:selector_value[,selector_key:selector_value]
     selector_key = set_key,slot_key,main_stat_key,rarity,level,rank
     selector_value = GOOD-like
@@ -56,44 +71,38 @@ Keep the N best artifacts from each group defined in rules.
 _*All artifacts will be pruned._
 
 ```
--g group_key_list=amount
+-g/--group group_key_list=amount
   group_key_list = set_key,slot_key,main_stat_key,rarity,level,rank
   amount = integer
 ```
 
 **Examples:**
 ```
-  -g 'set_key=25'  # keep the 25 best artifacts each set
-  -g 'set_key,slot_key=5'  # keep the 5 best artifacts each set and slot
-  -g 'set_key,slot_key,rank=1'  # keep the best artifact each set, slot and rank
+-g 'set_key=25'  # keep the 25 best artifacts each set
+-g 'set_key,slot_key=5'  # keep the 5 best artifacts each set and slot
+-g 'set_key,slot_key,rank=1'  # keep the best artifact each set, slot and rank
 ```
 
 ### Sort artifacts
 
 ```
--s sort_key_list
+-s/--sort sort_key_list
   sort_key_list = set_key,slot_key,main_stat_key,rarity,level,rank,best_score
 ```
 
 **Examples:**
 ```
-  -s 'best_score'  # sort artifacts from highest to lowest based on best_score attribute
-  -s 'best_score:desc'  # sort artifacts from highest to lowest based on best_score attribute
-  -s 'best_score:asc'  # sort artifacts from lowest to highest based on best_score attribute
-  -s 'level:asc,best_score:desc'  # sort artifacts ascending by level and descending by best_score attribute
+-s 'best_score'  # sort artifacts from highest to lowest based on best_score attribute
+-s 'best_score:desc'  # sort artifacts from highest to lowest based on best_score attribute
+-s 'best_score:asc'  # sort artifacts from lowest to highest based on best_score attribute
+-s 'level:asc,best_score:desc'  # sort artifacts ascending by level and descending by best_score attribute
 ```
 
 ### Export
 
 Export file in GOOD format
 ```
--e destination_file
-  destination_file = path to file
-```
-
-**Examples:**
-```
-  -e './output.json'
+-e/--export
 ```
 
 ## JSON Validator
