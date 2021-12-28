@@ -18,7 +18,8 @@ import uuid
 
 @click.command()
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
-def main(filters):
+@click.option('-e', '--export', is_flag=True, help='Display artifacts in GOOD format (default is G2C format')
+def main(filters, export):
     with open('good/data_3.json') as good_file:
         good = json.load(good_file)
 
@@ -32,12 +33,15 @@ def main(filters):
         filter_rule_list = parse_cli_filter_string(filters)
         artifact_id_format = filter_artifacts(artifact_id_format, filter_rule_list)
 
-    print(json.dumps(artifact_id_format, indent=2))
-    print(len(artifact_id_format))
+    output = artifact_id_format
+    if export:
+        output = update_good_artifacts(good, artifact_id_format)
+
+    print(json.dumps(output, indent=2))
+    print(len(output))
 
     # implementar parâmetros de CLI como descrito no README
     # tarefas de qualidade de código (typing, code quality tools, unit tests, jsonlint)
-    # updated_good = update_good_artifacts(good, matched_artifact_list_with_best_score)
 
 
 def find_files_by_extension(path, extension):
@@ -333,9 +337,9 @@ def filter_artifacts(g2c_artifact_id_format, filter_rule_list):
     return g2c_artifact_id_format
 
 
-def update_good_artifacts(good, artifacts):
+def update_good_artifacts(good, artifact_id_format):
     good = copy.deepcopy(good)
-    good_artifacts = [artifact['artifact_data'] for artifact in artifacts.values()]
+    good_artifacts = [artifact['artifact_data'] for artifact in artifact_id_format.values()]
     good['artifacts'] = good_artifacts
     return good
 
