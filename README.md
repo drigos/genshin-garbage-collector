@@ -9,13 +9,13 @@ _*Only artifacts matched by the selector will be filtered._
 _*Any artifact that don't match the selector will be preserved._
 
 ```
--f selector_list=filter_list
+-f selector_list=action_list
   selector_list = selector_key:selector_value[,selector_key:selector_value]
     selector_key = set_key,slot_key,main_stat_key,rarity,level,rank
     selector_value = GOOD-like
-  filter_list = filter_type:filter_value[,filter_type:filter_value]
-    filter_type = t (stands for threshold) and b (stands for best)
-    filter_value = float (when type is `t`) or integer (when type is `b`)
+  action = action_type:action_value
+    action_type = t (stands for threshold) and b (stands for best)
+    action_value = float (when type is `t`) or integer (when type is `b`)
 ```
 
 See [GOOD format description](https://frzyc.github.io/genshin-optimizer/#/doc/) for reference about the possible selector values.
@@ -37,17 +37,17 @@ See [GOOD format description](https://frzyc.github.io/genshin-optimizer/#/doc/) 
 
 **Example 4:** keep the `700` best artifacts  
 ```
--f *=b:700
+-f '*=b:700'
 ```
 
 **Example 5:** keep the `5` best `plume` from the `Pale Flame` artifact  
 ```
--f set_key:PaleFlame,slot_key:plume=b:5]
+-f 'set_key:PaleFlame,slot_key:plume=b:5'
 ```
 
 **Example 6:** keep the `20` best artifacts among `Crimson Witch Of Flames` and `Shimenawas Reminiscence` whose rank is between `0` and `3`  
 ```
--f set_key:[CrimsonWitchOfFlames,ShimenawasReminiscence],rank:[0,1,2,3]=b:20
+-f 'set_key:[CrimsonWitchOfFlames,ShimenawasReminiscence],rank:[0,1,2,3]=b:20'
 ```
 
 ### Group
@@ -63,9 +63,9 @@ _*All artifacts will be pruned._
 
 **Examples:**
 ```
-  -g set_key=25  # keep the 25 best artifacts each set
-  -g set_key,slot_key=5  # keep the 5 best artifacts each set and slot
-  -g set_key,slot_key,rank=1  # keep the best artifact each set, slot and rank
+  -g 'set_key=25'  # keep the 25 best artifacts each set
+  -g 'set_key,slot_key=5'  # keep the 5 best artifacts each set and slot
+  -g 'set_key,slot_key,rank=1'  # keep the best artifact each set, slot and rank
 ```
 
 ### Sort artifacts
@@ -77,10 +77,10 @@ _*All artifacts will be pruned._
 
 **Examples:**
 ```
-  -s best_score  # sort artifacts from highest to lowest based on best_score attribute
-  -s best_score:desc  # sort artifacts from highest to lowest based on best_score attribute
-  -s best_score:asc  # sort artifacts from lowest to highest based on best_score attribute
-  -s level:asc,best_score:desc  # sort artifacts ascending by level and descending by best_score attribute
+  -s 'best_score'  # sort artifacts from highest to lowest based on best_score attribute
+  -s 'best_score:desc'  # sort artifacts from highest to lowest based on best_score attribute
+  -s 'best_score:asc'  # sort artifacts from lowest to highest based on best_score attribute
+  -s 'level:asc,best_score:desc'  # sort artifacts ascending by level and descending by best_score attribute
 ```
 
 ### Export
@@ -93,7 +93,7 @@ Export file in GOOD format
 
 **Examples:**
 ```
-  -e ./output.json
+  -e './output.json'
 ```
 
 ## JSON Validator

@@ -7,7 +7,7 @@ import uuid
 
 
 def main():
-    with open('good/data_1.json') as good_file:
+    with open('good/data_3.json') as good_file:
         good = json.load(good_file)
 
     artifacts = generate_output_format_from_good(good['artifacts'])
@@ -37,14 +37,28 @@ def main():
             })
 
     id_format_artifacts_with_best_score = hydrate_artifacts_with_best_score(id_format_artifacts)
-    # função para manter artefatos acima de um determinado best_score
-    # função para manter N melhores artefatos
 
-    # escrever builds
+    filter_str_list = [
+        'rank:0=t:0.2',
+        'rank:1=t:0.25',
+        'rank:2=t:0.3',
+        'rank:3=t:0.35',
+        'rank:4=t:0.4',
+        'rank:5=t:0.5'
+    ]
+    # filter_str_list = [
+    #     'set_key:[GladiatorsFinale;WanderersTroupe],rank:[0;1;2;3]=b:20',
+    #     'set_key:[GladiatorsFinale;WanderersTroupe],rank:[0;1;2;3]=t:0.2',
+    #     'rank:5=t:0.5'
+    # ]
+    filter_obj_list = parse_filter_string(filter_str_list)
+    filtered_artifacts = filter_artifacts(id_format_artifacts_with_best_score, filter_obj_list)
+
+    print(json.dumps(filtered_artifacts, indent=2))
+
     # receber argumentos via CLI (good_file, threshold, amount)
-    # tarefas de qualidade de código (typing, code quality tools, unit tests)
+    # tarefas de qualidade de código (typing, code quality tools, unit tests, jsonlint)
     updated_good = update_good_artifacts(good, id_format_artifacts_with_best_score)
-    print(json.dumps(updated_good, indent=2))
 
 
 def find_files_by_extension(path, extension):
@@ -204,6 +218,56 @@ def hydrate_artifacts_with_best_score(artifacts):
         artifact['best_score'] = best_score['score']
 
     return hydrated_artifacts
+
+
+def parse_filter_string(filter_str_list):
+    filter_obj_list = list()
+
+    for filter_str in filter_str_list:
+        filter_obj = {
+            'selectors': [],
+            'action': {'key': '', 'value': ''},
+        }
+
+        selectors_str, action_str = filter_str.split('=')
+        selector_str_list = selectors_str.split(',')
+
+        for selector_str in selector_str_list:
+            selector_key, selector_value = selector_str.split(':')
+            filter_obj['selectors'].append({
+                'key': selector_key,
+                'value': selector_value.strip('[]').split(';')
+            })
+
+        action_key, action_value = action_str.split(':')
+        filter_obj['action']['key'] = action_key
+        filter_obj['action']['value'] = action_value
+
+        filter_obj_list.append(filter_obj)
+
+    return filter_obj_list
+
+
+def filter_artifacts(filtered_artifacts, filter_rules):
+    filtered_artifacts = copy.deepcopy(filtered_artifacts)
+
+    actions_functions = {
+        't': lambda artifacts, threshold: [artifact for artifact in artifacts if artifact['best_score'] < float(threshold)],
+        'b': lambda artifacts, threshold: sorted(artifacts, key=lambda item: item['best_score'], reverse=True)[int(threshold):]
+    }
+
+    for filter_rule in filter_rules:
+        temp_artifacts = filtered_artifacts.values()
+        for selector in filter_rule['selectors']:
+            temp_artifacts = [artifact for artifact in temp_artifacts if str(artifact[selector['key']]) in selector['value']]
+
+        action_key, action_value = filter_rule['action'].values()
+        temp_artifacts = actions_functions[action_key](temp_artifacts, action_value)
+
+        filtered_artifact_ids = [artifact['id'] for artifact in temp_artifacts]
+        [filtered_artifacts.pop(identifier) for identifier in filtered_artifact_ids]
+
+    return filtered_artifacts
 
 
 def update_good_artifacts(good, artifacts):
