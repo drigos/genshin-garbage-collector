@@ -7,19 +7,28 @@ import os
 import uuid
 
 
+# Artifact formats
+# - GOOD (Genshin Open Object Description)
+# - G2C (Genshin Garbage Collector)
+#
+# Wrappers
+# - List: [object]
+# - Set/Slot format: { set_key: { slot_key: [object] } }
+# - ID format: { id: object }
+
 @click.command()
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
 def main(filters):
     with open('good/data_3.json') as good_file:
         good = json.load(good_file)
 
-    artifacts = generate_output_format_from_good(good['artifacts'])
-    artifacts_with_efficiency = hydrate_sub_stats_efficiency(artifacts)
+    artifact_list = generate_g2c_artifact_list_from_good(good['artifacts'])
+    artifact_list_with_efficiency = hydrate_sub_stats_efficiency(artifact_list)
 
-    set_type_format_artifacts = generate_set_slot_format_from_artifact_list(artifacts_with_efficiency)
+    artifact_set_slot_format = convert_g2c_list_to_g2c_set_slot_format(artifact_list_with_efficiency)
 
     build_file_names = find_files_by_extension('builds/', '.json')
-    id_format_artifacts = score_artifacts_from_build_definitions(set_type_format_artifacts, build_file_names)
+    id_format_artifacts = score_artifacts_from_build_definitions(artifact_set_slot_format, build_file_names)
 
     id_format_artifacts_with_best_score = hydrate_artifacts_with_best_score(id_format_artifacts)
 
@@ -27,13 +36,20 @@ def main(filters):
     filtered_artifacts = filter_artifacts(id_format_artifacts_with_best_score, filter_obj_list)
 
     print(json.dumps(filtered_artifacts, indent=2))
+    print(len(filtered_artifacts))
 
-    # imprementar parâmetros de CLI como descrito no README
+    # implementar parâmetros de CLI como descrito no README
     # tarefas de qualidade de código (typing, code quality tools, unit tests, jsonlint)
     updated_good = update_good_artifacts(good, id_format_artifacts_with_best_score)
 
 
 def find_files_by_extension(path, extension):
+    """Return list of paths for all files with specified extension
+
+    :param path: directory to search
+    :param extension: extension to search
+    :return: list of paths for all files that match conditions
+    """
     file_names = list()
     for root, dirs, files in os.walk(path):
         if not len(files):
@@ -44,43 +60,57 @@ def find_files_by_extension(path, extension):
     return file_names
 
 
-def generate_output_format_from_good(artifacts):
-    output_format_artifacts = list()
-    for artifact in artifacts:
-        output_format_artifacts.append({
+def generate_g2c_artifact_from_good(good_artifact):
+    """Generate G2C artifact structure from GOOD artifact structure
+
+    :param good_artifact: GOOD (Genshin Open Object Description) artifact structure
+    :return: G2C (Genshin Garbage Collector) artifact structure
+    """
+    return {
             'id': str(uuid.uuid4()),
-            'set_key': artifact['setKey'],
-            'slot_key': artifact['slotKey'],
-            'main_stat_key': artifact['mainStatKey'],
-            'rarity': artifact['rarity'],
-            'level': artifact['level'],
-            'rank': math.floor(artifact['level'] / 4),
-            'sub_stats': copy.deepcopy(artifact['substats']),
+            'set_key': good_artifact['setKey'],
+            'slot_key': good_artifact['slotKey'],
+            'main_stat_key': good_artifact['mainStatKey'],
+            'rarity': good_artifact['rarity'],
+            'level': good_artifact['level'],
+            'rank': math.floor(good_artifact['level'] / 4),
+            'sub_stats': copy.deepcopy(good_artifact['substats']),
             'best_score': 0,
             'build_score': [],
-            'artifact_data': copy.deepcopy(artifact)
-        })
-    return output_format_artifacts
+            'artifact_data': copy.deepcopy(good_artifact)
+        }
 
 
-def hydrate_sub_stats_efficiency(artifacts):
+def generate_g2c_artifact_list_from_good(good_artifact_list):
+    """Generate G2C artifact list from GOOD artifact list
+
+    :param good_artifact_list: GOOD (Genshin Open Object Description) artifact list
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
+    return [generate_g2c_artifact_from_good(artifact) for artifact in good_artifact_list]
+
+
+def hydrate_sub_stats_efficiency(g2c_artifact_list):
     """Calculate average efficiency for each sub stat
 
     The greatest efficiency is achieved when the artifact contains:
     - 9 rolls (only in rarity equal 5 stars begin with 4 sub stats)
     - Each roll in max value for specific sub stat (others possible values are 70%, 80% and 90%)
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list (without efficiency)
+    :return: G2C (Genshin Garbage Collector) artifact list (with efficiency)
     """
-    artifacts = copy.deepcopy(artifacts)
+    g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
 
     max_artifact_rolls = 9
 
     with open('artifact-max-stats.json') as artifact_stats_file:
         artifact_stats_constants = json.load(artifact_stats_file)
 
-    for artifact in artifacts:
-        artifact_rarity = str(artifact['rarity'])
+    for g2c_artifact in g2c_artifact_list:
+        artifact_rarity = str(g2c_artifact['rarity'])
 
-        for sub_stat in artifact['sub_stats']:
+        for sub_stat in g2c_artifact['sub_stats']:
             sub_stat_key = sub_stat['key']
 
             if sub_stat_key == '':  # its condition is for artifacts with less than 4 sub stats
@@ -91,22 +121,21 @@ def hydrate_sub_stats_efficiency(artifacts):
                 average_efficiency = (current_value / max_roll_value) / max_artifact_rolls
                 sub_stat['efficiency'] = average_efficiency
 
-    return artifacts
+    return g2c_artifact_list
 
 
-def generate_set_slot_format_from_artifact_list(artifacts):
-    """Convert artifact list to Set/Type format
+def convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list):
+    """Convert G2C artifact list to G2C artifact Set/Slot format
 
-    Output format example:
-    - { SetName: { typeName: [...] } }
-    - { HuskOfOpulentDreams: { flower: [], plume: [], sands: [], circlet: [], goblet: [] } }
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :return: G2C (Genshin Garbage Collector) artifact Set/Slot format
     """
-    set_type_format_artifacts = dict()
-    for artifact in artifacts:
-        artifact_set_key = artifact['set_key']
-        artifact_slot_key = artifact['slot_key']
-        if artifact_set_key not in set_type_format_artifacts.keys():
-            set_type_format_artifacts[artifact_set_key] = dict({
+    g2c_artifact_set_slot_format = dict()
+    for g2c_artifact in g2c_artifact_list:
+        artifact_set_key = g2c_artifact['set_key']
+        artifact_slot_key = g2c_artifact['slot_key']
+        if artifact_set_key not in g2c_artifact_set_slot_format.keys():
+            g2c_artifact_set_slot_format[artifact_set_key] = dict({
                 'flower': [],
                 'plume': [],
                 'sands': [],
@@ -114,31 +143,41 @@ def generate_set_slot_format_from_artifact_list(artifacts):
                 'circlet': [],
             })
 
-        set_type_format_artifacts[artifact_set_key][artifact_slot_key].append(artifact)
+        g2c_artifact_set_slot_format[artifact_set_key][artifact_slot_key].append(g2c_artifact)
 
-    return set_type_format_artifacts
+    return g2c_artifact_set_slot_format
 
 
-def score_artifacts_from_build_definitions(set_type_format_artifacts, build_file_names):
-    id_format_artifacts = dict()
+def score_artifacts_from_build_definitions(artifact_set_type_format, build_file_names):
+    """Score artifacts from build definitions
+
+    - convert artifact_set_slot_format to artifact_id_format
+    - get artifact that match with builds
+    - score artifacts from build definitions
+
+    :param artifact_set_type_format: G2C (Genshin Garbage Collector) artifact Set/Slot format
+    :param build_file_names: build file path list
+    :return: G2C (Genshin Garbage Collector) artifact ID format
+    """
+    artifact_id_format = dict()
     for build_file_name in build_file_names:
         with open(build_file_name) as build_file:
             build = json.load(build_file)
 
-        matched_artifacts = get_matched_artifacts(set_type_format_artifacts, build)
+        matched_artifacts = get_matched_artifacts(artifact_set_type_format, build)
         artifacts_score = score_artifacts(matched_artifacts, build)
 
         for matched_artifact in matched_artifacts:
             identifier = matched_artifact['id']
-            if identifier not in id_format_artifacts.keys():
-                id_format_artifacts[identifier] = copy.deepcopy(matched_artifact)
+            if identifier not in artifact_id_format.keys():
+                artifact_id_format[identifier] = copy.deepcopy(matched_artifact)
 
-            id_format_artifacts[identifier]['build_score'].append({
+            artifact_id_format[identifier]['build_score'].append({
                 'character': build['character'],
                 'build': build['name'],
                 'score': artifacts_score[identifier]
             })
-    return id_format_artifacts
+    return artifact_id_format
 
 
 def get_artifacts_match_with_set(artifacts, artifact_set_names):
