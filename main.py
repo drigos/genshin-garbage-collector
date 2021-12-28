@@ -10,11 +10,6 @@ import uuid
 # Artifact formats
 # - GOOD (Genshin Open Object Description)
 # - G2C (Genshin Garbage Collector)
-#
-# Wrappers
-# - List: [object]
-# - Set/Slot format: { set_key: { slot_key: [object] } }
-# - ID format: { id: object }
 
 @click.command()
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
@@ -25,10 +20,8 @@ def main(filters):
     artifact_list = generate_g2c_artifact_list_from_good(good['artifacts'])
     artifact_list_with_efficiency = hydrate_sub_stats_efficiency(artifact_list)
 
-    artifact_set_slot_format = convert_g2c_list_to_g2c_set_slot_format(artifact_list_with_efficiency)
-
     build_file_names = find_files_by_extension('builds/', '.json')
-    id_format_artifacts = score_artifacts_from_build_definitions(artifact_set_slot_format, build_file_names)
+    id_format_artifacts = get_artifacts_with_build_scores(artifact_list_with_efficiency, build_file_names)
 
     id_format_artifacts_with_best_score = hydrate_artifacts_with_best_score(id_format_artifacts)
 
@@ -148,35 +141,41 @@ def convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list):
     return g2c_artifact_set_slot_format
 
 
-def score_artifacts_from_build_definitions(artifact_set_type_format, build_file_names):
-    """Score artifacts from build definitions
+def get_artifacts_with_build_scores(g2c_artifact_list, build_file_names):
+    """Get artifacts with build scores
 
-    - convert artifact_set_slot_format to artifact_id_format
-    - get artifact that match with builds
-    - score artifacts from build definitions
+    # Artifact wrappers
+    # - List: [artifact]
+    # - Set/Slot format: { set_key: { slot_key: [artifact] } }
+    # - ID format: { id: artifact }
 
-    :param artifact_set_type_format: G2C (Genshin Garbage Collector) artifact Set/Slot format
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
     :param build_file_names: build file path list
     :return: G2C (Genshin Garbage Collector) artifact ID format
     """
+    artifact_set_slot_format = convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list)
+
     artifact_id_format = dict()
     for build_file_name in build_file_names:
         with open(build_file_name) as build_file:
             build = json.load(build_file)
 
-        matched_artifacts = get_matched_artifacts(artifact_set_type_format, build)
-        artifacts_score = score_artifacts(matched_artifacts, build)
+        matched_artifact_list = get_artifacts_that_match_builds(artifact_set_slot_format, build)
 
-        for matched_artifact in matched_artifacts:
-            identifier = matched_artifact['id']
-            if identifier not in artifact_id_format.keys():
-                artifact_id_format[identifier] = copy.deepcopy(matched_artifact)
+        for matched_artifact in matched_artifact_list:
+            artifact_id = matched_artifact['id']
+            if artifact_id not in artifact_id_format.keys():
+                artifact_id_format[artifact_id] = copy.deepcopy(matched_artifact)
 
-            artifact_id_format[identifier]['build_score'].append({
+        artifacts_score = score_artifacts(matched_artifact_list, build)
+
+        for artifact_id, artifact_score in artifacts_score.items():
+            artifact_id_format[artifact_id]['build_score'].append({
                 'character': build['character'],
                 'build': build['name'],
-                'score': artifacts_score[identifier]
+                'score': artifact_score
             })
+
     return artifact_id_format
 
 
@@ -211,7 +210,7 @@ def get_artifacts_match_with_main_stat(artifacts, main_stats):
     return [artifact for artifact in artifacts if artifact['main_stat_key'] in main_stats]
 
 
-def get_matched_artifacts(artifacts, build):
+def get_artifacts_that_match_builds(artifacts, build):
     """Return artifact list that match the build
 
     artifacts: list with all artifacts
