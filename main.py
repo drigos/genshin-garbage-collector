@@ -20,7 +20,7 @@ import uuid
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
 @click.option('-e', '--export', is_flag=True, help='Display artifacts in GOOD format (default is G2C format')
 def main(filters, export):
-    with open('good/data_3.json') as good_file:
+    with open('good/data-andre.json') as good_file:
         good = json.load(good_file)
 
     artifact_list = generate_g2c_artifact_list_from_good(good['artifacts'])
@@ -150,7 +150,7 @@ def hydrate_sub_stats_efficiency(g2c_artifact_list):
         for sub_stat in g2c_artifact['sub_stats']:
             sub_stat_key = sub_stat['key']
 
-            if sub_stat_key == '':  # its condition is for artifacts with less than 4 sub stats
+            if sub_stat_key is None:  # its condition is for artifacts with less than 4 sub stats
                 sub_stat['efficiency'] = 0
             else:
                 max_roll_value = artifact_stats_constants[sub_stat_key][artifact_rarity]
