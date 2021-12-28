@@ -1,20 +1,18 @@
 {
-  "character": "Ningguang",
-  "name": "DPS",
+  "character": "Venti",
+  "name": "Crit Sub DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/ningguang/"
+    "guide_uri": "https://keqingmains.com/venti/"
   },
   "filter": {
     "set": [
-      "ArchaicPetra",
-      "GladiatorsFinale",
-      "NoblesseOblige"
+      "ViridescentVenerer"
     ],
     "sands": [
       "atk_"
     ],
     "goblet": [
-      "geo_dmg_"
+      "anemo_dmg_"
     ],
     "circlet": [
       "critRate_",
@@ -24,8 +22,9 @@
   "sub_stats": {
     "critRate_": 1,
     "critDMG_": 1,
+    "enerRech_": 0.8,
     "atk_": 0.8,
     "atk": 0.6,
-    "enerRech_": 0.4
+    "eleMas": 0.6
   }
 }

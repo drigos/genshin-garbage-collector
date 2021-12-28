@@ -1,0 +1,31 @@
+{
+  "character": "Venti",
+  "name": "EM Sub DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/venti/"
+  },
+  "filter": {
+    "set": [
+      "ViridescentVenerer"
+    ],
+    "sands": [
+      "eleMas",
+      "atk_"
+    ],
+    "goblet": [
+      "eleMas",
+      "anemo_dmg_"
+    ],
+    "circlet": [
+      "eleMas"
+    ]
+  },
+  "sub_stats": {
+    "eleMas": 1,
+    "enerRech_": 0.8,
+    "atk_": 0.6,
+    "critRate_": 0.6,
+    "atk": 0.4,
+    "critDMG_": 0.4
+  }
+}
