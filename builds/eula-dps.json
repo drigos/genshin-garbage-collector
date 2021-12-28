@@ -7,7 +7,8 @@
   "filter": {
     "set": [
       "PaleFlame",
-      "BloodstainedChivalry"
+      "BloodstainedChivalry",
+      "RetracingBolide"
     ],
     "sands": [
       "atk_"
