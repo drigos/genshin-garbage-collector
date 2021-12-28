@@ -327,7 +327,11 @@ def filter_artifacts(g2c_artifact_id_format, filter_rule_list):
     for filter_rule in filter_rule_list:
         exclusion_artifact_list = g2c_artifact_id_format.values()
         for selector in filter_rule['selectors']:
-            exclusion_artifact_list = [artifact for artifact in exclusion_artifact_list if str(artifact[selector['key']]) in selector['value']]
+            if selector['key'] != '*':
+                exclusion_artifact_list = [
+                    artifact for artifact in exclusion_artifact_list
+                    if str(artifact[selector['key']]) in selector['value']
+                ]
 
         action_key, action_value = filter_rule['action'].values()
         exclusion_artifact_list = actions_functions[action_key](exclusion_artifact_list, action_value)

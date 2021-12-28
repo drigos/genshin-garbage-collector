@@ -37,7 +37,7 @@ See [GOOD format description](https://frzyc.github.io/genshin-optimizer/#/doc/) 
 
 **Example 1:** keep artifacts above score `0.3`  
 ```
--f '*=t:0.3'
+-f '*:*=t:0.3'
 ```
 
 **Example 2:** use different score based on artifact rank  
@@ -52,7 +52,7 @@ See [GOOD format description](https://frzyc.github.io/genshin-optimizer/#/doc/) 
 
 **Example 4:** keep the `700` best artifacts  
 ```
--f '*=b:700'
+-f '*:*=b:700'
 ```
 
 **Example 5:** keep the `5` best `plume` from the `Pale Flame` artifact  
