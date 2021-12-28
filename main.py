@@ -1,3 +1,4 @@
+import click
 import copy
 import functools
 import json
@@ -6,7 +7,9 @@ import os
 import uuid
 
 
-def main():
+@click.command()
+@click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
+def main(filters):
     with open('good/data_3.json') as good_file:
         good = json.load(good_file)
 
@@ -38,25 +41,12 @@ def main():
 
     id_format_artifacts_with_best_score = hydrate_artifacts_with_best_score(id_format_artifacts)
 
-    filter_str_list = [
-        'rank:0=t:0.2',
-        'rank:1=t:0.25',
-        'rank:2=t:0.3',
-        'rank:3=t:0.35',
-        'rank:4=t:0.4',
-        'rank:5=t:0.5'
-    ]
-    # filter_str_list = [
-    #     'set_key:[GladiatorsFinale;WanderersTroupe],rank:[0;1;2;3]=b:20',
-    #     'set_key:[GladiatorsFinale;WanderersTroupe],rank:[0;1;2;3]=t:0.2',
-    #     'rank:5=t:0.5'
-    # ]
-    filter_obj_list = parse_filter_string(filter_str_list)
+    filter_obj_list = parse_filter_string(filters)
     filtered_artifacts = filter_artifacts(id_format_artifacts_with_best_score, filter_obj_list)
 
     print(json.dumps(filtered_artifacts, indent=2))
 
-    # receber argumentos via CLI (good_file, threshold, amount)
+    # imprementar parâmetros de CLI como descrito no README
     # tarefas de qualidade de código (typing, code quality tools, unit tests, jsonlint)
     updated_good = update_good_artifacts(good, id_format_artifacts_with_best_score)
 
