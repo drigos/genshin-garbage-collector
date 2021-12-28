@@ -1,16 +1,19 @@
 {
-  "character": "Rosaria",
-  "name": "Support",
+  "character": "Kaeya",
+  "name": "Freeze Sub DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/rosaria/"
+    "guide_uri": "https://keqingmains.com/kaeya/"
   },
   "filter": {
     "set": [
       "NoblesseOblige",
-      "BlizzardStrayer"
+      "BlizzardStrayer",
+      "GladiatorsFinale",
+      "EmblemOfSeveredFate"
     ],
     "sands": [
-      "atk_"
+      "atk_",
+      "enerRech_"
     ],
     "goblet": [
       "cryo_dmg_"
