@@ -2,10 +2,7 @@
   "character": "Barbara",
   "name": "Healer",
   "description": {
-    "guide_uri": [
-      "https://genshin-builds.com/character/barbara",
-      "https://genshin.gg/characters/Barbara"
-    ]
+    "guide_uri": "https://genshin.gg/characters/Barbara"
   },
   "filter": {
     "set": [
