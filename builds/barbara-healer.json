@@ -1,0 +1,31 @@
+{
+  "character": "Barbara",
+  "name": "Healer",
+  "description": {
+    "guide_uri": [
+      "https://genshin-builds.com/character/barbara",
+      "https://genshin.gg/characters/Barbara"
+    ]
+  },
+  "filter": {
+    "set": [
+      "OceanHuedClam"
+    ],
+    "sands": [
+      "hp_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "hp_"
+    ],
+    "circlet": [
+      "heal_",
+      "hp_"
+    ]
+  },
+  "sub_stats": {
+    "hp_": 1,
+    "enerRech_": 0.8,
+    "hp": 0.5
+  }
+}
