@@ -61,12 +61,6 @@ def main(input_file, output_format, list_mode, filters):
     print(output)
 
 
-def get_complementary_artifacts(g2c_artifact_full_list, g2c_artifact_partial_list):
-    g2c_artifact_full_list = copy.deepcopy(g2c_artifact_full_list)
-    keys = [artifact['id'] for artifact in g2c_artifact_partial_list]
-    return [artifact for artifact in g2c_artifact_full_list if artifact['id'] not in keys]
-
-
 def find_files_by_extension(path, extension):
     """Return list of paths for all files with specified extension
 
@@ -375,6 +369,12 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
 
 
 def lock_unlock_artifacts(g2c_artifact_list, lock):
+    """Lock or unlock all artifacts in list
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param lock: boolean to indicate whether artifacts should be locked or unlocked
+    :return: locked/unlocked G2C (Genshin Garbage Collector) artifact list
+    """
     g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
     for g2c_artifact in g2c_artifact_list:
         g2c_artifact['lock'] = lock
@@ -382,9 +382,27 @@ def lock_unlock_artifacts(g2c_artifact_list, lock):
     return g2c_artifact_list
 
 
-def update_good_artifacts(good, artifact_id_format):
+def get_complementary_artifacts(g2c_artifact_full_list, g2c_artifact_partial_list):
+    """Get artifacts from full list that aren't in the partial list
+
+    :param g2c_artifact_full_list: G2C (Genshin Garbage Collector) artifact list
+    :param g2c_artifact_partial_list: G2C (Genshin Garbage Collector) artifact list
+    :return: complementary G2C (Genshin Garbage Collector) artifact list
+    """
+    g2c_artifact_full_list = copy.deepcopy(g2c_artifact_full_list)
+    keys = [artifact['id'] for artifact in g2c_artifact_partial_list]
+    return [artifact for artifact in g2c_artifact_full_list if artifact['id'] not in keys]
+
+
+def update_good_artifacts(good, g2c_artifact_list):
+    """Change GOOD artifact list for G2C artifact list and return GOOD structure
+    
+    :param good: GOOD (Genshin Open Object Description)
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :return: GOOD (Genshin Open Object Description)
+    """
     good = copy.deepcopy(good)
-    good_artifacts = [artifact['artifact_data'] for artifact in artifact_id_format]
+    good_artifacts = [artifact['artifact_data'] for artifact in g2c_artifact_list]
     good['artifacts'] = good_artifacts
     return good
 
