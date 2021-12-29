@@ -390,7 +390,7 @@ def get_complementary_artifacts(g2c_artifact_full_list, g2c_artifact_partial_lis
     :return: complementary G2C (Genshin Garbage Collector) artifact list
     """
     g2c_artifact_full_list = copy.deepcopy(g2c_artifact_full_list)
-    keys = [artifact['id'] for artifact in g2c_artifact_partial_list]
+    keys = {artifact['id'] for artifact in g2c_artifact_partial_list}
     return [artifact for artifact in g2c_artifact_full_list if artifact['id'] not in keys]
 
 
