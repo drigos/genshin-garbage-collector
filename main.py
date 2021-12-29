@@ -20,7 +20,7 @@ import os
 @click.option('-o', '--output-format', default='g2c', show_default=True,
               type=click.Choice(['g2c', 'count', 'good'], case_sensitive=False),
               help='Specify output format.')
-@click.option('-k', '--keep', 'list_mode', flag_value='keep', help='Show artifacts that will be kept.')
+@click.option('-k', '--keep', 'list_mode', flag_value='keep', default=True, help='Show artifacts that will be kept.')
 @click.option('-d', '--discard', 'list_mode', flag_value='discard', help='Show artifacts that will be discarded.')
 @click.option('-a', '--all', 'list_mode', flag_value='all', help='Show all artifacts.')
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
