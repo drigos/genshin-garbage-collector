@@ -4,7 +4,6 @@ import functools
 import json
 import math
 import os
-import uuid
 
 
 # Artifact formats
@@ -105,7 +104,7 @@ def generate_g2c_artifact_from_good(good_artifact):
     :return: G2C (Genshin Garbage Collector) artifact structure
     """
     return {
-            'id': str(uuid.uuid4()),
+            'id': good_artifact['Id'],
             'set_key': good_artifact['setKey'],
             'slot_key': good_artifact['slotKey'],
             'main_stat_key': good_artifact['mainStatKey'],
