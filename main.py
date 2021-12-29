@@ -27,11 +27,11 @@ def main(input_file, filters, export):
     artifact_list = hydrate_sub_stats_efficiency(artifact_list)
 
     build_file_name_list = find_files_by_extension('builds/', '.json')
-    artifact_id_format = get_artifacts_with_build_scores(artifact_list, build_file_name_list)
+    artifact_list_to_keep = get_artifacts_with_build_scores(artifact_list, build_file_name_list)
 
     if filters:
         filter_rule_list = parse_cli_filter_string(filters)
-        artifact_id_format = filter_artifacts(artifact_id_format, filter_rule_list)
+        artifact_list_to_keep = filter_artifacts(artifact_list_to_keep, filter_rule_list)
 
     output = artifact_id_format
     if export:
@@ -195,7 +195,7 @@ def get_artifacts_with_build_scores(g2c_artifact_list, build_file_name_list):
         best_score = max(g2c_artifact['build_score'], key=lambda artifact: artifact['score'])
         g2c_artifact['best_score'] = best_score['score']
 
-    return g2c_artifact_id_format
+    return list(g2c_artifact_id_format.values())
 
 
 def convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list):
@@ -220,6 +220,15 @@ def convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list):
         g2c_artifact_set_slot_format[artifact_set_key][artifact_slot_key].append(g2c_artifact)
 
     return g2c_artifact_set_slot_format
+
+
+def convert_g2c_list_to_g2c_id_format(g2c_artifact_list):
+    """Convert G2C artifact list to G2C artifact ID format
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :return: G2C (Genshin Garbage Collector) artifact ID format
+    """
+    return {artifact['id']: artifact for artifact in g2c_artifact_list}
 
 
 def get_artifacts_that_match_build(g2c_artifact_set_slot_format, build):
@@ -306,17 +315,17 @@ def calculate_normalization_factor(sub_stats):
     return sum(sorted_sub_status) / 9
 
 
-def filter_artifacts(g2c_artifact_id_format, filter_rule_list):
+def filter_artifacts(g2c_artifact_list, filter_rule_list):
     """Filter artifacts according to defined rules
 
     Only artifacts matched by the selector will be filtered
     Any artifact that don't match the selector will be preserved
 
-    :param g2c_artifact_id_format: G2C (Genshin Garbage Collector) artifact ID format
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
     :param filter_rule_list: list with selector and action to filter artifacts
     :return: G2C (Genshin Garbage Collector) artifact list
     """
-    g2c_artifact_id_format = copy.deepcopy(g2c_artifact_id_format)
+    g2c_artifact_id_format = convert_g2c_list_to_g2c_id_format(g2c_artifact_list)
 
     actions_functions = {
         't': lambda artifacts, threshold: [artifact for artifact in artifacts if artifact['best_score'] < float(threshold)],
@@ -338,12 +347,12 @@ def filter_artifacts(g2c_artifact_id_format, filter_rule_list):
         filtered_artifact_ids = [artifact['id'] for artifact in exclusion_artifact_list]
         [g2c_artifact_id_format.pop(identifier) for identifier in filtered_artifact_ids]
 
-    return g2c_artifact_id_format
+    return list(g2c_artifact_id_format.values())
 
 
 def update_good_artifacts(good, artifact_id_format):
     good = copy.deepcopy(good)
-    good_artifacts = [artifact['artifact_data'] for artifact in artifact_id_format.values()]
+    good_artifacts = [artifact['artifact_data'] for artifact in artifact_id_format]
     good['artifacts'] = good_artifacts
     return good
 
