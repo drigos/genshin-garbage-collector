@@ -32,13 +32,16 @@ def main(input_file, output_format, list_mode, filters):
     artifact_list = hydrate_sub_stats_efficiency(artifact_list)
 
     build_file_name_list = find_files_by_extension('builds/', '.json')
+
     artifact_list_to_keep = get_artifacts_with_build_scores(artifact_list, build_file_name_list)
+    artifact_list_to_keep = lock_unlock_artifacts(artifact_list_to_keep, True)
 
     if filters:
         filter_rule_list = parse_cli_filter_string(filters)
         artifact_list_to_keep = filter_artifacts(artifact_list_to_keep, filter_rule_list)
 
     artifact_list_to_discard = get_complementary_artifacts(artifact_list, artifact_list_to_keep)
+    artifact_list_to_discard = lock_unlock_artifacts(artifact_list_to_discard, False)
 
     output_lists = {
         'keep': artifact_list_to_keep,
@@ -124,18 +127,19 @@ def generate_g2c_artifact_from_good(good_artifact):
     :return: G2C (Genshin Garbage Collector) artifact structure
     """
     return {
-            'id': good_artifact['Id'],
-            'set_key': good_artifact['setKey'],
-            'slot_key': good_artifact['slotKey'],
-            'main_stat_key': good_artifact['mainStatKey'],
-            'rarity': good_artifact['rarity'],
-            'level': good_artifact['level'],
-            'rank': math.floor(good_artifact['level'] / 4),
-            'sub_stats': copy.deepcopy(good_artifact['substats']),
-            'best_score': 0,
-            'build_score': [],
-            'artifact_data': copy.deepcopy(good_artifact)
-        }
+        'id': good_artifact['Id'],
+        'set_key': good_artifact['setKey'],
+        'slot_key': good_artifact['slotKey'],
+        'main_stat_key': good_artifact['mainStatKey'],
+        'rarity': good_artifact['rarity'],
+        'level': good_artifact['level'],
+        'rank': math.floor(good_artifact['level'] / 4),
+        'sub_stats': copy.deepcopy(good_artifact['substats']),
+        'best_score': 0,
+        'build_score': [],
+        'lock': None,
+        'artifact_data': copy.deepcopy(good_artifact)
+    }
 
 
 def generate_g2c_artifact_list_from_good(good_artifact_list):
@@ -368,6 +372,14 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
         [g2c_artifact_id_format.pop(identifier) for identifier in filtered_artifact_ids]
 
     return list(g2c_artifact_id_format.values())
+
+
+def lock_unlock_artifacts(g2c_artifact_list, lock):
+    g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
+    for g2c_artifact in g2c_artifact_list:
+        g2c_artifact['lock'] = lock
+        g2c_artifact['artifact_data']['lock'] = lock
+    return g2c_artifact_list
 
 
 def update_good_artifacts(good, artifact_id_format):
