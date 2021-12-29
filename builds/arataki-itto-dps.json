@@ -1,0 +1,31 @@
+{
+  "character": "Arataki Itto",
+  "name": "DPS",
+  "description": {
+    "guide_uri": "https://genshin-builds.com/character/arataki_itto"
+  },
+  "filter": {
+    "set": [
+      "HuskOfOpulentDreams"
+    ],
+    "sands": [
+      "def_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "geo_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_",
+      "def_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "enerRech_": 0.8,
+    "def_": 0.8,
+    "def": 0.6
+  }
+}
