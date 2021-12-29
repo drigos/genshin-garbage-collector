@@ -18,7 +18,7 @@ import os
 @click.command()
 @click.option('-i', '--input-file', required=True, type=str, help='Specify input file in GOOD format.')
 @click.option('-o', '--output-format', default='g2c', show_default=True,
-              type=click.Choice(['g2c', 'count', 'good-keep'], case_sensitive=False),
+              type=click.Choice(['g2c', 'count', 'good-keep', 'good-discard'], case_sensitive=False),
               help='Specify output format')
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
 def main(input_file, output_format, filters):
@@ -41,9 +41,20 @@ def main(input_file, output_format, filters):
     if output_format == 'count':
         output = len(artifact_list_to_keep)
     if output_format == 'good-keep':
-        output = json.dumps(update_good_artifacts(good, artifact_list_to_keep))
+        return_good = update_good_artifacts(good, artifact_list_to_keep)
+        output = json.dumps(return_good)
+    if output_format == 'good-discard':
+        artifact_list_to_discard = get_complementary_artifacts(artifact_list, artifact_list_to_keep)
+        return_good = update_good_artifacts(good, artifact_list_to_discard)
+        output = json.dumps(return_good)
 
     print(output)
+
+
+def get_complementary_artifacts(g2c_artifact_full_list, g2c_artifact_partial_list):
+    g2c_artifact_full_list = copy.deepcopy(g2c_artifact_full_list)
+    keys = [artifact['id'] for artifact in g2c_artifact_partial_list]
+    return [artifact for artifact in g2c_artifact_full_list if artifact['id'] not in keys]
 
 
 def find_files_by_extension(path, extension):
