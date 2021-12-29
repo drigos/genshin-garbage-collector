@@ -1,0 +1,30 @@
+{
+  "character": "Sayu",
+  "name": "Viridescent Support",
+  "description": {
+    "guide_uri": "https://genshin-builds.com/character/sayu"
+  },
+  "filter": {
+    "set": [
+      "ViridescentVenerer"
+    ],
+    "sands": [
+      "eleMas",
+      "enerRech_"
+    ],
+    "goblet": [
+      "eleMas",
+      "atk_"
+    ],
+    "circlet": [
+      "eleMas",
+      "heal_"
+    ]
+  },
+  "sub_stats": {
+    "eleMas": 1,
+    "enerRech_": 0.8,
+    "atk_": 0.8,
+    "atk": 0.6
+  }
+}
