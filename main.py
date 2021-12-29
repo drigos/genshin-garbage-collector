@@ -18,10 +18,13 @@ import os
 @click.command()
 @click.option('-i', '--input-file', required=True, type=str, help='Specify input file in GOOD format.')
 @click.option('-o', '--output-format', default='g2c', show_default=True,
-              type=click.Choice(['g2c', 'count', 'good-keep', 'good-discard'], case_sensitive=False),
-              help='Specify output format')
+              type=click.Choice(['g2c', 'count', 'good'], case_sensitive=False),
+              help='Specify output format.')
+@click.option('-k', '--keep', 'list_mode', flag_value='keep', help='Show artifacts that will be kept.')
+@click.option('-d', '--discard', 'list_mode', flag_value='discard', help='Show artifacts that will be discarded.')
+@click.option('-a', '--all', 'list_mode', flag_value='all', help='Show all artifacts.')
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
-def main(input_file, output_format, filters):
+def main(input_file, output_format, list_mode, filters):
     with open(input_file) as good_file:
         good = json.load(good_file)
 
@@ -35,17 +38,21 @@ def main(input_file, output_format, filters):
         filter_rule_list = parse_cli_filter_string(filters)
         artifact_list_to_keep = filter_artifacts(artifact_list_to_keep, filter_rule_list)
 
+    artifact_list_to_discard = get_complementary_artifacts(artifact_list, artifact_list_to_keep)
+
+    output_lists = {
+        'keep': artifact_list_to_keep,
+        'discard': artifact_list_to_discard,
+        'all': artifact_list_to_keep + artifact_list_to_discard
+    }
+    output_list = output_lists[list_mode]
     output = None
     if output_format == 'g2c':
-        output = json.dumps(artifact_list_to_keep)
+        output = json.dumps(output_list)
     if output_format == 'count':
-        output = len(artifact_list_to_keep)
-    if output_format == 'good-keep':
-        return_good = update_good_artifacts(good, artifact_list_to_keep)
-        output = json.dumps(return_good)
-    if output_format == 'good-discard':
-        artifact_list_to_discard = get_complementary_artifacts(artifact_list, artifact_list_to_keep)
-        return_good = update_good_artifacts(good, artifact_list_to_discard)
+        output = len(output_list)
+    if output_format == 'good':
+        return_good = update_good_artifacts(good, output_list)
         output = json.dumps(return_good)
 
     print(output)
