@@ -4,7 +4,6 @@ import functools
 import json
 import math
 import os
-import uuid
 
 
 # Artifact formats
@@ -17,10 +16,15 @@ import uuid
 # - ID format: { id: artifact }
 
 @click.command()
-@click.option('-i', '--input-file', required=True, type=str, help='Specify GOOD file.')
+@click.option('-i', '--input-file', required=True, type=str, help='Specify input file in GOOD format.')
+@click.option('-o', '--output-format', default='g2c', show_default=True,
+              type=click.Choice(['g2c', 'count', 'good'], case_sensitive=False),
+              help='Specify output format.')
+@click.option('-k', '--keep', 'list_mode', flag_value='keep', default=True, help='Show artifacts that will be kept.')
+@click.option('-d', '--discard', 'list_mode', flag_value='discard', help='Show artifacts that will be discarded.')
+@click.option('-a', '--all', 'list_mode', flag_value='all', help='Show all artifacts.')
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
-@click.option('-e', '--export', is_flag=True, help='Display artifacts in GOOD format (default is G2C format)')
-def main(input_file, filters, export):
+def main(input_file, output_format, list_mode, filters):
     with open(input_file) as good_file:
         good = json.load(good_file)
 
@@ -28,21 +32,33 @@ def main(input_file, filters, export):
     artifact_list = hydrate_sub_stats_efficiency(artifact_list)
 
     build_file_name_list = find_files_by_extension('builds/', '.json')
-    artifact_id_format = get_artifacts_with_build_scores(artifact_list, build_file_name_list)
+
+    artifact_list_to_keep = get_artifacts_with_build_scores(artifact_list, build_file_name_list)
+    artifact_list_to_keep = lock_unlock_artifacts(artifact_list_to_keep, True)
 
     if filters:
         filter_rule_list = parse_cli_filter_string(filters)
-        artifact_id_format = filter_artifacts(artifact_id_format, filter_rule_list)
+        artifact_list_to_keep = filter_artifacts(artifact_list_to_keep, filter_rule_list)
 
-    output = artifact_id_format
-    if export:
-        output = update_good_artifacts(good, artifact_id_format)
+    artifact_list_to_discard = get_complementary_artifacts(artifact_list, artifact_list_to_keep)
+    artifact_list_to_discard = lock_unlock_artifacts(artifact_list_to_discard, False)
 
-    print(json.dumps(output, indent=2))
-    print(len(output))
+    output_lists = {
+        'keep': artifact_list_to_keep,
+        'discard': artifact_list_to_discard,
+        'all': artifact_list_to_keep + artifact_list_to_discard
+    }
+    output_list = output_lists[list_mode]
+    output = None
+    if output_format == 'g2c':
+        output = json.dumps(output_list)
+    if output_format == 'count':
+        output = len(output_list)
+    if output_format == 'good':
+        return_good = update_good_artifacts(good, output_list)
+        output = json.dumps(return_good)
 
-    # implementar parâmetros de CLI como descrito no README
-    # tarefas de qualidade de código (typing, code quality tools, unit tests, jsonlint)
+    print(output)
 
 
 def find_files_by_extension(path, extension):
@@ -105,18 +121,19 @@ def generate_g2c_artifact_from_good(good_artifact):
     :return: G2C (Genshin Garbage Collector) artifact structure
     """
     return {
-            'id': str(uuid.uuid4()),
-            'set_key': good_artifact['setKey'],
-            'slot_key': good_artifact['slotKey'],
-            'main_stat_key': good_artifact['mainStatKey'],
-            'rarity': good_artifact['rarity'],
-            'level': good_artifact['level'],
-            'rank': math.floor(good_artifact['level'] / 4),
-            'sub_stats': copy.deepcopy(good_artifact['substats']),
-            'best_score': 0,
-            'build_score': [],
-            'artifact_data': copy.deepcopy(good_artifact)
-        }
+        'id': good_artifact['Id'],
+        'set_key': good_artifact['setKey'],
+        'slot_key': good_artifact['slotKey'],
+        'main_stat_key': good_artifact['mainStatKey'],
+        'rarity': good_artifact['rarity'],
+        'level': good_artifact['level'],
+        'rank': math.floor(good_artifact['level'] / 4),
+        'sub_stats': copy.deepcopy(good_artifact['substats']),
+        'best_score': 0,
+        'build_score': [],
+        'lock': None,
+        'artifact_data': copy.deepcopy(good_artifact)
+    }
 
 
 def generate_g2c_artifact_list_from_good(good_artifact_list):
@@ -196,7 +213,7 @@ def get_artifacts_with_build_scores(g2c_artifact_list, build_file_name_list):
         best_score = max(g2c_artifact['build_score'], key=lambda artifact: artifact['score'])
         g2c_artifact['best_score'] = best_score['score']
 
-    return g2c_artifact_id_format
+    return list(g2c_artifact_id_format.values())
 
 
 def convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list):
@@ -221,6 +238,15 @@ def convert_g2c_list_to_g2c_set_slot_format(g2c_artifact_list):
         g2c_artifact_set_slot_format[artifact_set_key][artifact_slot_key].append(g2c_artifact)
 
     return g2c_artifact_set_slot_format
+
+
+def convert_g2c_list_to_g2c_id_format(g2c_artifact_list):
+    """Convert G2C artifact list to G2C artifact ID format
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :return: G2C (Genshin Garbage Collector) artifact ID format
+    """
+    return {artifact['id']: artifact for artifact in g2c_artifact_list}
 
 
 def get_artifacts_that_match_build(g2c_artifact_set_slot_format, build):
@@ -307,17 +333,17 @@ def calculate_normalization_factor(sub_stats):
     return sum(sorted_sub_status) / 9
 
 
-def filter_artifacts(g2c_artifact_id_format, filter_rule_list):
+def filter_artifacts(g2c_artifact_list, filter_rule_list):
     """Filter artifacts according to defined rules
 
     Only artifacts matched by the selector will be filtered
     Any artifact that don't match the selector will be preserved
 
-    :param g2c_artifact_id_format: G2C (Genshin Garbage Collector) artifact ID format
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
     :param filter_rule_list: list with selector and action to filter artifacts
     :return: G2C (Genshin Garbage Collector) artifact list
     """
-    g2c_artifact_id_format = copy.deepcopy(g2c_artifact_id_format)
+    g2c_artifact_id_format = convert_g2c_list_to_g2c_id_format(g2c_artifact_list)
 
     actions_functions = {
         't': lambda artifacts, threshold: [artifact for artifact in artifacts if artifact['best_score'] < float(threshold)],
@@ -339,12 +365,44 @@ def filter_artifacts(g2c_artifact_id_format, filter_rule_list):
         filtered_artifact_ids = [artifact['id'] for artifact in exclusion_artifact_list]
         [g2c_artifact_id_format.pop(identifier) for identifier in filtered_artifact_ids]
 
-    return g2c_artifact_id_format
+    return list(g2c_artifact_id_format.values())
 
 
-def update_good_artifacts(good, artifact_id_format):
+def lock_unlock_artifacts(g2c_artifact_list, lock):
+    """Lock or unlock all artifacts in list
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param lock: boolean to indicate whether artifacts should be locked or unlocked
+    :return: locked/unlocked G2C (Genshin Garbage Collector) artifact list
+    """
+    g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
+    for g2c_artifact in g2c_artifact_list:
+        g2c_artifact['lock'] = lock
+        g2c_artifact['artifact_data']['lock'] = lock
+    return g2c_artifact_list
+
+
+def get_complementary_artifacts(g2c_artifact_full_list, g2c_artifact_partial_list):
+    """Get artifacts from full list that aren't in the partial list
+
+    :param g2c_artifact_full_list: G2C (Genshin Garbage Collector) artifact list
+    :param g2c_artifact_partial_list: G2C (Genshin Garbage Collector) artifact list
+    :return: complementary G2C (Genshin Garbage Collector) artifact list
+    """
+    g2c_artifact_full_list = copy.deepcopy(g2c_artifact_full_list)
+    keys = {artifact['id'] for artifact in g2c_artifact_partial_list}
+    return [artifact for artifact in g2c_artifact_full_list if artifact['id'] not in keys]
+
+
+def update_good_artifacts(good, g2c_artifact_list):
+    """Change GOOD artifact list for G2C artifact list and return GOOD structure
+    
+    :param good: GOOD (Genshin Open Object Description)
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :return: GOOD (Genshin Open Object Description)
+    """
     good = copy.deepcopy(good)
-    good_artifacts = [artifact['artifact_data'] for artifact in artifact_id_format.values()]
+    good_artifacts = [artifact['artifact_data'] for artifact in g2c_artifact_list]
     good['artifacts'] = good_artifacts
     return good
 
