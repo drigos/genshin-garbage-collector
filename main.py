@@ -16,10 +16,12 @@ import os
 # - ID format: { id: artifact }
 
 @click.command()
-@click.option('-i', '--input-file', required=True, type=str, help='Specify GOOD file.')
+@click.option('-i', '--input-file', required=True, type=str, help='Specify input file in GOOD format.')
+@click.option('-o', '--output-format', default='g2c', show_default=True,
+              type=click.Choice(['g2c', 'count', 'good-keep'], case_sensitive=False),
+              help='Specify output format')
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
-@click.option('-e', '--export', is_flag=True, help='Display artifacts in GOOD format (default is G2C format)')
-def main(input_file, filters, export):
+def main(input_file, output_format, filters):
     with open(input_file) as good_file:
         good = json.load(good_file)
 
@@ -33,15 +35,15 @@ def main(input_file, filters, export):
         filter_rule_list = parse_cli_filter_string(filters)
         artifact_list_to_keep = filter_artifacts(artifact_list_to_keep, filter_rule_list)
 
-    output = artifact_id_format
-    if export:
-        output = update_good_artifacts(good, artifact_id_format)
+    output = None
+    if output_format == 'g2c':
+        output = json.dumps(artifact_list_to_keep)
+    if output_format == 'count':
+        output = len(artifact_list_to_keep)
+    if output_format == 'good-keep':
+        output = json.dumps(update_good_artifacts(good, artifact_list_to_keep))
 
-    print(json.dumps(output, indent=2))
-    print(len(output))
-
-    # implementar parâmetros de CLI como descrito no README
-    # tarefas de qualidade de código (typing, code quality tools, unit tests, jsonlint)
+    print(output)
 
 
 def find_files_by_extension(path, extension):
