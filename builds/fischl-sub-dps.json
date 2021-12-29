@@ -1,14 +1,12 @@
 {
-  "character": "Beidou",
-  "name": "DPS",
+  "character": "Fischl",
+  "name": "Sub DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/beidou/"
+    "guide_uri": "https://genshin-builds.com/character/fischl"
   },
   "filter": {
     "set": [
-      "EmblemOfSeveredFate",
       "ThunderingFury",
-      "NoblesseOblige",
       "GladiatorsFinale",
       "ShimenawasReminiscence"
     ],
@@ -28,7 +26,6 @@
     "critDMG_": 1,
     "atk_": 0.8,
     "atk": 0.6,
-    "enerRech_": 0.6,
-    "eleMas": 0.4
+    "enerRech_": 0.6
   }
 }
