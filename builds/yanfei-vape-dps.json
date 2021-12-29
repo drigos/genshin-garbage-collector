@@ -1,0 +1,34 @@
+{
+  "character": "Yanfei",
+  "name": "Vaporize DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/yanfei/"
+  },
+  "filter": {
+    "set": [
+      "CrimsonWitchOfFlames",
+      "WanderersTroupe",
+      "RetracingBolide",
+      "ShimenawasReminiscence",
+      "GladiatorsFinale"
+    ],
+    "sands": [
+      "atk_",
+      "eleMas"
+    ],
+    "goblet": [
+      "pyro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "eleMas": 0.8,
+    "atk_": 0.8,
+    "atk": 0.6
+  }
+}

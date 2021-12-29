@@ -1,0 +1,31 @@
+{
+  "character": "Jean",
+  "name": "Viridescent Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/jean/"
+  },
+  "filter": {
+    "set": [
+      "ViridescentVenerer"
+    ],
+    "sands": [
+      "atk_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "anemo_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_",
+      "atk_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "enerRech_": 0.8,
+    "atk_": 0.8,
+    "atk": 0.6
+  }
+}

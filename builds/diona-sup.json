@@ -1,0 +1,31 @@
+{
+  "character": "Diona",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/diona/"
+  },
+  "filter": {
+    "set": [
+      "MaidenBeloved",
+      "NoblesseOblige",
+      "Instructor"
+    ],
+    "sands": [
+      "enerRech_",
+      "hp_"
+    ],
+    "goblet": [
+      "hp_"
+    ],
+    "circlet": [
+      "heal_",
+      "hp_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "hp_": 1,
+    "hp": 0.8,
+    "critRate_": 0.4
+  }
+}

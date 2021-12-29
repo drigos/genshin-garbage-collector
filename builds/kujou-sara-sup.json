@@ -1,0 +1,31 @@
+{
+  "character": "Kujou Sara",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/sara/"
+  },
+  "filter": {
+    "set": [
+      "EmblemOfSeveredFate",
+      "NoblesseOblige"
+    ],
+    "sands": [
+      "atk_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "electro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "atk_": 0.8,
+    "enerRech_": 0.8,
+    "atk": 0.6
+  }
+}

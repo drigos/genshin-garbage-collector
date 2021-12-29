@@ -1,8 +1,15 @@
 {
   "character": "Razor",
-  "name": "With Shield",
+  "name": "DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/razor/"
+  },
   "filter": {
     "set": [
+      "PaleFlame",
+      "GladiatorsFinale",
+      "BloodstainedChivalry",
+      "ShimenawasReminiscence",
       "RetracingBolide"
     ],
     "sands": [
@@ -19,7 +26,7 @@
   "sub_stats": {
     "critRate_": 1,
     "critDMG_": 1,
-    "atk_": 1,
-    "atk": 0.8
+    "atk_": 0.8,
+    "atk": 0.6
   }
 }

@@ -1,0 +1,30 @@
+{
+  "character": "Kaedehara Kazuha",
+  "name": "Viridescent Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/kazuha/"
+  },
+  "filter": {
+    "set": [
+      "ViridescentVenerer"
+    ],
+    "sands": [
+      "enerRech_",
+      "eleMas"
+    ],
+    "goblet": [
+      "eleMas"
+    ],
+    "circlet": [
+      "eleMas"
+    ]
+  },
+  "sub_stats": {
+    "eleMas": 1,
+    "enerRech_": 0.8,
+    "atk_": 0.8,
+    "critRate_": 0.6,
+    "critDMG_": 0.6,
+    "atk": 0.6
+  }
+}

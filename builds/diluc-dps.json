@@ -1,0 +1,30 @@
+{
+  "character": "Diluc",
+  "name": "DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/diluc/"
+  },
+  "filter": {
+    "set": [
+      "CrimsonWitchOfFlames"
+    ],
+    "sands": [
+      "atk_",
+      "eleMas"
+    ],
+    "goblet": [
+      "pyro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critDMG_": 1,
+    "critRate_": 1,
+    "atk_": 0.8,
+    "atk": 0.6,
+    "eleMas": 0.4
+  }
+}

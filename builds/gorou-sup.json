@@ -1,0 +1,38 @@
+{
+  "character": "Gorou",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://genshin-builds.com/character/gorou",
+    "info": "Crit Rate% is only useful if using Favonius Bow"
+  },
+  "filter": {
+    "set": [
+      "HuskOfOpulentDreams",
+      "NoblesseOblige",
+      "TheExile"
+    ],
+    "sands": [
+      "def_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "def_"
+    ],
+    "circlet": [
+      "def_",
+      "critRate_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "def_": 1,
+    "def": 0.8,
+    "eleMas": 0.8,
+    "critRate_": 0.5,
+    "critDMG_": 0.5,
+    "atk_": 0.5,
+    "atk": 0.5,
+    "hp_": 0.5,
+    "hp": 0.5
+  }
+}

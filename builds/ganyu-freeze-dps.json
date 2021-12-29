@@ -1,0 +1,27 @@
+{
+  "character": "Ganyu",
+  "name": "Freeze DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/ganyu/"
+  },
+  "filter": {
+    "set": [
+      "BlizzardStrayer"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "cryo_dmg_"
+    ],
+    "circlet": [
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critDMG_": 1,
+    "atk_": 0.8,
+    "atk": 0.6,
+    "critRate_": 0.4
+  }
+}

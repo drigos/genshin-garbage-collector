@@ -1,0 +1,33 @@
+{
+  "character": "Kaeya",
+  "name": "Freeze Sub DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/kaeya/"
+  },
+  "filter": {
+    "set": [
+      "NoblesseOblige",
+      "BlizzardStrayer",
+      "GladiatorsFinale",
+      "EmblemOfSeveredFate"
+    ],
+    "sands": [
+      "atk_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "cryo_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "atk_": 0.8,
+    "atk": 0.6,
+    "enerRech_": 0.6
+  }
+}

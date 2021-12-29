@@ -1,0 +1,32 @@
+{
+  "character": "Sucrose",
+  "name": "Viridescent Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/sucrose/"
+  },
+  "filter": {
+    "set": [
+      "ViridescentVenerer"
+    ],
+    "sands": [
+      "eleMas",
+      "atk_"
+    ],
+    "goblet": [
+      "eleMas",
+      "anemo_dmg_"
+    ],
+    "circlet": [
+      "eleMas",
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "eleMas": 1,
+    "atk_": 0.8,
+    "critRate_": 0.6,
+    "critDMG_": 0.6,
+    "atk": 0.6
+  }
+}

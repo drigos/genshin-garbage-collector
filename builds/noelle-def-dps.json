@@ -1,0 +1,29 @@
+{
+  "character": "Noelle",
+  "name": "Deffense DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/noelle/"
+  },
+  "filter": {
+    "set": [
+      "HuskOfOpulentDreams"
+    ],
+    "sands": [
+      "def_"
+    ],
+    "goblet": [
+      "geo_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "enerRech_": 0.8,
+    "def_": 0.8,
+    "def": 0.6
+  }
+}

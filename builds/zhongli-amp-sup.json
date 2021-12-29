@@ -1,0 +1,28 @@
+{
+  "character": "Zhongli",
+  "name": "Amplifier Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/zhongli/"
+  },
+  "filter": {
+    "set": [
+      "TenacityOfTheMillelith",
+      "NoblesseOblige"
+    ],
+    "sands": [
+      "hp_"
+    ],
+    "goblet": [
+      "hp_"
+    ],
+    "circlet": [
+      "hp_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "hp_": 1,
+    "hp": 0.8
+  }
+}

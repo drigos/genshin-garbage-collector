@@ -1,0 +1,30 @@
+{
+  "character": "Rosaria",
+  "name": "Freeze Sub DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/rosaria/"
+  },
+  "filter": {
+    "set": [
+      "NoblesseOblige",
+      "BlizzardStrayer"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "cryo_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "atk_": 0.8,
+    "atk": 0.6,
+    "enerRech_": 0.6
+  }
+}

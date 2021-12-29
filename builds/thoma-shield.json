@@ -1,0 +1,33 @@
+{
+  "character": "Thoma",
+  "name": "Shield",
+  "description": {
+    "guide_uri": "https://www.youtube.com/watch?v=hWj-Ps6QzwE",
+    "info": "Crit Rate% is only useful if using Favonius Lance"
+  },
+  "filter": {
+    "set": [
+      "NoblesseOblige",
+      "EmblemOfSeveredFate",
+      "TenacityOfTheMillelith",
+      "TheExile",
+      "Instructor"
+    ],
+    "sands": [
+      "enerRech_"
+    ],
+    "goblet": [
+      "hp_"
+    ],
+    "circlet": [
+      "hp_",
+      "critRate_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "hp": 1,
+    "hp_": 0.8,
+    "enerRech_": 0.8
+  }
+}

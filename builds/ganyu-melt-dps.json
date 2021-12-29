@@ -1,0 +1,33 @@
+{
+  "character": "Ganyu",
+  "name": "Melt DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/ganyu/"
+  },
+  "filter": {
+    "set": [
+      "ShimenawasReminiscence",
+      "WanderersTroupe",
+      "BlizzardStrayer",
+      "RetracingBolide"
+    ],
+    "sands": [
+      "eleMas",
+      "atk_"
+    ],
+    "goblet": [
+      "cryo_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "eleMas": 0.8,
+    "atk_": 0.8,
+    "atk": 0.6
+  }
+}

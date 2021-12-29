@@ -1,0 +1,29 @@
+{
+  "character": "Eula",
+  "name": "ER DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/eula/"
+  },
+  "filter": {
+    "set": [
+      "PaleFlame",
+      "BloodstainedChivalry"
+    ],
+    "sands": [
+      "enerRech_"
+    ],
+    "goblet": [
+      "physical_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "atk_": 0.8,
+    "atk": 0.5
+  }
+}

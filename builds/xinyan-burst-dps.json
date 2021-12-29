@@ -1,0 +1,31 @@
+{
+  "character": "Xinyan",
+  "name": "Burst DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/xinyan/"
+  },
+  "filter": {
+    "set": [
+      "PaleFlame",
+      "BloodstainedChivalry",
+      "NoblesseOblige",
+      "GladiatorsFinale",
+      "ShimenawasReminiscence"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "physical_dmg_"
+    ],
+    "circlet": [
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critDMG_": 1,
+    "enerRech_": 0.8,
+    "atk_": 0.8,
+    "atk": 0.6
+  }
+}
