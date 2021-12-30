@@ -51,7 +51,7 @@ Each artifact can contain 0 to N scores according to how many builds adhere to i
 
 ### Lock attribute
 
-This attribute indicates the artifacts that must be kept
+This attribute indicates the artifacts that must be kept.
 
 ### List modes
 
@@ -79,6 +79,8 @@ _*Any artifact that don't match the selector will be preserved._
 
 It is possible to use a wildcard character to select all artifacts for filtering, i.e. `*:*`.
 
+It is possible to use a semicolon-separated list to specify more than one value for the selector.
+
 The actions will effectively filter the list of artifacts and can be as follows:
 
 - threshold (`t`): minimum score threshold to keep artifacts (`float`).
@@ -89,6 +91,30 @@ The actions will effectively filter the list of artifacts and can be as follows:
 As an alternative to filters, you can use groupings to limit the amount of artifacts kept in each group.
 
 The same filter selector keys apply here (except the wildcard character).
+
+### Sort
+
+After all filters are applied it is possible to sort the list of artifacts.
+
+Sort contain two main components: 1) the **key**; and 2) the **order**.
+
+Below is a list of supported keys:
+
+- `set_key`
+- `slot_key`
+- `main_stat_key`
+- `rarity`
+- `level`
+- `rank`
+- `best_score`
+- `refer_id`
+
+And as for the order, the possible parameters are:
+
+- `asc`
+- `desc`
+
+If not specified an order, asc is assumed.
 
 How to run
 ----------
@@ -197,8 +223,7 @@ Keeps only N artifacts in each group.
 ### Sort
 
 ```
--s/--sort sort_key_list
-  sort_key_list = set_key,slot_key,main_stat_key,rarity,level,rank,best_score
+-s/--sort sort_key:sort_order[,sort_key:sort_order]
 ```
 
 **Examples:**
