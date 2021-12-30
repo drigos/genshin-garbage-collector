@@ -350,9 +350,14 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
         'b': lambda artifacts, threshold: sorted(artifacts, key=lambda item: item['best_score'], reverse=True)[int(threshold):]
     }
 
+    allowed_selector_keys = ['*', 'set_key', 'slot_key', 'main_stat_key', 'rarity', 'level', 'rank']
+
     for filter_rule in filter_rule_list:
         exclusion_artifact_list = g2c_artifact_id_format.values()
         for selector in filter_rule['selectors']:
+            if selector['key'] not in allowed_selector_keys:
+                exclusion_artifact_list = []
+
             if selector['key'] != '*':
                 exclusion_artifact_list = [
                     artifact for artifact in exclusion_artifact_list
