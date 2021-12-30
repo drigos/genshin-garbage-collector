@@ -76,11 +76,12 @@ def parse_cli_filter_string(filter_str_list):
     Filter rules format:
     {'selectors': [{'key': 'rank', 'value': ['0']}], 'action': {'key': 't','value': '0.2'}}
 
-    :param filter_str_list: string with 'selector_list=action'
+    :param filter_str_list: string list in 'selector_list=action' format
     :return: filter rules format
     """
-    filter_rule_list = list()
+    allowed_selector_keys = ['*', 'set_key', 'slot_key', 'main_stat_key', 'rarity', 'level', 'rank']
 
+    filter_rule_list = list()
     for filter_str in filter_str_list:
         filter_rule = {
             'selectors': [],
@@ -92,10 +93,17 @@ def parse_cli_filter_string(filter_str_list):
 
         for selector_str in selector_str_list:
             selector_key, selector_value = selector_str.split(':')
+
+            if selector_key not in allowed_selector_keys:
+                continue
+
             filter_rule['selectors'].append({
                 'key': selector_key,
                 'value': selector_value.strip('[]').split(';')
             })
+
+        if not filter_rule['selectors']:
+            continue
 
         action_key, action_value = action_str.split(':')
         filter_rule['action']['key'] = action_key
@@ -343,14 +351,9 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
         'b': lambda artifacts, threshold: sorted(artifacts, key=lambda item: item['best_score'], reverse=True)[int(threshold):]
     }
 
-    allowed_selector_keys = ['*', 'set_key', 'slot_key', 'main_stat_key', 'rarity', 'level', 'rank']
-
     for filter_rule in filter_rule_list:
         exclusion_artifact_list = g2c_artifact_id_format.values()
         for selector in filter_rule['selectors']:
-            if selector['key'] not in allowed_selector_keys:
-                exclusion_artifact_list = []
-
             if selector['key'] != '*':
                 exclusion_artifact_list = [
                     artifact for artifact in exclusion_artifact_list
