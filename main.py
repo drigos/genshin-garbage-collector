@@ -42,6 +42,11 @@ def main(input_file, output_format, list_mode, filters, sort):
         'all': artifact_list_to_keep + artifact_list_to_discard
     }
     output_list = output_lists[list_mode]
+
+    if sort:
+        sort_rule_list = parse_cli_sort_string(sort)
+        output_list = sort_artifacts(output_list, sort_rule_list)
+
     output = None
     if output_format == 'g2c':
         output = json.dumps(output_list)
@@ -50,10 +55,6 @@ def main(input_file, output_format, list_mode, filters, sort):
     if output_format == 'good':
         return_good = update_good_artifacts(good, output_list)
         output = json.dumps(return_good)
-
-    if sort:
-        sort_rule_list = parse_cli_sort_string(sort)
-        print(sort_rule_list)
 
     print(output)
 
@@ -115,7 +116,7 @@ def parse_cli_sort_string(sort_str_list):
     """Parse -s/--sort CLI argument
 
     Sort rules format:
-    [(key, reverse_boolean)]
+    [{'key': 'rank', 'reverse': True}]
 
     :param sort_str_list: string with comma-separated structures like 'sort_key:sort_order'
     :return: sort rules format
@@ -128,13 +129,14 @@ def parse_cli_sort_string(sort_str_list):
             sort_str += ':'
         sort_key, sort_order = sort_str.split(':')
 
-        reverse_boolean = True if sort_order == 'desc' else False
+        reverse = True if sort_order == 'desc' else False
 
         if sort_key not in allowed_sort_keys:
             continue
 
-        sort_rule_list.append((sort_key, reverse_boolean))
+        sort_rule_list.append({'key': sort_key, 'reverse': reverse})
 
+    sort_rule_list.reverse()
     return sort_rule_list
 
 
@@ -396,6 +398,17 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
         [g2c_artifact_id_format.pop(identifier) for identifier in filtered_artifact_ids]
 
     return list(g2c_artifact_id_format.values())
+
+
+def sort_artifacts(g2c_artifact_list, sort_rule_list):
+    g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
+
+    for sort_rule in sort_rule_list:
+        sort_key = sort_rule['key']
+        sort_reverse = sort_rule['reverse']
+        g2c_artifact_list = sorted(g2c_artifact_list, key=lambda item: item[sort_key], reverse=sort_reverse)
+
+    return g2c_artifact_list
 
 
 def lock_unlock_artifacts(g2c_artifact_list, lock):
