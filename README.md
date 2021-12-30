@@ -226,3 +226,14 @@ python main.py -i '~/good.json'
 ```shell script
 jq . builds/**/*.json > /dev/null 2>&1; echo $?
 ```
+
+## Artifact formats
+
+- GOOD (Genshin Open Object Description)
+- G2C (Genshin Garbage Collector)
+
+## Artifact wrappers
+
+- List: `[artifact]`
+- Set/Slot format: `{ set_key: { slot_key: [artifact] } }`
+- ID format: `{ id: artifact }`
