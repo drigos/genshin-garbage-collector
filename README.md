@@ -77,7 +77,7 @@ Selectors are a comma-separated list of key and value. Below is a list of suppor
 _*Only artifacts matched by the selector will be filtered._  
 _*Any artifact that don't match the selector will be preserved._
 
-It is possible to use a wildcard character to filter all artifacts, i.e. `*:*`.
+It is possible to use a wildcard character to select all artifacts for filtering, i.e. `*:*`.
 
 The actions will effectively filter the list of artifacts and can be as follows:
 
