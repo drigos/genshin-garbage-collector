@@ -95,7 +95,7 @@ How to run
 
 ```
 pip install -r requirements.txt
-python validator.py -i ~/good-full.json
+python validator.py -i ~/good-full.json -vvv
 python main.py -i '~/good-full.json' -o good > ~/good-filtered.json
 ```
 
