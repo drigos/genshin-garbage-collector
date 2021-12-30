@@ -400,13 +400,66 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
     return list(g2c_artifact_id_format.values())
 
 
+def sort_artifacts_by_order_list(g2c_artifact_list, sort_key, order_list):
+    g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
+
+    return [artifact for value in order_list for artifact in g2c_artifact_list if artifact[sort_key] == value]
+
+
+def sort_artifacts_by_set_key(g2c_artifact_list):
+    set_key_list = [
+        'OceanHuedClam',
+        'HuskOfOpulentDreams',
+        'EmblemOfSeveredFate',
+        'ShimenawasReminiscence',
+        'PaleFlame',
+        'TenacityOfTheMillelith',
+        'HeartOfDepth',
+        'RetracingBolide',
+        'ArchaicPetra',
+        'PrayersToSpringtime',
+        'PrayersForWisdom',
+        'PrayersForDestiny',
+        'PrayersForIllumination',
+        'BloodstainedChivalry',
+        'NoblesseOblige',
+        'CrimsonWitchOfFlames',
+        'ThunderingFury',
+        'WanderersTroupe',
+        'ViridescentVenerer',
+        'GladiatorsFinale',
+        'MaidenBeloved',
+        'Lavawalker',
+        'Thundersoother',
+        'BlizzardStrayer',
+        'Scholar',
+        'TheExile',
+        'Gambler',
+        'Instructor',
+        'MartialArtist',
+        'Berserker',
+        'TinyMiracle',
+        'DefendersWill',
+        'BraveHeart',
+        'ResolutionOfSojourner',
+        'TravelingDoctor',
+        'LuckyDog',
+        'Adventurer',
+    ]
+
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'set_key', set_key_list)
+
+
 def sort_artifacts(g2c_artifact_list, sort_rule_list):
     g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
 
     for sort_rule in sort_rule_list:
         sort_key = sort_rule['key']
-        sort_reverse = sort_rule['reverse']
-        g2c_artifact_list = sorted(g2c_artifact_list, key=lambda item: item[sort_key], reverse=sort_reverse)
+        reverse = sort_rule['reverse']
+        if sort_key == 'set_key':
+            g2c_artifact_list = sort_artifacts_by_set_key(g2c_artifact_list)
+        else:
+            g2c_artifact_list = sorted(g2c_artifact_list, key=lambda item: item[sort_key], reverse=reverse)
 
     return g2c_artifact_list
 
