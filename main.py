@@ -401,6 +401,14 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
 
 
 def sort_artifacts_by_order_list(g2c_artifact_list, sort_key, order_list, reverse=False):
+    """Sort artifacts by slot key like Genshin's internal order
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param sort_key: defines which attribute will be used to sorting
+    :param order_list: defines the order of values
+    :param reverse: defines whether to use original or reverse order
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
     g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
 
     ordered_list = [artifact for value in order_list for artifact in g2c_artifact_list if artifact[sort_key] == value]
@@ -411,6 +419,12 @@ def sort_artifacts_by_order_list(g2c_artifact_list, sort_key, order_list, revers
 
 
 def sort_artifacts_by_set_key(g2c_artifact_list, reverse=False):
+    """Sort artifacts by set key like Genshin's internal order
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param reverse: defines whether to use original or reverse order
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
     set_key_list = [
         'OceanHuedClam',
         'HuskOfOpulentDreams',
@@ -455,6 +469,12 @@ def sort_artifacts_by_set_key(g2c_artifact_list, reverse=False):
 
 
 def sort_artifacts_by_slot_key(g2c_artifact_list, reverse=False):
+    """Sort artifacts by slot key like Genshin's internal order
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param reverse: defines whether to use original or reverse order
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
     slot_key_list = [
         'flower',
         'plume',
@@ -467,11 +487,18 @@ def sort_artifacts_by_slot_key(g2c_artifact_list, reverse=False):
 
 
 def sort_artifacts(g2c_artifact_list, sort_rule_list):
+    """Sort artifacts according to defined rules
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param sort_rule_list: list with key/order rules to sort artifacts
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
     g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
 
     for sort_rule in sort_rule_list:
         sort_key = sort_rule['key']
         reverse = sort_rule['reverse']
+
         if sort_key == 'set_key':
             g2c_artifact_list = sort_artifacts_by_set_key(g2c_artifact_list, reverse)
         elif sort_key == 'slot_key':
