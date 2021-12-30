@@ -116,6 +116,31 @@ And as for the order, the possible parameters are:
 
 If not specified an order, asc is assumed.
 
+**Special order keys**
+
+By default, sorting use alphabetical character order, but for some keys Genshin's internal order used.
+The purpose of this is to facilitate the mapping between the artifacts exported by G2C and the game.
+
+Below is a list of keys don't use alphabetical order:
+
+- `set_key`
+- `slot_key`
+
+**Genshin order**
+
+This section explains the game order if you want to order the output of artifacts exported by this program in the same way.
+
+- `rarity:desc`
+- `level:desc`
+- `set_key:asc` (specific Genshin order; non-alphabetic order)
+- `slot_key:asc` (specific Genshin order; non-alphabetic order)
+- Original artifact sub stats amount (it would be necessary to calculate the number of bearings based on the known values of each sub stat)
+- Artifact acquisition date (we cannot obtain this information)
+
+For the last two ordering criteria we suggest using the `best_score`.
+
+Alternatively, the Inventory Kamera adds an identifier (`refer_id`) to the artifact based on the order of collection which can be used to achieve the exact same ordering as in the game. However, when importing into Genshin Optimizer this identifier is removed.
+
 How to run
 ----------
 
@@ -233,6 +258,8 @@ Keeps only N artifacts in each group.
 -s 'best_score:desc'  # sort artifacts from highest to lowest based on best_score attribute
 -s 'best_score:asc'  # sort artifacts from lowest to highest based on best_score attribute
 -s 'level:asc,best_score:desc'  # sort artifacts ascending by level and descending by best_score attribute
+-s 'rarity:desc,level:desc,set_key,slot_key,best_score:desc'  # genshin inventory order (almost) 
+-s 'refer_id'  # genshin inventory order (when using data exported from Inventory Kamera) 
 ```
 
 How to contribute
