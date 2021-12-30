@@ -72,7 +72,7 @@ Selectors are a comma-separated list of key and value. Below is a list of suppor
 - `main_stat_key`: [GOOD-like values](https://frzyc.github.io/genshin-optimizer/#/doc/)
 - `rarity`: `1-5`
 - `level`: `0-20`
-- `rank`: `0-5` (rank is `floor(level/4)`)
+- `rank`: `0-5` (rank is `floor(level/4)`, i.e. the number of additional rolls an artifact got by leveling)
 
 _*Only artifacts matched by the selector will be filtered._  
 _*Any artifact that don't match the selector will be preserved._
