@@ -4,16 +4,8 @@ import functools
 import json
 import math
 import os
+import uuid
 
-
-# Artifact formats
-# - GOOD (Genshin Open Object Description)
-# - G2C (Genshin Garbage Collector)
-
-# Artifact wrappers
-# - List: [artifact]
-# - Set/Slot format: { set_key: { slot_key: [artifact] } }
-# - ID format: { id: artifact }
 
 @click.command()
 @click.option('-i', '--input-file', required=True, type=str, help='Specify input file in GOOD format.')
@@ -121,7 +113,8 @@ def generate_g2c_artifact_from_good(good_artifact):
     :return: G2C (Genshin Garbage Collector) artifact structure
     """
     return {
-        'id': good_artifact['Id'],
+        'id': str(uuid.uuid4()),
+        'refer_id': good_artifact['Id'],
         'set_key': good_artifact['setKey'],
         'slot_key': good_artifact['slotKey'],
         'main_stat_key': good_artifact['mainStatKey'],
