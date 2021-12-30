@@ -400,13 +400,17 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
     return list(g2c_artifact_id_format.values())
 
 
-def sort_artifacts_by_order_list(g2c_artifact_list, sort_key, order_list):
+def sort_artifacts_by_order_list(g2c_artifact_list, sort_key, order_list, reverse=False):
     g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
 
-    return [artifact for value in order_list for artifact in g2c_artifact_list if artifact[sort_key] == value]
+    ordered_list = [artifact for value in order_list for artifact in g2c_artifact_list if artifact[sort_key] == value]
+    if reverse:
+        ordered_list.reverse()
+
+    return ordered_list
 
 
-def sort_artifacts_by_set_key(g2c_artifact_list):
+def sort_artifacts_by_set_key(g2c_artifact_list, reverse=False):
     set_key_list = [
         'OceanHuedClam',
         'HuskOfOpulentDreams',
@@ -447,10 +451,10 @@ def sort_artifacts_by_set_key(g2c_artifact_list):
         'Adventurer',
     ]
 
-    return sort_artifacts_by_order_list(g2c_artifact_list, 'set_key', set_key_list)
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'set_key', set_key_list, reverse)
 
 
-def sort_artifacts_by_slot_key(g2c_artifact_list):
+def sort_artifacts_by_slot_key(g2c_artifact_list, reverse=False):
     slot_key_list = [
         'flower',
         'plume',
@@ -459,7 +463,7 @@ def sort_artifacts_by_slot_key(g2c_artifact_list):
         'circlet',
     ]
 
-    return sort_artifacts_by_order_list(g2c_artifact_list, 'slot_key', slot_key_list)
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'slot_key', slot_key_list, reverse)
 
 
 def sort_artifacts(g2c_artifact_list, sort_rule_list):
@@ -469,9 +473,9 @@ def sort_artifacts(g2c_artifact_list, sort_rule_list):
         sort_key = sort_rule['key']
         reverse = sort_rule['reverse']
         if sort_key == 'set_key':
-            g2c_artifact_list = sort_artifacts_by_set_key(g2c_artifact_list)
+            g2c_artifact_list = sort_artifacts_by_set_key(g2c_artifact_list, reverse)
         elif sort_key == 'slot_key':
-            g2c_artifact_list = sort_artifacts_by_slot_key(g2c_artifact_list)
+            g2c_artifact_list = sort_artifacts_by_slot_key(g2c_artifact_list, reverse)
         else:
             g2c_artifact_list = sorted(g2c_artifact_list, key=lambda item: item[sort_key], reverse=reverse)
 
