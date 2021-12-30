@@ -16,7 +16,8 @@ import uuid
 @click.option('-d', '--discard', 'list_mode', flag_value='discard', help='Show artifacts that will be discarded.')
 @click.option('-a', '--all', 'list_mode', flag_value='all', help='Show all artifacts.')
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
-def main(input_file, output_format, list_mode, filters):
+@click.option('-s', '--sort', type=str, help='Sort artifacts according to defined rules.')
+def main(input_file, output_format, list_mode, filters, sort):
     with open(input_file) as good_file:
         good = json.load(good_file)
 
@@ -49,6 +50,10 @@ def main(input_file, output_format, list_mode, filters):
     if output_format == 'good':
         return_good = update_good_artifacts(good, output_list)
         output = json.dumps(return_good)
+
+    if sort:
+        sort_rule_list = parse_cli_sort_string(sort)
+        print(sort_rule_list)
 
     print(output)
 
@@ -104,6 +109,33 @@ def parse_cli_filter_string(filter_str_list):
         filter_rule_list.append(filter_rule)
 
     return filter_rule_list
+
+
+def parse_cli_sort_string(sort_str_list):
+    """Parse -s/--sort CLI argument
+
+    Sort rules format:
+    [(key, reverse_boolean)]
+
+    :param sort_str_list: string with comma-separated structures like 'sort_key:sort_order'
+    :return: sort rules format
+    """
+    allowed_sort_keys = ['set_key', 'slot_key', 'main_stat_key', 'rarity', 'level', 'rank', 'best_score', 'refer_id']
+
+    sort_rule_list = []
+    for sort_str in sort_str_list.split(','):
+        if ':' not in sort_str:
+            sort_str += ':'
+        sort_key, sort_order = sort_str.split(':')
+
+        reverse_boolean = True if sort_order == 'desc' else False
+
+        if sort_key not in allowed_sort_keys:
+            continue
+
+        sort_rule_list.append((sort_key, reverse_boolean))
+
+    return sort_rule_list
 
 
 def generate_g2c_artifact_from_good(good_artifact):
