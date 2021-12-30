@@ -450,6 +450,18 @@ def sort_artifacts_by_set_key(g2c_artifact_list):
     return sort_artifacts_by_order_list(g2c_artifact_list, 'set_key', set_key_list)
 
 
+def sort_artifacts_by_slot_key(g2c_artifact_list):
+    slot_key_list = [
+        'flower',
+        'plume',
+        'sands',
+        'goblet',
+        'circlet',
+    ]
+
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'slot_key', slot_key_list)
+
+
 def sort_artifacts(g2c_artifact_list, sort_rule_list):
     g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
 
@@ -458,6 +470,8 @@ def sort_artifacts(g2c_artifact_list, sort_rule_list):
         reverse = sort_rule['reverse']
         if sort_key == 'set_key':
             g2c_artifact_list = sort_artifacts_by_set_key(g2c_artifact_list)
+        elif sort_key == 'slot_key':
+            g2c_artifact_list = sort_artifacts_by_slot_key(g2c_artifact_list)
         else:
             g2c_artifact_list = sorted(g2c_artifact_list, key=lambda item: item[sort_key], reverse=reverse)
 
