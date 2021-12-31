@@ -134,7 +134,7 @@ This section explains the game order if you want to order the output of artifact
 - `level:desc`
 - `set_key:asc` (specific Genshin order; non-alphabetic order)
 - `slot_key:asc` (specific Genshin order; non-alphabetic order)
-- Original artifact sub stats amount (it would be necessary to calculate the number of bearings based on the known values of each sub stat)
+- Original artifact sub stats amount (it would be necessary to calculate the number of sub stat rolls based on the known values of each sub stat)
 - Artifact acquisition date (we cannot obtain this information)
 
 For the last two ordering criteria we suggest using the `best_score`.
