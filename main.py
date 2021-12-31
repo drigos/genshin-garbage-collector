@@ -401,7 +401,7 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
 
 
 def sort_artifacts_by_order_list(g2c_artifact_list, sort_key, order_list, reverse=False):
-    """Sort artifacts by slot key like Genshin's internal order
+    """Sort artifacts based on an order list
 
     :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
     :param sort_key: defines which attribute will be used to sorting
