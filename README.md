@@ -95,6 +95,7 @@ How to run
 
 ```
 pip install -r requirements.txt
+python validator.py -i ~/good-full.json -vvv
 python main.py -i '~/good-full.json' -o good > ~/good-filtered.json
 ```
 
@@ -209,6 +210,13 @@ Keeps only N artifacts in each group.
 -s 'best_score:asc'  # sort artifacts from lowest to highest based on best_score attribute
 -s 'level:asc,best_score:desc'  # sort artifacts ascending by level and descending by best_score attribute
 ```
+
+Rarity 5 Artifact Validator
+---------------------------
+
+- Check for null on the first three sub stats
+- Check for null on forth sub stat for upgraded artifact
+- Check max rarity for artifact sets
 
 How to contribute
 -----------------
