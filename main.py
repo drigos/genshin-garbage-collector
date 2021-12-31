@@ -411,7 +411,14 @@ def sort_artifacts_by_order_list(g2c_artifact_list, sort_key, order_list, revers
     """
     g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
 
-    ordered_list = [artifact for value in order_list for artifact in g2c_artifact_list if artifact[sort_key] == value]
+    artifact_set_format = {}
+    for g2c_artifact in g2c_artifact_list:
+        artifact_set_format.setdefault(g2c_artifact[sort_key], []).append(g2c_artifact)
+
+    ordered_list = []
+    for value in order_list:
+        ordered_list.extend(artifact_set_format.get(value, []))
+
     if reverse:
         ordered_list.reverse()
 
