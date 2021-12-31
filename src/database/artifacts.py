@@ -1,0 +1,45 @@
+rarity_five = [
+    'ArchaicPetra',
+    'BlizzardStrayer',
+    'BloodstainedChivalry',
+    'CrimsonWitchOfFlames',
+    'EmblemOfSeveredFate',
+    'GladiatorsFinale',
+    'HeartOfDepth',
+    'HuskOfOpulentDreams',
+    'Lavawalker',
+    'MaidenBeloved',
+    'NoblesseOblige',
+    'OceanHuedClam',
+    'PaleFlame',
+    'RetracingBolide',
+    'ShimenawasReminiscence',
+    'TenacityOfTheMillelith',
+    'ThunderingFury',
+    'Thundersoother',
+    'ViridescentVenerer',
+    'WanderersTroupe',
+]
+
+rarity_four = [
+    'Berserker',
+    'BraveHeart',
+    'DefendersWill',
+    'Gambler',
+    'Instructor',
+    'MartialArtist',
+    'PrayersForDestiny',
+    'PrayersForIllumination',
+    'PrayersForWisdom',
+    'PrayersToSpringtime',
+    'ResolutionOfSojourner',
+    'Scholar',
+    'TheExile',
+    'TinyMiracle',
+]
+
+rarity_three = [
+    'Adventurer',
+    'LuckyDog',
+    'TravelingDoctor',
+]

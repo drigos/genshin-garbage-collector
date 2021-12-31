@@ -1,7 +1,8 @@
-import math
-
 import click
 import json
+import math
+
+import src.database.artifacts as artifact_database
 
 
 @click.command()
@@ -66,33 +67,11 @@ def check_for_null_on_forth_sub_stat_for_upgraded_artifact(good_artifact_list, v
 
 
 def check_max_rarity_for_artifact_sets(good_artifact_list, verbose):
-    max_rarity_four_sets = [
-        'Berserker',
-        'BraveHeart',
-        'DefendersWill',
-        'Gambler',
-        'Instructor',
-        'MartialArtist',
-        'PrayersForDestiny',
-        'PrayersForIllumination',
-        'PrayersForWisdom',
-        'PrayersToSpringtime',
-        'ResolutionOfSojourner',
-        'Scholar',
-        'TheExile',
-        'TinyMiracle',
-    ]
-    max_rarity_three_sets = [
-        'Adventurer',
-        'LuckyDog',
-        'TravelingDoctor',
-    ]
-
     artifacts_with_problem = []
     for good_artifact in good_artifact_list:
-        if good_artifact['setKey'] in max_rarity_four_sets and good_artifact['rarity'] > 4:
+        if good_artifact['setKey'] in artifact_database.rarity_four and good_artifact['rarity'] > 4:
             artifacts_with_problem.append(good_artifact)
-        if good_artifact['setKey'] in max_rarity_three_sets and good_artifact['rarity'] > 3:
+        if good_artifact['setKey'] in artifact_database.rarity_three and good_artifact['rarity'] > 3:
             artifacts_with_problem.append(good_artifact)
 
     print_header(
