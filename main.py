@@ -189,6 +189,7 @@ def generate_g2c_artifact_from_good(good_artifact):
         'best_score': 0,
         'build_score': [],
         'lock': None,
+        'location': good_artifact['location'],
         'artifact_data': copy.deepcopy(good_artifact)
     }
 
