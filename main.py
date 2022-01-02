@@ -6,6 +6,8 @@ import math
 import os
 import uuid
 
+from collections import defaultdict
+
 
 @click.command()
 @click.option('-i', '--input-file', required=True, type=str, help='Specify input file in GOOD format.')
@@ -411,13 +413,13 @@ def sort_artifacts_by_order_list(g2c_artifact_list, sort_key, order_list, revers
     """
     g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
 
-    artifact_set_format = {}
+    artifact_set_format = defaultdict(list)
     for g2c_artifact in g2c_artifact_list:
-        artifact_set_format.setdefault(g2c_artifact[sort_key], []).append(g2c_artifact)
+        artifact_set_format[g2c_artifact[sort_key]].append(g2c_artifact)
 
     ordered_list = []
     for value in order_list:
-        ordered_list.extend(artifact_set_format.get(value, []))
+        ordered_list.extend(artifact_set_format[value])
 
     if reverse:
         ordered_list.reverse()
