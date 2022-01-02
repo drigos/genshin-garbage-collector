@@ -6,6 +6,8 @@ import math
 import os
 import uuid
 
+from collections import defaultdict
+
 
 @click.command()
 @click.option('-i', '--input-file', required=True, type=str, help='Specify input file in GOOD format.')
@@ -16,7 +18,8 @@ import uuid
 @click.option('-d', '--discard', 'list_mode', flag_value='discard', help='Show artifacts that will be discarded.')
 @click.option('-a', '--all', 'list_mode', flag_value='all', help='Show all artifacts.')
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
-def main(input_file, output_format, list_mode, filters):
+@click.option('-s', '--sort', type=str, help='Sort artifacts according to defined rules.')
+def main(input_file, output_format, list_mode, filters, sort):
     with open(input_file) as good_file:
         good = json.load(good_file)
 
@@ -41,6 +44,11 @@ def main(input_file, output_format, list_mode, filters):
         'all': artifact_list_to_keep + artifact_list_to_discard
     }
     output_list = output_lists[list_mode]
+
+    if sort:
+        sort_rule_list = parse_cli_sort_string(sort)
+        output_list = sort_artifacts(output_list, sort_rule_list)
+
     output = None
     if output_format == 'g2c':
         output = json.dumps(output_list)
@@ -112,6 +120,34 @@ def parse_cli_filter_string(filter_str_list):
         filter_rule_list.append(filter_rule)
 
     return filter_rule_list
+
+
+def parse_cli_sort_string(sort_str_list):
+    """Parse -s/--sort CLI argument
+
+    Sort rules format:
+    [{'key': 'rank', 'reverse': True}]
+
+    :param sort_str_list: string with comma-separated structures like 'sort_key:sort_order'
+    :return: sort rules format
+    """
+    allowed_sort_keys = ['set_key', 'slot_key', 'main_stat_key', 'rarity', 'level', 'rank', 'best_score', 'refer_id']
+
+    sort_rule_list = []
+    for sort_str in sort_str_list.split(','):
+        if ':' not in sort_str:
+            sort_str += ':'
+        sort_key, sort_order = sort_str.split(':')
+
+        reverse = True if sort_order == 'desc' else False
+
+        if sort_key not in allowed_sort_keys:
+            continue
+
+        sort_rule_list.append({'key': sort_key, 'reverse': reverse})
+
+    sort_rule_list.reverse()
+    return sort_rule_list
 
 
 def generate_g2c_artifact_from_good(good_artifact):
@@ -367,6 +403,122 @@ def filter_artifacts(g2c_artifact_list, filter_rule_list):
         [g2c_artifact_id_format.pop(identifier) for identifier in filtered_artifact_ids]
 
     return list(g2c_artifact_id_format.values())
+
+
+def sort_artifacts_by_order_list(g2c_artifact_list, sort_key, order_list, reverse=False):
+    """Sort artifacts based on an order list
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param sort_key: defines which attribute will be used to sorting
+    :param order_list: defines the order of values
+    :param reverse: defines whether to use original or reverse order
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
+    g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
+
+    artifact_set_format = defaultdict(list)
+    for g2c_artifact in g2c_artifact_list:
+        artifact_set_format[g2c_artifact[sort_key]].append(g2c_artifact)
+
+    ordered_list = []
+    for value in order_list:
+        ordered_list.extend(artifact_set_format[value])
+
+    if reverse:
+        ordered_list.reverse()
+
+    return ordered_list
+
+
+def sort_artifacts_by_set_key(g2c_artifact_list, reverse=False):
+    """Sort artifacts by set key like Genshin's internal order
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param reverse: defines whether to use original or reverse order
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
+    set_key_list = [
+        'OceanHuedClam',
+        'HuskOfOpulentDreams',
+        'EmblemOfSeveredFate',
+        'ShimenawasReminiscence',
+        'PaleFlame',
+        'TenacityOfTheMillelith',
+        'HeartOfDepth',
+        'RetracingBolide',
+        'ArchaicPetra',
+        'PrayersToSpringtime',
+        'PrayersForWisdom',
+        'PrayersForDestiny',
+        'PrayersForIllumination',
+        'BloodstainedChivalry',
+        'NoblesseOblige',
+        'CrimsonWitchOfFlames',
+        'ThunderingFury',
+        'WanderersTroupe',
+        'ViridescentVenerer',
+        'GladiatorsFinale',
+        'MaidenBeloved',
+        'Lavawalker',
+        'Thundersoother',
+        'BlizzardStrayer',
+        'Scholar',
+        'TheExile',
+        'Gambler',
+        'Instructor',
+        'MartialArtist',
+        'Berserker',
+        'TinyMiracle',
+        'DefendersWill',
+        'BraveHeart',
+        'ResolutionOfSojourner',
+        'TravelingDoctor',
+        'LuckyDog',
+        'Adventurer',
+    ]
+
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'set_key', set_key_list, reverse)
+
+
+def sort_artifacts_by_slot_key(g2c_artifact_list, reverse=False):
+    """Sort artifacts by slot key like Genshin's internal order
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param reverse: defines whether to use original or reverse order
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
+    slot_key_list = [
+        'flower',
+        'plume',
+        'sands',
+        'goblet',
+        'circlet',
+    ]
+
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'slot_key', slot_key_list, reverse)
+
+
+def sort_artifacts(g2c_artifact_list, sort_rule_list):
+    """Sort artifacts according to defined rules
+
+    :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
+    :param sort_rule_list: list with key/order rules to sort artifacts
+    :return: G2C (Genshin Garbage Collector) artifact list
+    """
+    g2c_artifact_list = copy.deepcopy(g2c_artifact_list)
+
+    for sort_rule in sort_rule_list:
+        sort_key = sort_rule['key']
+        reverse = sort_rule['reverse']
+
+        if sort_key == 'set_key':
+            g2c_artifact_list = sort_artifacts_by_set_key(g2c_artifact_list, reverse)
+        elif sort_key == 'slot_key':
+            g2c_artifact_list = sort_artifacts_by_slot_key(g2c_artifact_list, reverse)
+        else:
+            g2c_artifact_list = sorted(g2c_artifact_list, key=lambda item: item[sort_key], reverse=reverse)
+
+    return g2c_artifact_list
 
 
 def lock_unlock_artifacts(g2c_artifact_list, lock):

@@ -51,7 +51,7 @@ Each artifact can contain 0 to N scores according to how many builds adhere to i
 
 ### Lock attribute
 
-This attribute indicates the artifacts that must be kept
+This attribute indicates the artifacts that must be kept.
 
 ### List modes
 
@@ -79,6 +79,8 @@ _*Any artifact that don't match the selector will be preserved._
 
 It is possible to use a wildcard character to select all artifacts for filtering, i.e. `*:*`.
 
+It is possible to use a semicolon-separated list to specify more than one value for the selector.
+
 The actions will effectively filter the list of artifacts and can be as follows:
 
 - threshold (`t`): minimum score threshold to keep artifacts (`float`).
@@ -89,6 +91,55 @@ The actions will effectively filter the list of artifacts and can be as follows:
 As an alternative to filters, you can use groupings to limit the amount of artifacts kept in each group.
 
 The same filter selector keys apply here (except the wildcard character).
+
+### Sort
+
+After all filters are applied it is possible to sort the list of artifacts.
+
+Sort contain two main components: 1) the **key**; and 2) the **order**.
+
+Below is a list of supported keys:
+
+- `set_key`
+- `slot_key`
+- `main_stat_key`
+- `rarity`
+- `level`
+- `rank`
+- `best_score`
+- `refer_id`
+
+And as for the order, the possible parameters are:
+
+- `asc`
+- `desc`
+
+If not specified an order, asc is assumed.
+
+**Special order keys**
+
+By default, sorting use alphabetical character order, but for some keys Genshin's internal order used.
+The purpose of this is to facilitate the mapping between the artifacts exported by G2C and the game.
+
+Below is a list of keys don't use alphabetical order:
+
+- `set_key`
+- `slot_key`
+
+**Genshin order**
+
+This section explains the game order if you want to order the output of artifacts exported by this program in the same way.
+
+- `rarity:desc`
+- `level:desc`
+- `set_key:asc` (specific Genshin order; non-alphabetic order)
+- `slot_key:asc` (specific Genshin order; non-alphabetic order)
+- Original artifact sub stats amount (it would be necessary to calculate the number of sub stat rolls based on the known values of each sub stat)
+- Artifact acquisition date (we cannot obtain this information)
+
+For the last two ordering criteria we suggest using the `best_score`.
+
+Alternatively, the Inventory Kamera adds an identifier (`refer_id`) to the artifact based on the order of collection which can be used to achieve the exact same ordering as in the game. However, when importing into Genshin Optimizer this identifier is removed.
 
 How to run
 ----------
@@ -198,8 +249,7 @@ Keeps only N artifacts in each group.
 ### Sort
 
 ```
--s/--sort sort_key_list
-  sort_key_list = set_key,slot_key,main_stat_key,rarity,level,rank,best_score
+-s/--sort sort_key:sort_order[,sort_key:sort_order]
 ```
 
 **Examples:**
@@ -209,6 +259,8 @@ Keeps only N artifacts in each group.
 -s 'best_score:desc'  # sort artifacts from highest to lowest based on best_score attribute
 -s 'best_score:asc'  # sort artifacts from lowest to highest based on best_score attribute
 -s 'level:asc,best_score:desc'  # sort artifacts ascending by level and descending by best_score attribute
+-s 'rarity:desc,level:desc,set_key,slot_key,best_score:desc'  # genshin inventory order (almost) 
+-s 'refer_id'  # genshin inventory order (when using data exported from Inventory Kamera) 
 ```
 
 Rarity 5 Artifact Validator
