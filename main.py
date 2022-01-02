@@ -178,7 +178,7 @@ def generate_g2c_artifact_from_good(good_artifact):
     """
     return {
         'id': str(uuid.uuid4()),
-        'refer_id': good_artifact['Id'],
+        'refer_id': good_artifact.get('Id', ''),
         'set_key': good_artifact['setKey'],
         'slot_key': good_artifact['slotKey'],
         'main_stat_key': good_artifact['mainStatKey'],
