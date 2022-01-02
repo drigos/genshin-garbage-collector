@@ -7,6 +7,7 @@ import os
 import uuid
 
 from collections import defaultdict
+import src.database.artifacts as artifact_database
 
 
 @click.command()
@@ -17,9 +18,10 @@ from collections import defaultdict
 @click.option('-k', '--keep', 'list_mode', flag_value='keep', default=True, help='Show artifacts that will be kept.')
 @click.option('-d', '--discard', 'list_mode', flag_value='discard', help='Show artifacts that will be discarded.')
 @click.option('-a', '--all', 'list_mode', flag_value='all', help='Show all artifacts.')
+@click.option('-w', '--weak', is_flag=True, help='Keep artifact in non maximum rarity.')
 @click.option('-f', '--filters', multiple=True, type=str, help='Filter artifacts according to defined rules.')
 @click.option('-s', '--sort', type=str, help='Sort artifacts according to defined rules.')
-def main(input_file, output_format, list_mode, filters, sort):
+def main(input_file, output_format, list_mode, weak, filters, sort):
     with open(input_file) as good_file:
         good = json.load(good_file)
 
@@ -27,6 +29,9 @@ def main(input_file, output_format, list_mode, filters, sort):
     artifact_list = hydrate_sub_stats_efficiency(artifact_list)
 
     build_file_name_list = find_files_by_extension('builds/', '.json')
+
+    if not weak:
+        artifact_list = remove_artifacts_in_non_maximum_rarity(artifact_list)
 
     artifact_list_to_keep = get_artifacts_with_build_scores(artifact_list, build_file_name_list)
     artifact_list_to_keep = lock_unlock_artifacts(artifact_list_to_keep, True)
@@ -76,6 +81,21 @@ def find_files_by_extension(path, extension):
         file_names.extend([os.path.join(root, file_name) for file_name in files if file_name.endswith(extension)])
 
     return file_names
+
+
+def remove_artifacts_in_non_maximum_rarity(good_artifact_list):
+    good_artifact_list = copy.deepcopy(good_artifact_list)
+
+    maximum_rarity_artifacts = []
+    for good_artifact in good_artifact_list:
+        if good_artifact['set_key'] in artifact_database.rarity_five and good_artifact['rarity'] == 5:
+            maximum_rarity_artifacts.append(good_artifact)
+        if good_artifact['set_key'] in artifact_database.rarity_four and good_artifact['rarity'] == 4:
+            maximum_rarity_artifacts.append(good_artifact)
+        if good_artifact['set_key'] in artifact_database.rarity_three and good_artifact['rarity'] == 3:
+            maximum_rarity_artifacts.append(good_artifact)
+
+    return maximum_rarity_artifacts
 
 
 def parse_cli_filter_string(filter_str_list):
@@ -437,47 +457,7 @@ def sort_artifacts_by_set_key(g2c_artifact_list, reverse=False):
     :param reverse: defines whether to use original or reverse order
     :return: G2C (Genshin Garbage Collector) artifact list
     """
-    set_key_list = [
-        'OceanHuedClam',
-        'HuskOfOpulentDreams',
-        'EmblemOfSeveredFate',
-        'ShimenawasReminiscence',
-        'PaleFlame',
-        'TenacityOfTheMillelith',
-        'HeartOfDepth',
-        'RetracingBolide',
-        'ArchaicPetra',
-        'PrayersToSpringtime',
-        'PrayersForWisdom',
-        'PrayersForDestiny',
-        'PrayersForIllumination',
-        'BloodstainedChivalry',
-        'NoblesseOblige',
-        'CrimsonWitchOfFlames',
-        'ThunderingFury',
-        'WanderersTroupe',
-        'ViridescentVenerer',
-        'GladiatorsFinale',
-        'MaidenBeloved',
-        'Lavawalker',
-        'Thundersoother',
-        'BlizzardStrayer',
-        'Scholar',
-        'TheExile',
-        'Gambler',
-        'Instructor',
-        'MartialArtist',
-        'Berserker',
-        'TinyMiracle',
-        'DefendersWill',
-        'BraveHeart',
-        'ResolutionOfSojourner',
-        'TravelingDoctor',
-        'LuckyDog',
-        'Adventurer',
-    ]
-
-    return sort_artifacts_by_order_list(g2c_artifact_list, 'set_key', set_key_list, reverse)
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'set_key', artifact_database.set_key_order, reverse)
 
 
 def sort_artifacts_by_slot_key(g2c_artifact_list, reverse=False):
@@ -487,15 +467,7 @@ def sort_artifacts_by_slot_key(g2c_artifact_list, reverse=False):
     :param reverse: defines whether to use original or reverse order
     :return: G2C (Genshin Garbage Collector) artifact list
     """
-    slot_key_list = [
-        'flower',
-        'plume',
-        'sands',
-        'goblet',
-        'circlet',
-    ]
-
-    return sort_artifacts_by_order_list(g2c_artifact_list, 'slot_key', slot_key_list, reverse)
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'slot_key', artifact_database.slot_key_order, reverse)
 
 
 def sort_artifacts(g2c_artifact_list, sort_rule_list):
