@@ -457,47 +457,7 @@ def sort_artifacts_by_set_key(g2c_artifact_list, reverse=False):
     :param reverse: defines whether to use original or reverse order
     :return: G2C (Genshin Garbage Collector) artifact list
     """
-    set_key_list = [
-        'OceanHuedClam',
-        'HuskOfOpulentDreams',
-        'EmblemOfSeveredFate',
-        'ShimenawasReminiscence',
-        'PaleFlame',
-        'TenacityOfTheMillelith',
-        'HeartOfDepth',
-        'RetracingBolide',
-        'ArchaicPetra',
-        'PrayersToSpringtime',
-        'PrayersForWisdom',
-        'PrayersForDestiny',
-        'PrayersForIllumination',
-        'BloodstainedChivalry',
-        'NoblesseOblige',
-        'CrimsonWitchOfFlames',
-        'ThunderingFury',
-        'WanderersTroupe',
-        'ViridescentVenerer',
-        'GladiatorsFinale',
-        'MaidenBeloved',
-        'Lavawalker',
-        'Thundersoother',
-        'BlizzardStrayer',
-        'Scholar',
-        'TheExile',
-        'Gambler',
-        'Instructor',
-        'MartialArtist',
-        'Berserker',
-        'TinyMiracle',
-        'DefendersWill',
-        'BraveHeart',
-        'ResolutionOfSojourner',
-        'TravelingDoctor',
-        'LuckyDog',
-        'Adventurer',
-    ]
-
-    return sort_artifacts_by_order_list(g2c_artifact_list, 'set_key', set_key_list, reverse)
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'set_key', artifact_database.set_key_order, reverse)
 
 
 def sort_artifacts_by_slot_key(g2c_artifact_list, reverse=False):
@@ -507,15 +467,7 @@ def sort_artifacts_by_slot_key(g2c_artifact_list, reverse=False):
     :param reverse: defines whether to use original or reverse order
     :return: G2C (Genshin Garbage Collector) artifact list
     """
-    slot_key_list = [
-        'flower',
-        'plume',
-        'sands',
-        'goblet',
-        'circlet',
-    ]
-
-    return sort_artifacts_by_order_list(g2c_artifact_list, 'slot_key', slot_key_list, reverse)
+    return sort_artifacts_by_order_list(g2c_artifact_list, 'slot_key', artifact_database.slot_key_order, reverse)
 
 
 def sort_artifacts(g2c_artifact_list, sort_rule_list):
