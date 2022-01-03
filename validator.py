@@ -20,6 +20,9 @@ def main(input_file, verbose):
 
 
 def print_header(message, good_artifact_list, verbose=1):
+    if not len(good_artifact_list):
+        return
+
     verbose_level = min(verbose - 1, 2)
     verbose_info = [
         ['Id', 'setKey'],
