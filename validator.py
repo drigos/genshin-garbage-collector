@@ -34,6 +34,10 @@ def print_header(message, good_artifact_list, verbose=1):
     for good_artifact in good_artifact_list:
         formatted_artifact_list.append({k: v for k, v in good_artifact.items() if k in verbose_info[verbose_level]})
 
+    for formatted_artifact in formatted_artifact_list:
+        formatted_artifact['line'] = math.floor((formatted_artifact['Id'] / 7) + 1)
+        formatted_artifact['column'] = (formatted_artifact['Id'] % 7) + 1
+
     print('-' * len(message))
     print(message)
     print('Finds: ', len(good_artifact_list))
