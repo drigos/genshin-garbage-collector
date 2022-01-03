@@ -188,6 +188,7 @@ def generate_g2c_artifact_from_good(good_artifact):
         'rank': math.floor(good_artifact['level'] / 4),
         'sub_stats': copy.deepcopy(good_artifact['substats']),
         'best_score': 0,
+        'best_build': '',
         'build_score': [],
         'lock': None,
         'location': good_artifact['location'],
@@ -264,13 +265,14 @@ def get_artifacts_with_build_scores(g2c_artifact_list, build_file_name_list):
         for artifact_id, artifact_score in artifacts_score.items():
             g2c_artifact_id_format[artifact_id]['build_score'].append({
                 'character': build['character'],
-                'build': build['name'],
+                'name': build['name'],
                 'score': artifact_score
             })
 
     for g2c_artifact in g2c_artifact_id_format.values():
         best_score = max(g2c_artifact['build_score'], key=lambda artifact: artifact['score'])
         g2c_artifact['best_score'] = best_score['score']
+        g2c_artifact['best_build'] = f"{best_score['character']} - {best_score['name']}"
 
     return list(g2c_artifact_id_format.values())
 
