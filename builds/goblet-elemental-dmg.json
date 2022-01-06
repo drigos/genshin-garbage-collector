@@ -1,0 +1,31 @@
+{
+  "character": "Goblet",
+  "name": "Elemental DMG",
+  "filter": {
+    "flower": [],
+    "plume": [],
+    "sands": [],
+    "goblet": [
+      "physical_dmg_",
+      "anemo_dmg_",
+      "geo_dmg_",
+      "electro_dmg_",
+      "hydro_dmg_",
+      "pyro_dmg_",
+      "cryo_dmg"
+    ],
+    "circlet": []
+  },
+  "sub_stats": {
+    "atk_": 1,
+    "atk": 1,
+    "enerRech_": 1,
+    "eleMas": 1,
+    "critRate_": 1,
+    "critDMG_": 1,
+    "hp_": 1,
+    "hp": 1,
+    "def_": 1,
+    "def": 1
+  }
+}

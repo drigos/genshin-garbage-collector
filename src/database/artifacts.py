@@ -44,7 +44,7 @@ rarity_three = [
     'TravelingDoctor',
 ]
 
-set_key_order= [
+set_key_order = [
     'OceanHuedClam',
     'HuskOfOpulentDreams',
     'EmblemOfSeveredFate',

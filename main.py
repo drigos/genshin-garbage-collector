@@ -8,6 +8,7 @@ import uuid
 
 from collections import defaultdict
 import src.database.artifacts as artifact_database
+import src.database.stats as stat_database
 
 
 @click.command()
@@ -178,7 +179,7 @@ def generate_g2c_artifact_from_good(good_artifact):
     """
     return {
         'id': str(uuid.uuid4()),
-        'refer_id': good_artifact['Id'],
+        'refer_id': good_artifact.get('Id', ''),
         'set_key': good_artifact['setKey'],
         'slot_key': good_artifact['slotKey'],
         'main_stat_key': good_artifact['mainStatKey'],
@@ -187,8 +188,10 @@ def generate_g2c_artifact_from_good(good_artifact):
         'rank': math.floor(good_artifact['level'] / 4),
         'sub_stats': copy.deepcopy(good_artifact['substats']),
         'best_score': 0,
+        'best_build': '',
         'build_score': [],
         'lock': None,
+        'location': good_artifact['location'],
         'artifact_data': copy.deepcopy(good_artifact)
     }
 
@@ -262,13 +265,14 @@ def get_artifacts_with_build_scores(g2c_artifact_list, build_file_name_list):
         for artifact_id, artifact_score in artifacts_score.items():
             g2c_artifact_id_format[artifact_id]['build_score'].append({
                 'character': build['character'],
-                'build': build['name'],
+                'name': build['name'],
                 'score': artifact_score
             })
 
     for g2c_artifact in g2c_artifact_id_format.values():
         best_score = max(g2c_artifact['build_score'], key=lambda artifact: artifact['score'])
         g2c_artifact['best_score'] = best_score['score']
+        g2c_artifact['best_build'] = f"{best_score['character']} - {best_score['name']}"
 
     return list(g2c_artifact_id_format.values())
 
@@ -315,12 +319,14 @@ def get_artifacts_that_match_build(g2c_artifact_set_slot_format, build):
     """
     flower, plume, sands, goblet, circlet = get_artifacts_match_set_key(
         g2c_artifact_set_slot_format,
-        build['filter']['set']
+        build['filter'].get('set', artifact_database.set_key_order)
     )
 
-    sands = get_artifacts_match_main_stat(sands, build['filter']['sands'])
-    goblet = get_artifacts_match_main_stat(goblet, build['filter']['goblet'])
-    circlet = get_artifacts_match_main_stat(circlet, build['filter']['circlet'])
+    flower = get_artifacts_match_main_stat(flower, build['filter'].get('flower', stat_database.flower_main_stats))
+    plume = get_artifacts_match_main_stat(plume, build['filter'].get('plume', stat_database.plume_main_stats))
+    sands = get_artifacts_match_main_stat(sands, build['filter'].get('sands', stat_database.sands_main_stats))
+    goblet = get_artifacts_match_main_stat(goblet, build['filter'].get('goblet', stat_database.goblet_main_stats))
+    circlet = get_artifacts_match_main_stat(circlet, build['filter'].get('circlet', stat_database.circlet_main_stats))
 
     return [*flower, *plume, *sands, *goblet, *circlet]
 
