@@ -82,6 +82,8 @@ set_key_order = [
     'TravelingDoctor',
     'LuckyDog',
     'Adventurer',
+    'EchoesOfAnOffering',
+    'VermillionHereafter',
 ]
 
 slot_key_order = [
