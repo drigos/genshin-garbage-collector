@@ -145,6 +145,7 @@ How to run
 ----------
 
 ```
+source venv/bin/activate
 pip install -r requirements.txt
 python validator.py -i ~/good-full.json -vvv
 python main.py -i '~/good-full.json' -o good > ~/good-filtered.json
@@ -180,6 +181,14 @@ Specify which artifacts to show (default: keep).
 -k/--keep
 -d/--discard
 -a/--all
+```
+
+### Weak flag
+
+Display artifacts that are not at the maximum rarity allowed by the set.
+
+```
+-w/--weak
 ```
 
 ### Filters
@@ -270,6 +279,7 @@ Rarity 5 Artifact Validator
 - Check for null on the first three sub stats
 - Check for null on forth sub stat for upgraded artifact
 - Check max rarity for artifact sets
+- Check invalid artifact sets
 
 How to contribute
 -----------------
