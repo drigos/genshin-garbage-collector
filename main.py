@@ -527,7 +527,7 @@ def get_complementary_artifacts(g2c_artifact_full_list, g2c_artifact_partial_lis
 
 def update_good_artifacts(good, g2c_artifact_list):
     """Change GOOD artifact list for G2C artifact list and return GOOD structure
-    
+
     :param good: GOOD (Genshin Open Object Description)
     :param g2c_artifact_list: G2C (Genshin Garbage Collector) artifact list
     :return: GOOD (Genshin Open Object Description)
