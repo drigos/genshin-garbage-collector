@@ -1,13 +1,13 @@
 {
-  "character": "Ningguang",
+  "character": "Lisa",
   "name": "DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/ningguang/"
+    "guide_uri": "https://keqingmains.com/lisa/"
   },
   "filter": {
     "set": [
-      "ArchaicPetra",
-      "NoblesseOblige",
+      "ThunderingFury",
+      "Thundersoother",
       "GladiatorsFinale",
       "ShimenawasReminiscence",
       "EchoesOfAnOffering",
@@ -17,7 +17,7 @@
       "atk_"
     ],
     "goblet": [
-      "geo_dmg_"
+      "electro_dmg_"
     ],
     "circlet": [
       "critRate_",

@@ -1,24 +1,20 @@
 {
-  "character": "Razor",
-  "name": "DPS",
+  "character": "Keqing",
+  "name": "Physical DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/razor/"
+    "guide_uri": "https://keqingmains.com/keqing/"
   },
   "filter": {
     "set": [
       "PaleFlame",
-      "BloodstainedChivalry",
-      "RetracingBolide",
-      "GladiatorsFinale",
-      "ShimenawasReminiscence",
-      "EchoesOfAnOffering",
-      "VermillionHereafter"
+      "BlizzardStrayer",
+      "BloodstainedChivalry"
     ],
     "sands": [
       "atk_"
     ],
     "goblet": [
-      "physical_dmg_"
+      "phys_dmg_"
     ],
     "circlet": [
       "critRate_",

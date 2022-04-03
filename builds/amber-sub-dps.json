@@ -1,0 +1,30 @@
+{
+  "character": "Amber",
+  "name": "Sub DPS",
+  "description": {
+    "guide_uri": "https://www.youtube.com/watch?v=QW40leHPgJ8"
+  },
+  "filter": {
+    "set": [
+      "CrimsonWitchOfFlames",
+      "WanderersTroupe"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "pyro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critDMG_": 1,
+    "critRate_": 0.8,
+    "atk_": 0.6,
+    "atk": 0.4,
+    "eleMas": 0.4
+  }
+}

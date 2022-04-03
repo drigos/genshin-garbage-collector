@@ -1,14 +1,13 @@
 {
-  "character": "Razor",
+  "character": "Kamisato Ayato",
   "name": "DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/razor/"
+    "guide_uri": ""
   },
   "filter": {
     "set": [
-      "PaleFlame",
-      "BloodstainedChivalry",
-      "RetracingBolide",
+      "HeartOfDepth",
+      "EmblemOfSeveredFate",
       "GladiatorsFinale",
       "ShimenawasReminiscence",
       "EchoesOfAnOffering",
@@ -18,7 +17,7 @@
       "atk_"
     ],
     "goblet": [
-      "physical_dmg_"
+      "hydro_dmg_"
     ],
     "circlet": [
       "critRate_",

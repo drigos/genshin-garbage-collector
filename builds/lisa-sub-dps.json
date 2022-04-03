@@ -1,0 +1,32 @@
+{
+  "character": "Lisa",
+  "name": "Sub DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/lisa/"
+  },
+  "filter": {
+    "set": [
+      "ThunderingFury",
+      "NoblesseOblige",
+      "EmblemOfSeveredFate"
+    ],
+    "sands": [
+      "atk_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "electro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "critRate_": 0.8,
+    "critDMG_": 0.8,
+    "atk_": 0.6,
+    "atk": 0.4
+  }
+}

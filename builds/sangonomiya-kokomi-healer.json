@@ -1,0 +1,33 @@
+{
+  "character": "Sangonomiya Kokomi",
+  "name": "Healer",
+  "description": {
+    "guide_uri": "https://keqingmains.com/kokomi/"
+  },
+  "filter": {
+    "set": [
+      "OceanHuedClam",
+      "TenacityOfTheMillelith",
+      "MaidenBeloved",
+      "HeartOfDepth"
+    ],
+    "sands": [
+      "hp_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "hydro_dmg_"
+    ],
+    "circlet": [
+      "heal_",
+      "hp_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "hp_": 0.8,
+    "hp": 0.6,
+    "atk_": 0.6,
+    "atk": 0.4
+  }
+}

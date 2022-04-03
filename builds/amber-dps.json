@@ -1,13 +1,13 @@
 {
-  "character": "Ningguang",
+  "character": "Amber",
   "name": "DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/ningguang/"
+    "guide_uri": "https://www.youtube.com/watch?v=QW40leHPgJ8"
   },
   "filter": {
     "set": [
-      "ArchaicPetra",
-      "NoblesseOblige",
+      "CrimsonWitchOfFlames",
+      "WanderersTroupe",
       "GladiatorsFinale",
       "ShimenawasReminiscence",
       "EchoesOfAnOffering",
@@ -17,7 +17,7 @@
       "atk_"
     ],
     "goblet": [
-      "geo_dmg_"
+      "pyro_dmg_"
     ],
     "circlet": [
       "critRate_",
@@ -25,10 +25,10 @@
     ]
   },
   "sub_stats": {
-    "critRate_": 1,
     "critDMG_": 1,
-    "atk_": 0.8,
-    "atk": 0.6,
-    "enerRech_": 0.4
+    "critRate_": 0.8,
+    "atk_": 0.6,
+    "atk": 0.4,
+    "eleMas": 0.4
   }
 }
