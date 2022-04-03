@@ -17,6 +17,7 @@ def main(input_file, verbose):
     check_for_null_on_the_first_three_sub_stats(good_artifact_list, verbose)
     check_for_null_on_forth_sub_stat_for_upgraded_artifact(good_artifact_list, verbose)
     check_max_rarity_for_artifact_sets(good_artifact_list, verbose)
+    check_invalid_artifact_sets(good_artifact_list, verbose)
 
 
 def print_header(message, good_artifact_list, verbose=1):
@@ -84,6 +85,19 @@ def check_max_rarity_for_artifact_sets(good_artifact_list, verbose):
 
     print_header(
         'Check max rarity for artifact sets',
+        artifacts_with_problem,
+        verbose
+    )
+
+
+def check_invalid_artifact_sets(good_artifact_list, verbose):
+    artifacts_with_problem = []
+    for good_artifact in good_artifact_list:
+        if good_artifact['setKey'] not in artifact_database.set_key_order:
+            artifacts_with_problem.append(good_artifact)
+
+    print_header(
+        'Check invalid artifact sets',
         artifacts_with_problem,
         verbose
     )
