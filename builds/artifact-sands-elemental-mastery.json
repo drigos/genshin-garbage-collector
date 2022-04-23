@@ -1,0 +1,25 @@
+{
+  "character": "Sands",
+  "name": "Elemental Mastery",
+  "filter": {
+    "flower": [],
+    "plume": [],
+    "sands": [
+      "eleMas"
+    ],
+    "goblet": [],
+    "circlet": []
+  },
+  "sub_stats": {
+    "atk_": 1,
+    "atk": 1,
+    "enerRech_": 1,
+    "eleMas": 1,
+    "critRate_": 1,
+    "critDMG_": 1,
+    "hp_": 1,
+    "hp": 1,
+    "def_": 1,
+    "def": 1
+  }
+}
