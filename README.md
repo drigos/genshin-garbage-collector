@@ -313,20 +313,43 @@ jq . builds/**/*.json > /dev/null 2>&1; echo $?
 
 ```shell
 # Follow in order listed on Genshin to see which artifacts can be deleted
-python main.py -i 'good/genshinData_GOOD.json' -o g2c -aw -s 'refer_id' | jq '[.[] | {rarity,level,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock}]' > output/all.json
+python main.py -i 'good/genshinData_GOOD.json' -o g2c -aw | jq '[.[] | {rarity,level,rank,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats}] | sort_by(.refer_id)' > output/all.json
 
 # To reduce a specific set (e.g. WanderersTroupe or GladiatorsFinale), evaluate total amount...
-python main.py -i 'good/genshinData_GOOD.json' -o g2c | jq '[.[] | select(.set_key == "WanderersTroupe")] | length'
-# ...and then create threshold for each rank until you find a satisfactory amount...
-python main.py -i 'good/genshinData_GOOD.json' -o g2c -d -f 'rank:0=t:0.15' -f 'rank:1=t:0.20' -f 'rank:2=t:0.25' -f 'rank:3=t:0.30' -f 'rank:4=t:0.35' -f 'rank:5=t:0.40' | jq '[.[] | select(.set_key == "WanderersTroupe")] | length'
+cat output/all.json | jq '[.[] | select(.set_key == "WanderersTroupe")] | length'
+# ...and then create threshold for each rank until you find a satisfactory amount to remove...
+cat output/all.json | jq '[.[] | select(.set_key == "WanderersTroupe") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))] | length'
 # ...finally get a list of artifacts with the same filter used in the previous command
-python main.py -i 'good/genshinData_GOOD.json' -o g2c -d -f 'rank:0=t:0.15' -f 'rank:1=t:0.20' -f 'rank:2=t:0.25' -f 'rank:3=t:0.30' -f 'rank:4=t:0.35' -f 'rank:5=t:0.40' | jq '[.[] | {rarity,level,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats} | select(.set_key == "WanderersTroupe")] | sort_by(.refer_id)' > output/wander.json
+cat output/all.json | jq '[.[] | select(.set_key == "WanderersTroupe") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))]' > output/wander.json
 
-# Find better artifacts to upgrade (disable build goblet-elemental-dmg.json)
-python main.py -i 'good/genshinData_GOOD.json' -o g2c -f 'rank:5=t:1.0' -s 'best_score:desc' | jq '[.[] | {rarity,level,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats}]' > output/upgrade.json
-# To upgrade artifacts from a specific set (disable build goblet-elemental-dmg.json)
-python main.py -i 'good/genshinData_GOOD.json' -o g2c | jq '[.[] | {rarity,level,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats} | select(.set_key == "PaleFlame")] | sort_by(.best_score) | reverse' > output/pale.json
-python main.py -i 'good/genshinData_GOOD.json' -o g2c | jq '[.[] | {rarity,level,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats} | select(.set_key == "TenacityOfTheMillelith")] | sort_by(.best_score) | reverse' > output/millelith.json
-# To upgrade artifacts from a specific build (disable build goblet-elemental-dmg.json)
-python main.py -i 'good/genshinData_GOOD.json' -o g2c | jq '[.[] | {rarity,level,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats} | select(.best_build == "Eula - DPS")] | sort_by(.best_score) | reverse' > output/eula-dps.json
+# To reduce a specific slot (e.g. flower or plume), evaluate total amount...
+cat output/all.json | jq '[.[] | select(.slot_key == "plume")] | length'
+# ...and then create threshold for each rank until you find a satisfactory amount to remove to remove...
+cat output/all.json | jq '[.[] | select(.slot_key == "plume") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))] | length'
+# ...finally get a list of artifacts with the same filter used in the previous command
+cat output/all.json | jq '[.[] | select(.slot_key == "plume") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))]' > output/plume.json
+
+# To reduce artifact-based builds (e.g. "Circlet - Rare Stats", "Goblet - Elemental DMG", "Sands - Elemental Mastery")...
+# ...first, create file with all artifacts and build_score attributes
+python main.py -i 'good/genshinData_GOOD.json' -o g2c -aw | jq '[.[] | {rarity,level,rank,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats,build_score}] | sort_by(.refer_id)' > output/all-with-build-score.json
+# ...then evaluate total amount...
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats")] | length'
+# ...and then create threshold for each rank until you find a satisfactory amount to remove...
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))] | length'
+# ...finally get a list of artifacts with the same filter used in the previous command
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))]' > output/circlet.json
+# >>>> Verify whether these artifacts not match with other build thresholds <<<<
+
+# Find better artifacts to upgrade (disable build artifact-*.json)
+cat output/all.json | jq '[.[] | select(.rank != 5)] | sort_by(.best_score) | reverse' > output/upgrade.json
+# To upgrade artifacts from a specific set (disable build artifact-*.json)
+cat output/all.json | jq '[.[] | select(.rank != 5) | select(.set_key == "TenacityOfTheMillelith")] | sort_by(.best_score) | reverse' > output/millelith.json
+cat output/all.json | jq '[.[] | select(.rank != 5) | select(.set_key == "PaleFlame")] | sort_by(.best_score) | reverse' > output/pale.json
+cat output/all.json | jq '[.[] | select(.rank != 5) | select(.set_key == "EmblemOfSeveredFate")] | sort_by(.best_score) | reverse' > output/emblem.json
+cat output/all.json | jq '[.[] | select(.rank != 5) | select(.set_key == "HuskOfOpulentDreams")] | sort_by(.best_score) | reverse' > output/husk.json
+cat output/all.json | jq '[.[] | select(.rank != 5) | select(.set_key == "OceanHuedClam")] | sort_by(.best_score) | reverse' > output/ocean.json
+cat output/all.json | jq '[.[] | select(.rank != 5) | select(.set_key == "VermillionHereafter")] | sort_by(.best_score) | reverse' > output/vermillion.json
+
+# To upgrade artifacts from a specific build (disable build artifact-*.json)
+cat output/all.json | jq '[.[] | select(.rank != 5) | select(.best_build == "Eula - DPS")] | sort_by(.best_score) | reverse' > output/eula-dps.json
 ```
