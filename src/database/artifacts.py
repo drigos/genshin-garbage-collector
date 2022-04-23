@@ -45,6 +45,8 @@ rarity_three = [
 ]
 
 set_key_order = [
+    'VermillionHereafter',
+    'EchoesOfAnOffering',
     'OceanHuedClam',
     'HuskOfOpulentDreams',
     'EmblemOfSeveredFate',
@@ -82,8 +84,6 @@ set_key_order = [
     'TravelingDoctor',
     'LuckyDog',
     'Adventurer',
-    'EchoesOfAnOffering',
-    'VermillionHereafter',
 ]
 
 slot_key_order = [
