@@ -326,11 +326,11 @@ cat output/all.json | jq '[.[] | select(.set_key == "WanderersTroupe") | select(
 cat output/all.json | jq '[.[] | select(.set_key == "WanderersTroupe") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))]' > output/wanderers.json
 
 # To reduce a specific slot (e.g. flower or plume), evaluate total amount...
-cat output/all.json | jq '[.[] | select(.slot_key == "plume")] | length'
+cat output/all.json | jq '[.[] | select(.slot_key == "flower")] | length'
 # ...and then create threshold for each rank until you find a satisfactory amount to remove to remove...
-cat output/all.json | jq '[.[] | select(.slot_key == "plume") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))] | length'
+cat output/all.json | jq '[.[] | select(.slot_key == "flower") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))] | length'
 # ...finally get a list of artifacts with the same filter used in the previous command
-cat output/all.json | jq '[.[] | select(.slot_key == "plume") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))]' > output/plume.json
+cat output/all.json | jq '[.[] | select(.slot_key == "flower") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))]' > output/flower.json
 
 # To reduce artifact-based builds (e.g. "Circlet - Rare Stats", "Goblet - Elemental DMG", "Sands - Elemental Mastery")...
 # ...first, create file with all artifacts and build_score attributes
@@ -338,13 +338,13 @@ python main.py -i 'good/genshinData_GOOD.json' -o g2c -aw | jq '[.[] | del(.arti
 # ...then evaluate total amount...
 cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats")] | length'
 # ...and then create threshold for each rank until you find a satisfactory amount to remove...
-cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))] | length'
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.25) or (.rank == 1 and .best_score < 0.30) or (.rank == 2 and .best_score < 0.35) or (.rank == 3 and .best_score < 0.40) or (.rank == 4 and .best_score < 0.45) or (.rank == 5 and .best_score < 0.50))] | length'
 # ...finally get a list of artifacts with the same filter used in the previous command
-cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.15) or (.rank == 1 and .best_score < 0.20) or (.rank == 2 and .best_score < 0.25) or (.rank == 3 and .best_score < 0.30) or (.rank == 4 and .best_score < 0.35) or (.rank == 5 and .best_score < 0.40))]' > output/circlet.json
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.25) or (.rank == 1 and .best_score < 0.30) or (.rank == 2 and .best_score < 0.35) or (.rank == 3 and .best_score < 0.40) or (.rank == 4 and .best_score < 0.45) or (.rank == 5 and .best_score < 0.50))]' > output/circlet.json
 # >>>> Verify whether these artifacts not match with other build thresholds <<<<
 
 # To group all artifacts to be removed in a single file, use the command below
-jq -s 'reduce .[] as $item ([]; . + $item) | unique_by(.refer_id) | .[].lock = false' output/{flower,plume,gladiators,wanderers}.json > output/remove.json
+jq -s 'reduce .[] as $item ([]; . + $item) | unique_by(.refer_id) | .[].lock = false' output/{flower,plume,gladiators,wanderers,circlet,goblet,sands}.json > output/remove.json
 # To merge artifacts to be removed in the general list, use the command below (the order of the remove.json and all.json files is important)
 jq -s '.[0] + .[1] | unique_by(.refer_id)' output/{remove,all}.json > output/all-with-remove.json
 
@@ -357,6 +357,10 @@ for file in builds/artifact-*.json.disabled; do mv ${file} ${file//.disabled/}; 
 
 # Find better artifacts to upgrade (disable build artifact-*.json)
 cat output/all-without-artifact-builds.json | jq '[.[] | select(.rank != 5)] | sort_by(.best_score) | reverse' > output/upgrade.json
+
+# To remove some arbitrary artifacts chain removal rules with select 
+cat output/upgrade.json | jq '[.[] | select(.slot_key != "flower") | select(.slot_key != "plume") | select(.set_key != "WanderersTroupe") | select(.set_key != "GladiatorsFinale") | select(.level < 16)]' > output/upgrade-reduced-set.json
+
 # To upgrade artifacts from a specific set (disable build artifact-*.json)
 cat output/all-without-artifact-builds.json | jq '[.[] | select(.rank != 5) | select(.set_key == "TenacityOfTheMillelith")] | sort_by(.best_score) | reverse' > output/millelith.json
 cat output/all-without-artifact-builds.json | jq '[.[] | select(.rank != 5) | select(.set_key == "PaleFlame")] | sort_by(.best_score) | reverse' > output/pale.json
