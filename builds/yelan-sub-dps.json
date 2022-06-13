@@ -1,0 +1,31 @@
+{
+  "character": "Yelan",
+  "name": "Sub DPS",
+  "filter": {
+    "set": [
+      "EmblemOfSeveredFate",
+      "NoblesseOblige",
+      "HeartOfDepth",
+      "TenacityOfTheMillelith"
+    ],
+    "sands": [
+      "hp_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "hydro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_",
+      "hp_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "hp_": 0.8,
+    "enerRech_": 0.8,
+    "hp": 0.6
+  }
+}
