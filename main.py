@@ -37,6 +37,7 @@ def main(input_file, output_format, list_mode, weak, filters, sort):
     artifact_list_to_keep = get_artifacts_with_build_scores(artifact_list, build_file_name_list)
     artifact_list_to_keep = lock_unlock_artifacts(artifact_list_to_keep, True)
 
+    # DEPRECATED
     if filters:
         filter_rule_list = parse_cli_filter_string(filters)
         artifact_list_to_keep = filter_artifacts(artifact_list_to_keep, filter_rule_list)
@@ -51,6 +52,7 @@ def main(input_file, output_format, list_mode, weak, filters, sort):
     }
     output_list = output_lists[list_mode]
 
+    # DEPRECATED
     if sort:
         sort_rule_list = parse_cli_sort_string(sort)
         output_list = sort_artifacts(output_list, sort_rule_list)
@@ -171,15 +173,16 @@ def parse_cli_sort_string(sort_str_list):
     return sort_rule_list
 
 
-def generate_g2c_artifact_from_good(index, good_artifact):
+def generate_g2c_artifact_from_good(good_artifact, index=None):
     """Generate G2C artifact structure from GOOD artifact structure
 
     :param good_artifact: GOOD (Genshin Open Object Description) artifact structure
+    :param index: artifact unique identifier
     :return: G2C (Genshin Garbage Collector) artifact structure
     """
     return {
         'id': str(uuid.uuid4()),
-        'refer_id': good_artifact.get('Id', index),
+        'refer_id': good_artifact.get('id', index),
         'set_key': good_artifact['setKey'],
         'slot_key': good_artifact['slotKey'],
         'main_stat_key': good_artifact['mainStatKey'],
@@ -202,7 +205,7 @@ def generate_g2c_artifact_list_from_good(good_artifact_list):
     :param good_artifact_list: GOOD (Genshin Open Object Description) artifact list
     :return: G2C (Genshin Garbage Collector) artifact list
     """
-    return [generate_g2c_artifact_from_good(idx, artifact) for idx, artifact in enumerate(good_artifact_list)]
+    return [generate_g2c_artifact_from_good(artifact, index) for index, artifact in enumerate(good_artifact_list)]
 
 
 def hydrate_sub_stats_efficiency(g2c_artifact_list):
