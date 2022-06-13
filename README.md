@@ -151,6 +151,18 @@ python validator.py -i ~/good-full.json -vvv
 python main.py -i '~/good-full.json' -o good > ~/good-filtered.json
 ```
 
+### Problems?
+
+```shell
+> pip --version
+Traceback (most recent call last):
+  File "/home/rodrigo/Git/personal/genshin-garbage-collector/venv/bin/pip", line 5, in <module>
+    from pip._internal.cli.main import main
+ModuleNotFoundError: No module named 'pip'
+> python -m ensurepip
+> pip install --upgrade pip
+```
+
 ### Input file
 
 Specify input file in GOOD format.
