@@ -15,9 +15,9 @@ You want to use wider filters to generate your build, and it's taking hours.
 ### How it works?
 
 ```
-+------------------+    +------+    +---------------+    +-----+    +-------------------+
-| Inventory Kamera | -> | GOOD | -> | g2c-validator | -> | g2c | -> | Genshin Optimizer |
-+------------------+    +------+    +---------------+    +-----+    +-------------------+
++------------------+    +------+    +---------------+    +-----+    +-------------------------+
+| Inventory Kamera | -> | GOOD | -> | g2c-validator | -> | g2c | -> | Artifact List (or GOOD) |
++------------------+    +------+    +---------------+    +-----+    +-------------------------+
                                           /\  ||
                                           ||  \/
                                     +---------------+
@@ -25,9 +25,16 @@ You want to use wider filters to generate your build, and it's taking hours.
                                     +---------------+
 ```
 
+Scans
 - [Inventory Kamera](https://github.com/Andrewthe13th/Inventory_Kamera)
+- [Amenoma](https://github.com/daydreaming666/Amenoma)
+
+Format
 - [GOOD](https://frzyc.github.io/genshin-optimizer/#/doc/)
-- [Genshin Optimizer](https://frzyc.github.io/genshin-optimizer/#/)
+
+Optimizers
+- [Genshin Optimizer](https://frzyc.github.io/genshin-optimizer/#/) (Character Optimizer)
+- [gcsim Team Optimizer](https://github.com/martinsadw/gcsim-team-optimizer) (Team Optimizer)
 
 ## Builds
 
