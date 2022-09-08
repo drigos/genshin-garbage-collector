@@ -6,7 +6,8 @@
   },
   "filter": {
     "set": [
-      "OceanHuedClam"
+      "OceanHuedClam",
+      "DeepwoodMemories"
     ],
     "sands": [
       "hp_",
