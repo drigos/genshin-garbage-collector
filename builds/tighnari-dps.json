@@ -1,0 +1,33 @@
+{
+  "character": "Tighnari",
+  "name": "DPS",
+  "description": {
+    "beta": true
+  },
+  "filter": {
+    "set": [
+      "GildedDreams",
+      "WanderersTroupe"
+    ],
+    "sands": [
+      "eleMas",
+      "atk_"
+    ],
+    "goblet": [
+      "dendro_dmg_",
+      "eleMas",
+      "atk_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critDMG_": 1,
+    "critRate_": 1,
+    "eleMas": 0.8,
+    "atk_": 0.8,
+    "atk": 0.6
+  }
+}
