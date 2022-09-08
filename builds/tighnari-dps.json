@@ -6,8 +6,8 @@
   },
   "filter": {
     "set": [
-      "GildedDreams",
-      "WanderersTroupe"
+      "WanderersTroupe",
+      "GildedDreams"
     ],
     "sands": [
       "eleMas",
