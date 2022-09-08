@@ -6,8 +6,9 @@
   },
   "filter": {
     "set": [
-      "HeartOfDepth",
-      "WanderersTroupe"
+      "NoblesseOblige",
+      "EmblemOfSeveredFate",
+      "DeepwoodMemories"
     ],
     "sands": [
       "enerRech_",
