@@ -26,8 +26,8 @@ def print_header(message, good_artifact_list, verbose=1):
 
     verbose_level = min(verbose - 1, 2)
     verbose_info = [
-        ['Id', 'setKey'],
-        ['Id', 'setKey', 'soltKey', 'mainStatKey', 'level'],
+        ['id', 'setKey'],
+        ['id', 'setKey', 'soltKey', 'mainStatKey', 'level'],
         good_artifact_list[0].keys()
     ]
 
@@ -37,8 +37,8 @@ def print_header(message, good_artifact_list, verbose=1):
 
     column_size = 8
     for formatted_artifact in formatted_artifact_list:
-        formatted_artifact['line'] = math.floor((formatted_artifact['Id'] / column_size) + 1)
-        formatted_artifact['column'] = (formatted_artifact['Id'] % column_size) + 1
+        formatted_artifact['line'] = math.floor((formatted_artifact['id'] / column_size) + 1)
+        formatted_artifact['column'] = (formatted_artifact['id'] % column_size) + 1
 
     print('-' * len(message))
     print(message)
