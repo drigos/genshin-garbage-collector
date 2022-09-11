@@ -351,9 +351,9 @@ cat output/all.json | jq 'group_by(.slot_key) | map({slot_key: .[0].slot_key, co
 # ...evaluate total amount...
 cat output/all.json | jq '[.[] | select(.slot_key == "flower")] | length'
 # ...and then create threshold for each rank until you find a satisfactory amount to remove to remove...
-cat output/all.json | jq '[.[] | select(.slot_key == "flower") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.18) or (.rank == 1 and .best_score < 0.23) or (.rank == 2 and .best_score < 0.28) or (.rank == 3 and .best_score < 0.33) or (.rank == 4 and .best_score < 0.38) or (.rank == 5 and .best_score < 0.43))] | length'
+cat output/all.json | jq '[.[] | select(.slot_key == "flower") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.20) or (.rank == 1 and .best_score < 0.25) or (.rank == 2 and .best_score < 0.30) or (.rank == 3 and .best_score < 0.35) or (.rank == 4 and .best_score < 0.40) or (.rank == 5 and .best_score < 0.45))] | length'
 # ...finally get a list of artifacts with the same filter used in the previous command
-cat output/all.json | jq '[.[] | select(.slot_key == "flower") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.18) or (.rank == 1 and .best_score < 0.23) or (.rank == 2 and .best_score < 0.28) or (.rank == 3 and .best_score < 0.33) or (.rank == 4 and .best_score < 0.38) or (.rank == 5 and .best_score < 0.43))]' > output/flower.json
+cat output/all.json | jq '[.[] | select(.slot_key == "flower") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.20) or (.rank == 1 and .best_score < 0.25) or (.rank == 2 and .best_score < 0.30) or (.rank == 3 and .best_score < 0.35) or (.rank == 4 and .best_score < 0.40) or (.rank == 5 and .best_score < 0.45))]' > output/flower.json
 
 # To reduce artifact-based builds (e.g. "Goblet - Elemental DMG", "Circlet - Rare Stats", "Sands - Elemental Mastery")...
 cat output/all.json | jq 'group_by(.best_build) | map({best_build: .[0].best_build, count: . | length}) | sort_by(.count)'
@@ -380,6 +380,11 @@ jq -s '.[0] + .[1] | unique_by(.refer_id)' output/{remove,all}.json > output/all
 
 # How many artifacts to remove 
 cat output/all-with-remove.json | jq '[.[] | select(.lock == false)] | length'
+
+# ---
+
+python main.py -i 'good/data.json' -o g2c -aw | jq '[.[] | del(.artifact_data)] | sort_by(.refer_id)' > output/all-with-build-score.json
+python build-counter.py -i 'output/all-with-build-score.json'
 
 # ---
 
