@@ -3,7 +3,10 @@ rarity_five = [
     'BlizzardStrayer',
     'BloodstainedChivalry',
     'CrimsonWitchOfFlames',
+    'DeepwoodMemories',
+    'EchoesOfAnOffering',
     'EmblemOfSeveredFate',
+    'GildedDreams',
     'GladiatorsFinale',
     'HeartOfDepth',
     'HuskOfOpulentDreams',
@@ -17,6 +20,7 @@ rarity_five = [
     'TenacityOfTheMillelith',
     'ThunderingFury',
     'Thundersoother',
+    'VermillionHereafter',
     'ViridescentVenerer',
     'WanderersTroupe',
 ]
@@ -45,8 +49,10 @@ rarity_three = [
 ]
 
 set_key_order = [
-    'VermillionHereafter',
+    'GildedDreams',
+    'DeepwoodMemories',
     'EchoesOfAnOffering',
+    'VermillionHereafter',
     'OceanHuedClam',
     'HuskOfOpulentDreams',
     'EmblemOfSeveredFate',
