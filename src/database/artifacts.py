@@ -4,8 +4,10 @@ rarity_five = [
     'BloodstainedChivalry',
     'CrimsonWitchOfFlames',
     'DeepwoodMemories',
+    'DesertPavilionChronicle',
     'EchoesOfAnOffering',
     'EmblemOfSeveredFate',
+    'FlowerOfParadiseLost',
     'GildedDreams',
     'GladiatorsFinale',
     'HeartOfDepth',
@@ -49,6 +51,8 @@ rarity_three = [
 ]
 
 set_key_order = [
+    'FlowerOfParadiseLost',
+    'DesertPavilionChronicle',
     'GildedDreams',
     'DeepwoodMemories',
     'EchoesOfAnOffering',
