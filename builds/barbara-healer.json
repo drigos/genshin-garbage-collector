@@ -2,16 +2,16 @@
   "character": "Barbara",
   "name": "Healer",
   "description": {
-    "guide_uri": "https://genshin.gg/characters/Barbara"
+    "guide_uri": "https://keqingmains.com/barbara/"
   },
   "filter": {
     "set": [
       "OceanHuedClam",
-      "DeepwoodMemories"
+      "MaidenBeloved",
+      "TenacityOfTheMillelith"
     ],
     "sands": [
-      "hp_",
-      "enerRech_"
+      "hp_"
     ],
     "goblet": [
       "hp_"
