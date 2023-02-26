@@ -1,0 +1,34 @@
+{
+  "character": "Nilou",
+  "name": "Bloom Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/nilou-quickguide/",
+    "version": "3.4"
+  },
+  "filter": {
+    "set": [
+      "WanderersTroupe",
+      "GildedDreams",
+      "FlowerOfParadiseLost",
+      "HeartOfDepth",
+      "NoblesseOblige",
+      "TenacityOfTheMillelith"
+    ],
+    "sands": [
+      "hp_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "hp_"
+    ],
+    "circlet": [
+      "hp_"
+    ]
+  },
+  "sub_stats": {
+    "hp_": 1,
+    "hp": 0.8,
+    "enerRech_": 0.6,
+    "eleMas": 0.6
+  }
+}

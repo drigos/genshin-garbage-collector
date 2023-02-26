@@ -1,12 +1,16 @@
 {
   "character": "Collei",
-  "name": "Spread",
+  "name": "Quicken Sub DPS",
   "description": {
-    "beta": true
+    "guide_uri": "https://keqingmains.com/collei/",
+    "version": "3.4"
   },
   "filter": {
     "set": [
-      "DeepwoodMemories"
+      "DeepwoodMemories",
+      "TenacityOfTheMillelith",
+      "NoblesseOblige",
+      "GildedDreams"
     ],
     "sands": [
       "eleMas",
@@ -20,12 +24,14 @@
     ],
     "circlet": [
       "critRate_",
-      "critDMG_"
+      "critDMG_",
+      "eleMas"
     ]
   },
   "sub_stats": {
     "critDMG_": 1,
     "critRate_": 1,
+    "enerRech_": 0.8,
     "eleMas": 0.8,
     "atk_": 0.6,
     "atk": 0.4

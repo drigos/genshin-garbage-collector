@@ -2,12 +2,15 @@
   "character": "Tighnari",
   "name": "DPS",
   "description": {
-    "beta": true
+    "guide_uri": "https://keqingmains.com/tighnari/",
+    "version": "3.4"
   },
   "filter": {
     "set": [
       "WanderersTroupe",
-      "GildedDreams"
+      "GildedDreams",
+      "FlowerOfParadiseLost",
+      "DeepwoodMemories"
     ],
     "sands": [
       "eleMas",
