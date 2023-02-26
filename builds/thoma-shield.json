@@ -2,15 +2,15 @@
   "character": "Thoma",
   "name": "Shield",
   "description": {
-    "guide_uri": "https://www.youtube.com/watch?v=hWj-Ps6QzwE",
-    "info": "Crit Rate% is only useful if using Favonius Lance"
+    "guide_uri": "https://keqingmains.com/thoma/",
+    "info": "Crit Rate% is only useful if using Favonius Lance",
+    "version": "3.4"
   },
   "filter": {
     "set": [
       "NoblesseOblige",
       "EmblemOfSeveredFate",
-      "TenacityOfTheMillelith",
-      "DeepwoodMemories"
+      "TenacityOfTheMillelith"
     ],
     "sands": [
       "enerRech_"

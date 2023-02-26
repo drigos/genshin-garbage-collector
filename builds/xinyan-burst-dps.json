@@ -2,7 +2,8 @@
   "character": "Xinyan",
   "name": "Burst DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/xinyan/"
+    "guide_uri": "https://keqingmains.com/xinyan/",
+    "version": "3.4"
   },
   "filter": {
     "set": [
@@ -13,7 +14,7 @@
       "ShimenawasReminiscence",
       "EchoesOfAnOffering",
       "VermillionHereafter",
-      "DeepwoodMemories"
+      "EmblemOfSeveredFate"
     ],
     "sands": [
       "atk_"

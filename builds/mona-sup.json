@@ -2,13 +2,13 @@
   "character": "Mona",
   "name": "Support",
   "description": {
-    "guide_uri": "https://keqingmains.com/mona/"
+    "guide_uri": "https://keqingmains.com/mona/",
+    "version": "3.4"
   },
   "filter": {
     "set": [
       "NoblesseOblige",
-      "EmblemOfSeveredFate",
-      "DeepwoodMemories"
+      "EmblemOfSeveredFate"
     ],
     "sands": [
       "enerRech_",

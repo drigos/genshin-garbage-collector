@@ -2,13 +2,13 @@
   "character": "Diona",
   "name": "Support",
   "description": {
-    "guide_uri": "https://keqingmains.com/diona/"
+    "guide_uri": "https://keqingmains.com/diona/",
+    "version": "3.4"
   },
   "filter": {
     "set": [
       "MaidenBeloved",
-      "NoblesseOblige",
-      "DeepwoodMemories"
+      "NoblesseOblige"
     ],
     "sands": [
       "enerRech_",

@@ -2,14 +2,14 @@
   "character": "Lisa",
   "name": "Sub DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/lisa/"
+    "guide_uri": "https://keqingmains.com/lisa/",
+    "version": "3.4"
   },
   "filter": {
     "set": [
       "ThunderingFury",
       "NoblesseOblige",
-      "EmblemOfSeveredFate",
-      "DeepwoodMemories"
+      "EmblemOfSeveredFate"
     ],
     "sands": [
       "atk_",

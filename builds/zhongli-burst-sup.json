@@ -2,14 +2,15 @@
   "character": "Zhongli",
   "name": "Burst Support",
   "description": {
-    "guide_uri": "https://keqingmains.com/zhongli/"
+    "guide_uri": "https://keqingmains.com/zhongli/",
+    "version": "3.4"
   },
   "filter": {
     "set": [
       "TenacityOfTheMillelith",
       "ArchaicPetra",
       "NoblesseOblige",
-      "DeepwoodMemories"
+      "EmblemOfSeveredFate"
     ],
     "sands": [
       "hp_",
@@ -24,6 +25,7 @@
     ]
   },
   "sub_stats": {
+    "enerRech_": 1,
     "critRate_": 1,
     "critDMG_": 1,
     "atk_": 0.8,

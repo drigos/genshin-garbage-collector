@@ -3,7 +3,8 @@
   "name": "Support",
   "description": {
     "guide_uri": "https://genshin-builds.com/character/gorou",
-    "info": "Crit Rate% is only useful if using Favonius Bow"
+    "info": "Crit Rate% is only useful if using Favonius Warbow",
+    "version": "3.4"
   },
   "filter": {
     "set": [

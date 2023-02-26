@@ -2,13 +2,13 @@
   "character": "Kujou Sara",
   "name": "Support",
   "description": {
-    "guide_uri": "https://keqingmains.com/sara/"
+    "guide_uri": "https://keqingmains.com/sara/",
+    "version": "3.4"
   },
   "filter": {
     "set": [
       "EmblemOfSeveredFate",
-      "NoblesseOblige",
-      "DeepwoodMemories"
+      "NoblesseOblige"
     ],
     "sands": [
       "atk_",
