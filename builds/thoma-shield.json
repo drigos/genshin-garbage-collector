@@ -25,8 +25,8 @@
   },
   "sub_stats": {
     "critRate_": 1,
-    "hp": 1,
-    "hp_": 0.8,
+    "hp_": 1,
+    "hp": 0.8,
     "enerRech_": 0.8
   }
 }
