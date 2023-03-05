@@ -1,0 +1,44 @@
+{
+  "character": "Dori",
+  "name": "Aggravate Sub DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/dori-quickguide/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "GladiatorsFinale",
+      "ShimenawasReminiscence",
+      "EchoesOfAnOffering",
+      "VermillionHereafter",
+      "WanderersTroupe",
+      "GildedDreams",
+      "FlowerOfParadiseLost",
+      "EmblemOfSeveredFate",
+      "DeepwoodMemories",
+      "ThunderingFury",
+      "NoblesseOblige"
+    ],
+    "sands": [
+      "eleMas",
+      "enerRech_"
+    ],
+    "goblet": [
+      "electro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "enerRech_": 1,
+    "eleMas": 0.8,
+    "atk_": 0.6,
+    "hp_": 0.6,
+    "atk": 0.4,
+    "hp": 0.4
+  }
+}

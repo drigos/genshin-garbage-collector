@@ -1,0 +1,38 @@
+{
+  "character": "Yaoyao",
+  "name": "EM",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/yaoyao-quickguide/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "DeepwoodMemories",
+      "TenacityOfTheMillelith",
+      "EmblemOfSeveredFate",
+      "WanderersTroupe",
+      "GildedDreams",
+      "FlowerOfParadiseLost"
+    ],
+    "sands": [
+      "eleMas"
+    ],
+    "goblet": [
+      "dendro_dmg_",
+      "eleMas"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_",
+      "eleMas"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "eleMas": 0.8,
+    "atk_": 0.6,
+    "atk": 0.4,
+    "enerRech_": 0.4
+  }
+}

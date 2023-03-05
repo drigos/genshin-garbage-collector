@@ -1,0 +1,34 @@
+{
+  "character": "Wanderer",
+  "name": "DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/wanderer-quickguide/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "DesertPavilionChronicle",
+      "GladiatorsFinale",
+      "ShimenawasReminiscence",
+      "EchoesOfAnOffering",
+      "VermillionHereafter"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "atk_",
+      "anemo_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "atk_": 0.8,
+    "atk": 0.6
+  }
+}

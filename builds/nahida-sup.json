@@ -1,0 +1,37 @@
+{
+  "character": "Nahida",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/nahida-quickguide/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "TenacityOfTheMillelith",
+      "NoblesseOblige",
+      "WanderersTroupe",
+      "GildedDreams",
+      "FlowerOfParadiseLost",
+      "DeepwoodMemories"
+    ],
+    "sands": [
+      "eleMas"
+    ],
+    "goblet": [
+      "eleMas",
+      "dendro_dmg_"
+    ],
+    "circlet": [
+      "eleMas",
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "eleMas": 1,
+    "critDMG_": 0.8,
+    "critRate_": 0.8,
+    "atk_": 0.6,
+    "atk": 0.4
+  }
+}
