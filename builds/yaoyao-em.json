@@ -3,7 +3,7 @@
   "name": "EM",
   "description": {
     "guide_uri": "https://keqingmains.com/q/yaoyao-quickguide/",
-    "version": 3.5
+    "version": "3.5"
   },
   "filter": {
     "set": [

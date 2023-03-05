@@ -3,7 +3,7 @@
   "name": "DPS",
   "description": {
     "guide_uri": "https://keqingmains.com/q/wanderer-quickguide/",
-    "version": 3.5
+    "version": "3.5"
   },
   "filter": {
     "set": [
