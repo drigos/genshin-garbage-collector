@@ -1,0 +1,36 @@
+{
+  "character": "Candace",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/candace-quickguide/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "NoblesseOblige",
+      "EmblemOfSeveredFate",
+      "HeartOfDepth",
+      "TenacityOfTheMillelith"
+    ],
+    "sands": [
+      "enerRech_",
+      "hp_"
+    ],
+    "goblet": [
+      "hydro_dmg_",
+      "hp_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_",
+      "hp_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "critRate_": 0.8,
+    "critDMG_": 0.8,
+    "hp_": 0.6,
+    "hp": 0.4
+  }
+}

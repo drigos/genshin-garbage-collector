@@ -1,0 +1,36 @@
+{
+  "character": "Layla",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/layla-quickguide/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "BlizzardStrayer",
+      "NoblesseOblige",
+      "EmblemOfSeveredFate",
+      "TenacityOfTheMillelith"
+    ],
+    "sands": [
+      "enerRech_",
+      "hp_"
+    ],
+    "goblet": [
+      "cryo_dmg_",
+      "hp_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_",
+      "hp_"
+    ]
+  },
+  "sub_stats": {
+    "hp_": 1,
+    "hp": 0.8,
+    "enerRech_": 0.8,
+    "critRate_": 0.6,
+    "critDMG_": 0.6
+  }
+}

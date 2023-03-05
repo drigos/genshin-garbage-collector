@@ -1,0 +1,32 @@
+{
+  "character": "Faruzan",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/faruzan-quickguide/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "ViridescentVenerer",
+      "NoblesseOblige"
+    ],
+    "sands": [
+      "enerRech_",
+      "atk_"
+    ],
+    "goblet": [
+      "anemo_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "critRate_": 0.8,
+    "critDMG_": 0.6,
+    "atk_": 0.4,
+    "atk": 0.2
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "character": "Alhaithan",
+  "name": "DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/alhaitham-quickguide/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "EmblemOfSeveredFate",
+      "WanderersTroupe",
+      "GildedDreams",
+      "FlowerOfParadiseLost",
+      "DeepwoodMemories"
+    ],
+    "sands": [
+      "eleMas",
+      "atk_"
+    ],
+    "goblet": [
+      "dendro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critDMG_": 1,
+    "critRate_": 1,
+    "eleMas": 1,
+    "enerRech_": 0.8,
+    "atk_": 0.8,
+    "atk": 0.6
+  }
+}

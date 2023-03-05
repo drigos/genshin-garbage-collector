@@ -1,0 +1,34 @@
+{
+  "character": "Yaoyao",
+  "name": "Healer",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/yaoyao-quickguide/",
+    "version": 3.5
+  },
+  "filter": {
+    "set": [
+      "MaidenBeloved",
+      "OceanHuedClam",
+      "DeepwoodMemories",
+      "TenacityOfTheMillelith",
+      "EmblemOfSeveredFate"
+    ],
+    "sands": [
+      "hp_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "hp_"
+    ],
+    "circlet": [
+      "heal_",
+      "hp_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "critRate_": 0.8,
+    "hp_": 0.6,
+    "hp": 0.4
+  }
+}
