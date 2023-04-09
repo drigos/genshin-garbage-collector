@@ -1,0 +1,39 @@
+{
+  "character": "Tartaglia",
+  "name": "DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/tartaglia/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "HeartOfDepth",
+      "GladiatorsFinale",
+      "ShimenawasReminiscence",
+      "EchoesOfAnOffering",
+      "VermillionHereafter",
+      "WanderersTroupe",
+      "GildedDreams",
+      "FlowerOfParadiseLost",
+      "NoblesseOblige"
+    ],
+    "sands": [
+      "atk_"
+    ],
+    "goblet": [
+      "hydro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "critRate_": 1,
+    "critDMG_": 1,
+    "atk_": 0.8,
+    "atk": 0.6,
+    "eleMas": 0.6,
+    "enerRech_": 0.4
+  }
+}

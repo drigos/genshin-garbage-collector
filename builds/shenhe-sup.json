@@ -1,0 +1,39 @@
+{
+  "character": "Shenhe",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/shenhe/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "GladiatorsFinale",
+      "ShimenawasReminiscence",
+      "EchoesOfAnOffering",
+      "VermillionHereafter",
+      "BlizzardStrayer",
+      "NoblesseOblige"
+    ],
+    "sands": [
+      "enerRech_",
+      "atk_"
+    ],
+    "goblet": [
+      "cryo_dmg_",
+      "atk_"
+
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_",
+      "atk_"
+    ]
+  },
+  "sub_stats": {
+    "atk_": 1,
+    "atk": 0.8,
+    "enerRech_": 0.8,
+    "critRate_": 0.6,
+    "critDMG_": 0.6
+  }
+}

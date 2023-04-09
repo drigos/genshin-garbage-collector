@@ -1,0 +1,33 @@
+{
+  "character": "Yungin",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/yunjin/",
+    "info": "Crit Rate% is only useful if using Favonius Lance",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "HuskOfOpulentDreams",
+      "EmblemOfSeveredFate",
+      "ArchaicPetra"
+    ],
+    "sands": [
+      "enerRech_",
+      "def_"
+    ],
+    "goblet": [
+      "def_"
+    ],
+    "circlet": [
+      "critRate_",
+      "def_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "def_": 0.8,
+    "def": 0.6,
+    "critRate_": 0.6
+  }
+}

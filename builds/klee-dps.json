@@ -1,25 +1,23 @@
 {
-  "character": "Wanderer",
+  "character": "Klee",
   "name": "DPS",
   "description": {
-    "guide_uri": "https://keqingmains.com/q/wanderer-quickguide/",
+    "guide_uri": "https://keqingmains.com/klee/",
     "version": "3.5"
   },
   "filter": {
     "set": [
-      "ViridescentVenerer",
-      "DesertPavilionChronicle",
       "GladiatorsFinale",
       "ShimenawasReminiscence",
       "EchoesOfAnOffering",
-      "VermillionHereafter"
+      "VermillionHereafter",
+      "Lavawalker"
     ],
     "sands": [
       "atk_"
     ],
     "goblet": [
-      "atk_",
-      "anemo_dmg_"
+      "pyro_dmg_"
     ],
     "circlet": [
       "critRate_",
@@ -30,6 +28,7 @@
     "critRate_": 1,
     "critDMG_": 1,
     "atk_": 0.8,
-    "atk": 0.6
+    "atk": 0.6,
+    "enerRech_": 0.6
   }
 }

@@ -1,0 +1,34 @@
+{
+  "character": "Shikanoin Heizou",
+  "name": "Driver",
+  "description": {
+    "guide_uri": "https://keqingmains.com/heizou/",
+    "version": "3.5"
+  },
+  "filter": {
+    "set": [
+      "ViridescentVenerer",
+      "DesertPavilionChronicle",
+      "WanderersTroupe",
+      "GildedDreams",
+      "FlowerOfParadiseLost"
+    ],
+    "sands": [
+      "eleMas"
+    ],
+    "goblet": [
+      "eleMas"
+    ],
+    "circlet": [
+      "eleMas"
+    ]
+  },
+  "sub_stats": {
+    "eleMas": 1,
+    "enerRech_": 0.8,
+    "critRate_": 0.6,
+    "critDMG_": 0.6,
+    "atk_": 0.4,
+    "atk": 0.2
+  }
+}
