@@ -15,6 +15,7 @@ rarity_five = [
     'Lavawalker',
     'MaidenBeloved',
     'NoblesseOblige',
+    'NymphsDream',
     'OceanHuedClam',
     'PaleFlame',
     'RetracingBolide',
@@ -24,6 +25,7 @@ rarity_five = [
     'Thundersoother',
     'VermillionHereafter',
     'ViridescentVenerer',
+    'VourukashasGlow',
     'WanderersTroupe',
 ]
 
@@ -51,6 +53,8 @@ rarity_three = [
 ]
 
 set_key_order = [
+    'VourukashasGlow',
+    'NymphsDream',
     'FlowerOfParadiseLost',
     'DesertPavilionChronicle',
     'GildedDreams',
