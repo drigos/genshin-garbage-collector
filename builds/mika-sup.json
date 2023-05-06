@@ -1,0 +1,35 @@
+{
+  "character": "Mika",
+  "name": "Support",
+  "description": {
+    "guide_uri": "https://keqingmains.com/q/mika-quickguide/"
+  },
+  "filter": {
+    "set": [
+      "NoblesseOblige",
+      "OceanHuedClam",
+      "EmblemOfSeveredFate",
+      "TenacityOfTheMillelith",
+      "VourukashasGlow",
+      "MaidenBeloved"
+    ],
+    "sands": [
+      "enerRech_",
+      "hp_"
+    ],
+    "goblet": [
+      "hp_"
+    ],
+    "circlet": [
+      "heal_",
+      "hp_",
+      "critRate_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "critRate_": 0.8,
+    "hp_": 0.8,
+    "hp": 0.6
+  }
+}
