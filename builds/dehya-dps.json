@@ -1,0 +1,43 @@
+{
+  "character": "Dehya",
+  "name": "DPS",
+  "description": {
+    "guide_uri": "https://keqingmains.com/hu-tao/"
+  },
+  "filter": {
+    "set": [
+      "VourukashasGlow",
+      "EmblemOfSeveredFate",
+      "Lavawalker",
+      "CrimsonWitchOfFlames",
+      "NoblesseOblige",
+      "GladiatorsFinale",
+      "ShimenawasReminiscence",
+      "EchoesOfAnOffering",
+      "VermillionHereafter",
+      "TenacityOfTheMillelith"
+    ],
+    "sands": [
+      "atk_",
+      "hp_",
+      "enerRech_"
+    ],
+    "goblet": [
+      "pyro_dmg_"
+    ],
+    "circlet": [
+      "critRate_",
+      "critDMG_"
+    ]
+  },
+  "sub_stats": {
+    "enerRech_": 1,
+    "critRate_": 0.8,
+    "critDMG_": 0.8,
+    "hp_": 0.6,
+    "atk_": 0.6,
+    "hp": 0.4,
+    "atk": 0.4,
+    "eleMas": 0.2
+  }
+}
