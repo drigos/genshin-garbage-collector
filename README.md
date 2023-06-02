@@ -154,8 +154,8 @@ How to run
 ```
 source venv/bin/activate
 pip install -r requirements.txt
-python validator.py -i ~/good-full.json -vvv
-python main.py -i '~/good-full.json' -o good > ~/good-filtered.json
+python3 validator.py -i ~/good-full.json -vvv
+python3 main.py -i '~/good-full.json' -o good > ~/good-filtered.json
 ```
 
 ### Problems?
@@ -166,7 +166,7 @@ Traceback (most recent call last):
   File "/home/rodrigo/Git/personal/genshin-garbage-collector/venv/bin/pip", line 5, in <module>
     from pip._internal.cli.main import main
 ModuleNotFoundError: No module named 'pip'
-> python -m ensurepip
+> python3 -m ensurepip
 > pip install --upgrade pip
 ```
 
@@ -308,7 +308,7 @@ How to contribute
 ```shell
 source venv/bin/activate
 pip install -r requirements.txt
-python main.py -i '~/good.json'
+python3 main.py -i '~/good.json'
 ```
 
 ## JSON Validator
@@ -332,7 +332,7 @@ jq . builds/**/*.json > /dev/null 2>&1; echo $?
 
 ```shell
 # Follow in order listed on Genshin to see which artifacts can be deleted
-python main.py -i 'good/data.json' -o g2c -aw | jq '[.[] | {rarity,level,rank,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats}] | sort_by(.refer_id)' > output/all.json
+python3 main.py -i 'good/data.json' -o g2c -aw | jq '[.[] | {rarity,level,rank,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats}] | sort_by(.refer_id)' > output/all.json
 
 # How many artifacts to remove (only the ones that don't match any build) 
 cat output/all.json | jq '[.[] | select(.lock == false)] | length'
@@ -358,23 +358,26 @@ cat output/all.json | jq '[.[] | select(.slot_key == "flower") | select((.best_s
 # To reduce artifact-based builds (e.g. "Goblet - Elemental DMG", "Circlet - Rare Stats", "Sands - Elemental Mastery")...
 cat output/all.json | jq 'group_by(.best_build) | map({best_build: .[0].best_build, count: . | length}) | sort_by(.count)'
 # ...first, create file with all artifacts and build_score attributes
-python main.py -i 'good/data.json' -o g2c -aw | jq '[.[] | del(.artifact_data)] | sort_by(.refer_id)' > output/all-with-build-score.json
+python3 main.py -i 'good/data.json' -o g2c -aw | jq '[.[] | del(.artifact_data)] | sort_by(.refer_id)' > output/all-with-build-score.json
 # ...then evaluate total amount...
 cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Goblet - Elemental DMG")] | length'
 cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats")] | length'
 cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Sands - Elemental Mastery")] | length'
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Artifact - Deepwood Memories")] | length'
 # ...and then create threshold for each rank until you find a satisfactory amount to remove...
 cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Goblet - Elemental DMG") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.30) or (.rank == 1 and .best_score < 0.35) or (.rank == 2 and .best_score < 0.40) or (.rank == 3 and .best_score < 0.45) or (.rank == 4 and .best_score < 0.50) or (.rank == 5 and .best_score < 0.55))] | length'
 cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.28) or (.rank == 1 and .best_score < 0.33) or (.rank == 2 and .best_score < 0.38) or (.rank == 3 and .best_score < 0.43) or (.rank == 4 and .best_score < 0.48) or (.rank == 5 and .best_score < 0.53))] | length'
 cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Sands - Elemental Mastery") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.25) or (.rank == 1 and .best_score < 0.30) or (.rank == 2 and .best_score < 0.35) or (.rank == 3 and .best_score < 0.40) or (.rank == 4 and .best_score < 0.45) or (.rank == 5 and .best_score < 0.50))] | length'
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Artifact - Deepwood Memories") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.25) or (.rank == 1 and .best_score < 0.30) or (.rank == 2 and .best_score < 0.35) or (.rank == 3 and .best_score < 0.40) or (.rank == 4 and .best_score < 0.45) or (.rank == 5 and .best_score < 0.50))] | length'
 # ...finally get a list of artifacts with the same filter used in the previous command
-cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Goblet - Elemental DMG") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.30) or (.rank == 1 and .best_score < 0.35) or (.rank == 2 and .best_score < 0.40) or (.rank == 3 and .best_score < 0.45) or (.rank == 4 and .best_score < 0.50) or (.rank == 5 and .best_score < 0.55))]' > output/goblet.json
-cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.28) or (.rank == 1 and .best_score < 0.33) or (.rank == 2 and .best_score < 0.38) or (.rank == 3 and .best_score < 0.43) or (.rank == 4 and .best_score < 0.48) or (.rank == 5 and .best_score < 0.53))]' > output/circlet.json
-cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Sands - Elemental Mastery") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.26) or (.rank == 1 and .best_score < 0.31) or (.rank == 2 and .best_score < 0.36) or (.rank == 3 and .best_score < 0.41) or (.rank == 4 and .best_score < 0.46) or (.rank == 5 and .best_score < 0.51))]' > output/sands.json
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Goblet - Elemental DMG") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.30) or (.rank == 1 and .best_score < 0.35) or (.rank == 2 and .best_score < 0.40) or (.rank == 3 and .best_score < 0.45) or (.rank == 4 and .best_score < 0.50) or (.rank == 5 and .best_score < 0.55))]' > output/art-goblet.json
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Circlet - Rare Stats") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.28) or (.rank == 1 and .best_score < 0.33) or (.rank == 2 and .best_score < 0.38) or (.rank == 3 and .best_score < 0.43) or (.rank == 4 and .best_score < 0.48) or (.rank == 5 and .best_score < 0.53))]' > output/art-circlet.json
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Sands - Elemental Mastery") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.26) or (.rank == 1 and .best_score < 0.31) or (.rank == 2 and .best_score < 0.36) or (.rank == 3 and .best_score < 0.41) or (.rank == 4 and .best_score < 0.46) or (.rank == 5 and .best_score < 0.51))]' > output/art-sands.json
+cat output/all-with-build-score.json | jq '[.[] | select(.best_build == "Artifact - Deepwood Memories") | select((.best_score == 0) or (.rank == 0 and .best_score < 0.26) or (.rank == 1 and .best_score < 0.31) or (.rank == 2 and .best_score < 0.36) or (.rank == 3 and .best_score < 0.41) or (.rank == 4 and .best_score < 0.46) or (.rank == 5 and .best_score < 0.51))]' > output/art-deepwood.json
 # >>>> Verify whether these artifacts not match with other build thresholds <<<<
 
 # To group all artifacts to be removed in a single file, use the command below
-jq -s 'reduce .[] as $item ([]; . + $item) | unique_by(.refer_id) | .[].lock = false' output/{flower,plume,gladiators,wanderers,circlet,goblet,sands}.json > output/remove.json
+jq -s 'reduce .[] as $item ([]; . + $item) | unique_by(.refer_id) | .[].lock = false' output/{flower,plume,sands,goblet,circlet,gladiators,wanderers,art-sands,art-goblet,art-circlet,art-deepwood}.json > output/remove.json
 # To merge artifacts to be removed in the general list, use the command below (the order of the remove.json and all.json files is important)
 jq -s '.[0] + .[1] | unique_by(.refer_id)' output/{remove,all}.json > output/all-with-remove.json
 
@@ -383,14 +386,14 @@ cat output/all-with-remove.json | jq '[.[] | select(.lock == false)] | length'
 
 # ---
 
-python main.py -i 'good/data.json' -o g2c -aw | jq '[.[] | del(.artifact_data)] | sort_by(.refer_id)' > output/all-with-build-score.json
-python build-counter.py -i 'output/all-with-build-score.json'
+python3 main.py -i 'good/data.json' -o g2c -aw | jq '[.[] | del(.artifact_data)] | sort_by(.refer_id)' > output/all-with-build-score.json
+python3 build-counter.py -i 'output/all-with-build-score.json'
 
 # ---
 
 # Disable builds like artifact-*.json
 for file in builds/artifact-*.json; do mv ${file} ${file}.disabled; done
-python main.py -i 'good/data.json' -o g2c -aw | jq '[.[] | {rarity,level,rank,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats}] | sort_by(.refer_id)' > output/all-without-artifact-builds.json
+python3 main.py -i 'good/data.json' -o g2c -aw | jq '[.[] | {rarity,level,rank,main_stat_key,set_key,slot_key,best_score,best_build,refer_id,location,lock,sub_stats}] | sort_by(.refer_id)' > output/all-without-artifact-builds.json
 for file in builds/artifact-*.json.disabled; do mv ${file} ${file//.disabled/}; done
 
 # Find better artifacts to upgrade (disable build artifact-*.json)
